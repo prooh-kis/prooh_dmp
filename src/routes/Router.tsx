@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { HomePageLayout } from "../components";
+import { Header, HomePageLayout } from "../components";
 
 import {
   AuthPage,
@@ -12,11 +12,18 @@ import {
 } from "../pages";
 
 import { PrivateRoute } from "./PrivateRoute";
-import { AUTH, FORGET_PASSWORD, HOME, UPDATE_PASSWORD, VERIFY_EMAIL } from "./routes";
+import {
+  AUTH,
+  FORGET_PASSWORD,
+  HOME,
+  UPDATE_PASSWORD,
+  VERIFY_EMAIL,
+} from "./routes";
 
 const Routers: React.FC = () => {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route
           path={AUTH}
@@ -42,7 +49,7 @@ const Routers: React.FC = () => {
             </PrivateRoute>
           }
         />
-            <Route
+        <Route
           path={UPDATE_PASSWORD}
           element={
             <PrivateRoute layout={HomePageLayout}>
@@ -50,14 +57,7 @@ const Routers: React.FC = () => {
             </PrivateRoute>
           }
         />
-        <Route
-          path={HOME}
-          element={
-            <PrivateRoute layout={HomePageLayout}>
-              <LandingPage />
-            </PrivateRoute>
-          }
-        />
+        <Route path={HOME} element={<LandingPage />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
