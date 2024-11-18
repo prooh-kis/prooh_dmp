@@ -5,6 +5,7 @@ import { Header, HomePageLayout } from "../components";
 import {
   AuthPage,
   ForgetPassword,
+  HomePage,
   LandingPage,
   PageNotFound,
   UpdatePassword,
@@ -16,6 +17,7 @@ import {
   AUTH,
   FORGET_PASSWORD,
   HOME,
+  HOMEPAGE,
   UPDATE_PASSWORD,
   VERIFY_EMAIL,
 } from "./routes";
@@ -58,6 +60,7 @@ const Routers: React.FC = () => {
           }
         />
         <Route path={HOME} element={<LandingPage />} />
+        <Route path={HOMEPAGE} element={<HomePage />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
