@@ -5,6 +5,7 @@ import {
   SingleRowTable,
   MyTab,
   HeroDataDetailPage,
+  EnterWeightCohortWise,
 } from "../../components/index";
 import { Checkbox } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
@@ -39,7 +40,6 @@ export const HomePage = () => {
   const [audienceTypeWiseData, setAudienceTypeWiseData] = useState<any>([]);
   const [currentAudienceType, setCurrentAudienceType] = useState<number>(0);
   console.log("audienceTypeWiseData :", audienceTypeWiseData);
-  
 
   useEffect(() => {
     let ddd = ALL_COHORTS?.map((value: string) => {
@@ -147,8 +147,18 @@ export const HomePage = () => {
         <HeroDataDetailPage data={data} />
         <div className="bg-white rounded-md">
           <div className="p-8">
+            <h1 className="text-[24px] text-[#0E212E] font-bold py-4">
+              1. Total Responded-14
+            </h1>
+            <EnterWeightCohortWise
+              audienceTypeWiseData={audienceTypeWiseData}
+              setAudienceTypeWiseData={setAudienceTypeWiseData}
+              currentAudienceType={currentAudienceType}
+            />
+          </div>
+          <div className="p-8">
             <h1 className="text-[24px] text-[#0E212E] font-bold">
-              1. Enter Audience Type Wise
+              2. Enter Audience Type Wise
             </h1>
             <h1 className="text-[#74848E] pb-8">
               Approval Shall Be Granted In Hours Post Application And The
@@ -169,11 +179,9 @@ export const HomePage = () => {
               currentAudienceType={currentAudienceType}
             />
           </div>
-        </div>
-        <div className="bg-white rounded-md">
           <div className="p-8">
             <h1 className="text-[24px] text-[#0E212E] font-bold">
-              2. Enter Audience Data TIme Zone Wise
+              3. Enter Audience Data TIme Zone Wise
             </h1>
             <h1 className="text-[#74848E] pb-8">
               Approval Shall Be Granted In Hours Post Application And The

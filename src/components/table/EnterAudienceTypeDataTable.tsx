@@ -39,7 +39,7 @@ export const EnterAudienceTypeDataTable = ({
           </th>
           <th className="border border-slate-300 py-2">Total Days</th>
           <th className="border border-slate-300 py-2" colSpan={4}>
-            Total Audience Weightage
+            Total Audience Weighage
           </th>
         </tr>
       </thead>

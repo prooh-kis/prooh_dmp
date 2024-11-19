@@ -11,6 +11,7 @@ export {
   EnterAudienceTypeDataTable,
   EnterAudienceDataTimeZoonWiseTable,
   SingleRowTable,
+  EnterWeightCohortWise,
 } from "./table";
 
 export { RegisterHeroDataForm } from "./RegisterHeroDataForm";
