@@ -1,6 +1,32 @@
 import React from "react";
 
-export const EnterAudienceTypeDataTable = () => {
+export const EnterAudienceTypeDataTable = ({
+  audienceTypeWiseData,
+  setAudienceTypeWiseData,
+  currentAudienceType,
+}: any) => {
+  const ss = 1000000;
+  console.log("audienceTypeWiseData : ", audienceTypeWiseData);
+
+  const handleData = (gender: string, value: any) => {
+    const ddd = audienceTypeWiseData?.map((d: any, i: number) => {
+      if (i === currentAudienceType) {
+        return {
+          ...d,
+          genderWiseData: d?.genderWiseData?.map((d1: any, index: number) => {
+            if (d1?.gender == gender) {
+              d1.weight = value;
+              return d1;
+            } else {
+              d1.weight = 100 - Number(value);
+              return d1;
+            }
+          }),
+        };
+      } else return d;
+    });
+    setAudienceTypeWiseData(ddd);
+  };
   return (
     <table className="border-collapse w-full text-[14px]">
       <thead>
@@ -50,17 +76,26 @@ export const EnterAudienceTypeDataTable = () => {
           >
             Male
           </td>
-          <td
-            rowSpan={3}
-            className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 "
-          >
-            80%
+          <td rowSpan={3} className="border border-slate-300 text-[#1297E2]">
+            <input
+              className="text-[#1297E2] cursor-pointer  text-center w-full h-100% bg-blue-200 py-4"
+              value={
+                audienceTypeWiseData?.[currentAudienceType]?.genderWiseData[0]
+                  ?.weight
+              }
+              onChange={(e) => {
+                handleData("Male", e.target.value);
+              }}
+            />
           </td>
           <td
             rowSpan={3}
             className="border border-slate-300  cursor-pointer  text-center py-2 "
           >
-            120000
+            {ss *
+              audienceTypeWiseData?.[currentAudienceType]?.genderWiseData[0]
+                ?.weight *
+              0.01}
           </td>
           <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
             WeekDay
@@ -86,7 +121,7 @@ export const EnterAudienceTypeDataTable = () => {
             Saturday
           </td>
           <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            22
+            4
           </td>
           <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
             70%
@@ -106,7 +141,7 @@ export const EnterAudienceTypeDataTable = () => {
             Sunday
           </td>
           <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            22
+            4
           </td>
           <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
             70%
@@ -128,17 +163,26 @@ export const EnterAudienceTypeDataTable = () => {
           >
             Female
           </td>
-          <td
-            rowSpan={3}
-            className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 "
-          >
-            20%
+          <td rowSpan={3} className="">
+            <input
+              className="text-[#1297E2] cursor-pointer  text-center w-full h-100% bg-blue-200 py-4"
+              value={
+                audienceTypeWiseData?.[currentAudienceType]?.genderWiseData[1]
+                  ?.weight
+              }
+              onChange={(e) => {
+                handleData("Female", e.target.value);
+              }}
+            />
           </td>
           <td
             rowSpan={3}
             className="border border-slate-300  cursor-pointer  text-center py-2 "
           >
-            141241
+            {ss *
+              audienceTypeWiseData?.[currentAudienceType]?.genderWiseData[1]
+                ?.weight *
+              0.01}
           </td>
           <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
             WeekDay
@@ -164,7 +208,7 @@ export const EnterAudienceTypeDataTable = () => {
             Saturday
           </td>
           <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            22
+            4
           </td>
           <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
             70%
@@ -184,7 +228,7 @@ export const EnterAudienceTypeDataTable = () => {
             Sunday
           </td>
           <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            22
+            4
           </td>
           <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
             70%

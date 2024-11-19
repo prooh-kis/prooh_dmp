@@ -11,6 +11,10 @@ import {
   userSignupReducer,
   userUpdatePasswordReducer,
 } from "../reducers/userReducers";
+import {
+  getHeroDataDetailsReducer,
+  heroDataRegisterReducer,
+} from "../reducers/heroDataReducers";
 
 const initialState = {
   userSignin: {
@@ -23,8 +27,6 @@ const initialState = {
 const store = configureStore({
   initialState,
   reducer: {
-    
-
     // auth
     auth: authReducer,
     userSignin: userSigninReducer,
@@ -35,8 +37,9 @@ const store = configureStore({
     emailSendForConfirmation: emailSendForConfirmationReducer,
     emailSendForVendorConfirmation: emailSendForVendorConfirmationReducer,
 
-    //
-  
+    // hero Data
+    heroDataRegister: heroDataRegisterReducer,
+    heroDataDetails: getHeroDataDetailsReducer,
   },
   // middleware: thunk
   // devTools: process.env.NODE_ENV !== 'production'

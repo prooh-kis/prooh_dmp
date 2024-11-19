@@ -12,7 +12,7 @@ interface Props {
 
 export const MyTab = ({ data, current, setCurrent }: Props) => {
   return (
-    <div className="flex text-[16px] font-bold">
+    <div className="flex text-[14px] font-bold w-full truncate">
       {data?.map(({ label, icon, key }: Data) => (
         <div
           onClick={() => setCurrent(key)}
@@ -22,8 +22,8 @@ export const MyTab = ({ data, current, setCurrent }: Props) => {
           <div
             className={
               current === key
-                ? "flex gap-1 text-[#1297E2] pr-6 items-center"
-                : "flex gap-1 text-[#949494] pr-6 items-center"
+                ? "flex gap-1 text-[#1297E2] pr-6 items-center "
+                : "flex gap-1 text-[#949494] pr-6 items-center "
             }
           >
             {icon} {label}

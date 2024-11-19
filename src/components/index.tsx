@@ -12,3 +12,6 @@ export {
   EnterAudienceDataTimeZoonWiseTable,
   SingleRowTable,
 } from "./table";
+
+export { RegisterHeroDataForm } from "./RegisterHeroDataForm";
+export { HeroDataDetailPage } from "./HeroDataDetailPage";

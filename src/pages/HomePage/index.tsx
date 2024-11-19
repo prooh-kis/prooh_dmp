@@ -4,174 +4,147 @@ import {
   MyButton,
   SingleRowTable,
   MyTab,
+  HeroDataDetailPage,
 } from "../../components/index";
 import { Checkbox } from "antd";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import {
-  audienceTypeDataTab,
-  dataAsPerOurIotDevices,
-} from "../../HardCodedData/tabData";
+import { audienceTypeDataTab } from "../../HardCodedData/tabData";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { getRegisterHeroDataDetails } from "../../actions/heroDataAction";
+import { message } from "antd";
+import { GET_HERO_DATA_DETAILS_RESET } from "../../constants/heroDataConstant";
+import { ALL_COHORTS } from "../../constants/heplerConstant";
 
 export const HomePage = () => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [current, setCurrent] = useState<number>(0);
+  const dispatch = useDispatch<any>();
+  const [totalCount, setTotalCount] = useState<number>(100000);
 
-  const handleOpen = useCallback(() => {
-    setOpen(true);
-  }, [open]);
+  const heroDataDetails = useSelector((state: any) => state.heroDataDetails);
+  const { loading, error, success, data } = heroDataDetails;
 
-  const handleSetCurrent = useCallback(
-    (value: number) => {
-      setCurrent(value);
-    },
-    [current]
-  );
+  useEffect(() => {
+    var urlParams = new URLSearchParams(window.location.search);
+    dispatch(getRegisterHeroDataDetails(urlParams.get("userId")));
+  }, []);
 
-  const getTable = (current: number) => {
-    switch (current) {
-      case 0:
-        return (
-          <SingleRowTable
-            data={{
-              "DFMD 1": 2000,
-              "DFMD 2": 2000,
-              "DFMD 3": 2000,
-              "DFMD 4": 3000,
-              Total: 9000,
-            }}
-          />
-        );
-      case 1:
-        return (
-          <SingleRowTable
-            data={{
-              "Entrance 1": 2000,
-              "Entrance 2": 2000,
-              "Entrance 3": 2000,
-              "Exit Gate": 2000,
-              Total: 8000,
-            }}
-          />
-        );
-
-      case 2:
-        return (
-          <SingleRowTable
-            data={{ "Google traffic and RTO data": 53453, Total: 53453 }}
-          />
-        );
-      case 3:
-        return (
-          <SingleRowTable
-            data={{ "As Per Roadster Iot Device Data": 34324, Total: 34324 }}
-          />
-        );
-
-      default:
-        return (
-          <SingleRowTable
-            data={{ "As Per Our Mobile SDK Data": 2345, Total: 2345 }}
-          />
-        );
-        break;
+  useEffect(() => {
+    if (error) {
+      message.error(error);
+      dispatch({ type: GET_HERO_DATA_DETAILS_RESET });
     }
-  };
+  }, [error]);
+
+  const [audienceTypeWiseData, setAudienceTypeWiseData] = useState<any>([]);
+  const [currentAudienceType, setCurrentAudienceType] = useState<number>(0);
+  console.log("audienceTypeWiseData :", audienceTypeWiseData);
+  
+
+  useEffect(() => {
+    let ddd = ALL_COHORTS?.map((value: string) => {
+      return {
+        categoryType: value,
+        percentage: 0.1514,
+        genderWiseData: [
+          {
+            gender: "Male",
+            weight: 45,
+            weekdays: {
+              days: 22,
+              monthly: 0.7,
+              daily: 0.03,
+              unique: 0.3,
+              cohort: {
+                morning: 0.5,
+                afternoon: 0.1,
+                evening: 0.2,
+                night: 0.2,
+              },
+            },
+            saturdays: {
+              days: 4,
+              monthly: 0.2,
+              daily: 0.05,
+              unique: 0.4,
+              cohort: {
+                morning: 0.2,
+                afternoon: 0.2,
+                evening: 0.2,
+                night: 0.4,
+              },
+            },
+            sundays: {
+              days: 4,
+              monthly: 0.1,
+              daily: 0.025,
+              unique: 0.2,
+              cohort: {
+                morning: 0.2,
+                afternoon: 0.2,
+                evening: 0.3,
+                night: 0.3,
+              },
+            },
+          },
+          {
+            gender: "Female",
+            weight: 0.6598,
+            weekdays: {
+              days: 22,
+              monthly: 0.6,
+              daily: 0.027,
+              unique: 0.4,
+              cohort: {
+                morning: 0.3,
+                afternoon: 0.2,
+                evening: 0.3,
+                night: 0.2,
+              },
+            },
+            saturdays: {
+              days: 4,
+              monthly: 0.3,
+              daily: 0.075,
+              unique: 0.4,
+              cohort: {
+                morning: 0.2,
+                afternoon: 0.1,
+                evening: 0.3,
+                night: 0.4,
+              },
+            },
+            sundays: {
+              days: 4,
+              monthly: 0.1,
+              daily: 0.025,
+              unique: 0.2,
+              cohort: {
+                morning: 0.2,
+                afternoon: 0.1,
+                evening: 0.4,
+                night: 0.3,
+              },
+            },
+          },
+        ],
+        impact_factor: {
+          govt_holidays: 0.11,
+          long_weekends_holidays: 0.7,
+          festivals: 0.8,
+          peak_winters: 0.6,
+          peak_summers: 0.8,
+          summer_holidays_school: 0.6,
+        },
+      };
+    });
+    setAudienceTypeWiseData(ddd);
+  }, []);
 
   return (
     <div>
       <div className="p-12 gap-4 flex flex-col bg-gray-100">
-        <div className="bg-white">
-          <div className="p-8 flex justify-between">
-            <div className="flex gap-4 justify-center items-center ">
-              <i className="fi fi-bs-angle-left"></i>
-              <img
-                src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
-                alt=""
-                className="h-[64px] w-[64px] rounded-md"
-              />
-              <div>
-                <h1 className="text-[#0E212E] text-[24px] font-semibold">
-                  Vishal Kumar
-                </h1>
-                <h1 className="text-[#254354]">Media Owner</h1>
-              </div>
-            </div>
-            <div>
-              <div className="flex gap-4 justify-center items-center">
-                <i className="fi fi-sr-envelope text-[#00A0FA]"></i>
-                <h1>vishalkumar70522@gmail.com</h1>
-              </div>
-              <div className="flex gap-4 justify-center items-center">
-                <i className="fi fi-sr-phone-call text-[#00A0FA]"></i>
-                <h1>vishalkumar70522@gmail.com</h1>
-              </div>
-              <div className="flex gap-4 justify-start items-center">
-                <i className="fi fi-sr-envelope text-[#00A0FA]"></i>
-                <h1>7061921638@upi</h1>
-              </div>
-            </div>
-          </div>
-          <div className="border border-1"></div>
-          <div className="p-8">
-            <h1 className="py-4">You Are Working On</h1>
-            <table className="border-collapse w-full text-[15px]">
-              <thead>
-                <tr className="text-[#FFFFFF] bg-[#1297E2] ">
-                  <th className="border border-slate-300 py-2">
-                    Selected TouchPoint
-                  </th>
-                  <th colSpan={3} className="border border-slate-300 py-2">
-                    Selected Cities
-                  </th>
-                  <th className="border border-slate-300 py-2">
-                    Total Average FootFall
-                  </th>
-                  <th className="border border-slate-300 py-2">
-                    View Full Data
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="w-full border border-1">
-                <tr>
-                  <td className="border border-slate-300 text-center py-2">
-                    Premium High Street
-                  </td>
-                  {["Ara", "Patna", "Delhi"]?.map(
-                    (value: string, index: number) => (
-                      <td
-                        className="border border-slate-300 text-center py-2"
-                        key={index}
-                      >
-                        {value}
-                      </td>
-                    )
-                  )}
-                  <td
-                    onClick={handleOpen}
-                    className="border border-slate-300 text-[#1297E2] cursor-pointer hover:text-blue-700 text-center py-2"
-                  >
-                    10000
-                  </td>
-                  <td className="border border-slate-300 text-gray-400 cursor-pointer hover:text-gray-400 text-center py-2">
-                    <i className="fi fi-ss-eye"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            {open && (
-              <div className="py-4 font-bold text-[20px]">
-                <h1 className="py-4">Data As Per Our Iot Devices</h1>
-                <MyTab
-                  data={dataAsPerOurIotDevices}
-                  current={current}
-                  setCurrent={handleSetCurrent}
-                />
-                <div className="py-4">{getTable(current)}</div>
-              </div>
-            )}
-          </div>
-        </div>
+        <HeroDataDetailPage data={data} />
         <div className="bg-white rounded-md">
           <div className="p-8">
             <h1 className="text-[24px] text-[#0E212E] font-bold">
@@ -183,12 +156,18 @@ export const HomePage = () => {
             </h1>
             <div className="py-4">
               <MyTab
-                data={audienceTypeDataTab}
-                current={0}
-                setCurrent={() => {}}
+                data={audienceTypeWiseData?.map((data: any, index: number) => {
+                  return { label: data.categoryType, key: index };
+                })}
+                current={currentAudienceType}
+                setCurrent={(value: number) => setCurrentAudienceType(value)}
               />
             </div>
-            <EnterAudienceTypeDataTable />
+            <EnterAudienceTypeDataTable
+              audienceTypeWiseData={audienceTypeWiseData}
+              setAudienceTypeWiseData={setAudienceTypeWiseData}
+              currentAudienceType={currentAudienceType}
+            />
           </div>
         </div>
         <div className="bg-white rounded-md">
