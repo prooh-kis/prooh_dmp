@@ -78,10 +78,12 @@ export const EnterAudienceTypeDataTable = ({
           </td>
           <td rowSpan={3} className="border border-slate-300 text-[#1297E2]">
             <input
+              title=""
+              placeholder="male"
               className="text-[#1297E2] cursor-pointer  text-center w-full h-100% bg-blue-200 py-4"
               value={
                 audienceTypeWiseData?.[currentAudienceType]?.genderWiseData[0]
-                  ?.weight
+                  ?.weight ?? 0
               }
               onChange={(e) => {
                 handleData("Male", e.target.value);
@@ -165,10 +167,12 @@ export const EnterAudienceTypeDataTable = ({
           </td>
           <td rowSpan={3} className="">
             <input
+              title=""
+              placeholder="female"
               className="text-[#1297E2] cursor-pointer  text-center w-full h-100% bg-blue-200 py-4"
               value={
                 audienceTypeWiseData?.[currentAudienceType]?.genderWiseData[1]
-                  ?.weight
+                  ?.weight ?? 0
               }
               onChange={(e) => {
                 handleData("Female", e.target.value);

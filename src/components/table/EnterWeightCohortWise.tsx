@@ -43,6 +43,8 @@ export const EnterWeightCohortWise = ({
               {editableCell?.index === index &&
               editableCell?.column === "percentage" ? (
                 <input
+                  title=""
+                  placeholder="percentage"
                   type="number"
                   value={data?.percentage * 100}
                   onBlur={handleBlur}
@@ -58,6 +60,17 @@ export const EnterWeightCohortWise = ({
             </td>
           </tr>
         ))}
+        <tr>
+          <td className="border border-slate-300  cursor-pointer  text-left py-2 px-2 ">
+            Total
+          </td>
+          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 px-2 ">
+
+          </td>
+          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 px-2 ">
+
+          </td>
+        </tr>
       </tbody>
     </table>
   );

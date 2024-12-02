@@ -16,14 +16,14 @@ import { useDispatch } from "react-redux";
 import { getRegisterHeroDataDetails } from "../../actions/heroDataAction";
 import { message } from "antd";
 import { GET_HERO_DATA_DETAILS_RESET } from "../../constants/heroDataConstant";
-import { ALL_COHORTS } from "../../constants/heplerConstant";
+import { ALL_COHORTS } from "../../constants/helperConstant";
 
 export const HomePage = () => {
   const dispatch = useDispatch<any>();
   const [totalCount, setTotalCount] = useState<number>(100000);
 
   const heroDataDetails = useSelector((state: any) => state.heroDataDetails);
-  const { loading, error, success, data } = heroDataDetails;
+  const { loading, error, success, data: heroDataUser } = heroDataDetails;
 
   useEffect(() => {
     var urlParams = new URLSearchParams(window.location.search);
@@ -138,18 +138,48 @@ export const HomePage = () => {
         },
       };
     });
-    setAudienceTypeWiseData(ddd);
-  }, []);
+    if (heroDataDetails?.audienceData?.length > 0) {
+      setAudienceTypeWiseData(heroDataDetails?.audienceData);
+    } else {
+      setAudienceTypeWiseData(() => {
+        return ALL_COHORTS?.map((val: any) => {
+          return {
+            categoryType: val,
+            percentage: 0,
+            genderWiseData: [],
+            impact_factor: {
+              govt_holidays: 0,
+              long_weekends_holidays: 0,
+              festivals: 0,
+              peak_winters: 0,
+              peak_summers: 0,
+              summer_holidays_school: 0,
+            }
+          }
+        })
+      })
+    }
+  }, [heroDataDetails?.audienceData]);
 
   return (
     <div>
       <div className="p-12 gap-4 flex flex-col bg-gray-100">
-        <HeroDataDetailPage data={data} />
+        <HeroDataDetailPage data={heroDataUser?.user} />
         <div className="bg-white rounded-md">
           <div className="p-8">
-            <h1 className="text-[24px] text-[#0E212E] font-bold py-4">
-              1. Total Responded-14
+            <h1 className="text-[12px] text-[#74848E] pb-8">
+             Note: Approval Shall Be Granted In Hours Post Application And The
+              Research Paper Shall Be Completed In 48 hours...
             </h1>
+            <div className="flex justify-between items-center">
+              <h1 className="text-[16px] text-[#0E212E] font-bold py-4">
+                1. Enter Audience Segment Wise Data
+              </h1>
+              <div className="flex items-center">
+                <i className="fi fi-sr-check-circle flex items-center"></i>
+              </div>
+            </div>
+
             <EnterWeightCohortWise
               audienceTypeWiseData={audienceTypeWiseData}
               setAudienceTypeWiseData={setAudienceTypeWiseData}
@@ -157,12 +187,8 @@ export const HomePage = () => {
             />
           </div>
           <div className="p-8">
-            <h1 className="text-[24px] text-[#0E212E] font-bold">
-              2. Enter Audience Type Wise
-            </h1>
-            <h1 className="text-[#74848E] pb-8">
-              Approval Shall Be Granted In Hours Post Application And The
-              Research Paper Shall Be Completed In 48{" "}
+            <h1 className="text-[16px] text-[#0E212E] font-bold">
+              2. Enter Audience Type Wise Data
             </h1>
             <div className="py-4">
               <MyTab
@@ -180,12 +206,8 @@ export const HomePage = () => {
             />
           </div>
           <div className="p-8">
-            <h1 className="text-[24px] text-[#0E212E] font-bold">
+            <h1 className="text-[16px] text-[#0E212E] font-bold py-4">
               3. Enter Audience Data TIme Zone Wise
-            </h1>
-            <h1 className="text-[#74848E] pb-8">
-              Approval Shall Be Granted In Hours Post Application And The
-              Research Paper Shall Be Completed In 48{" "}
             </h1>
             <EnterAudienceDataTimeZoonWiseTable />
           </div>

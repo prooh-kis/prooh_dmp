@@ -40,7 +40,7 @@ export const getRegisterHeroDataDetails = (userId) => async (dispatch) => {
     payload: userId,
   });
   try {
-    const { data } = await Axios.get(`${URL}?heroDataId=${userId}`);
+    const { data } = await Axios.get(`${URL}?dataHeroUserId=${userId}`);
     dispatch({
       type: GET_HERO_DATA_DETAILS_SUCCESS,
       payload: data,
