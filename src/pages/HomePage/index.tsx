@@ -10,164 +10,218 @@ import {
 import { Checkbox } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 
-import { audienceTypeDataTab } from "../../HardCodedData/tabData";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { getRegisterHeroDataDetails } from "../../actions/heroDataAction";
+import { getAudienceDataAction, getRegisterHeroDataDetails, saveAudienceDataAction } from "../../actions/heroDataAction";
 import { message } from "antd";
-import { GET_HERO_DATA_DETAILS_RESET } from "../../constants/heroDataConstant";
+import { GET_HERO_DATA_DETAILS_RESET, SAVE_AUDIENCE_DATA_RESET } from "../../constants/heroDataConstant";
 import { ALL_COHORTS } from "../../constants/helperConstant";
+import { EnterImpactFactorTable } from "../../components/table/EnterImpactFactorTable";
+
+const monthDays = {
+  "weekdays": 22,
+  "saturdays": 4,
+  "sundays": 4,
+}
 
 export const HomePage = () => {
   const dispatch = useDispatch<any>();
+  const urlParams = new URLSearchParams(window.location.search);
+
   const [totalCount, setTotalCount] = useState<number>(100000);
+  const [selectedMarketSite, setSelectedMarketSite] = useState<any>("");
+  const [certified, setCertified] = useState<any>(false);
+
+  const [audienceTypeWiseData, setAudienceTypeWiseData] = useState<any>(ALL_COHORTS?.map((val: any) => {
+    return {
+      categoryType: val,
+      percentage: 0,
+      genderWiseData: [],
+      impact_factor: {
+        govt_holidays: 0,
+        long_weekends_holidays: 0,
+        festivals: 0,
+        peak_winters: 0,
+        peak_summers: 0,
+        summer_holidays_school: 0,
+      }
+    }
+  }));
+  const [currentAudienceType, setCurrentAudienceType] = useState<number>(0);
+  const [genderData, setGenderData] = useState<any>(null);
 
   const heroDataDetails = useSelector((state: any) => state.heroDataDetails);
   const { loading, error, success, data: heroDataUser } = heroDataDetails;
 
+  const audienceDataSave = useSelector((state: any) => state.audienceDataSave);
+  const { loading: loadingSave, error: errorSave, success: successSave, data: savedData } = audienceDataSave;
+
+  const audienceDataGet = useSelector((state: any) => state.audienceDataGet);
+  const {
+    loading: loadingAudienceData,
+    error: errorAudienceData,
+    data: gotAudienceData,
+  } = audienceDataGet;
+
   useEffect(() => {
-    var urlParams = new URLSearchParams(window.location.search);
+    if (audienceTypeWiseData?.[currentAudienceType]?.genderWiseData?.length > 0) {
+      setGenderData(audienceTypeWiseData[currentAudienceType]?.genderWiseData);
+    } else {
+      setGenderData([{
+        gender: "Male",
+        weight: 0,
+        weekdays: {
+          days: 22,
+          monthly: 0,
+          daily: 0,
+          unique: 0,
+          cohort: {
+            morning: 0,
+            afternoon: 0,
+            evening: 0,
+            night: 0,
+          },
+        },
+        saturdays: {
+          days: 4,
+          monthly: 0,
+          daily: 0,
+          unique: 0,
+          cohort: {
+            morning: 0,
+            afternoon: 0,
+            evening: 0,
+            night: 0,
+          }
+        },
+        sundays: {
+          days: 4,
+          monthly: 0,
+          daily: 0,
+          unique: 0,
+          cohort: {
+            morning: 0,
+            afternoon: 0,
+            evening: 0,
+            night: 0,
+          }
+        },
+      },{
+        gender: "Female",
+        weight: 0,
+        weekdays: {
+          days: 22,
+          monthly: 0,
+          daily: 0,
+          unique: 0,
+          cohort: {
+            morning: 0,
+            afternoon: 0,
+            evening: 0,
+            night: 0,
+          }
+        },
+        saturdays: {
+          days: 4,
+          monthly: 0,
+          daily: 0,
+          unique: 0,
+          cohort: {
+            morning: 0,
+            afternoon: 0,
+            evening: 0,
+            night: 0,
+          }
+        },
+        sundays: {
+          days: 4,
+          monthly: 0,
+          daily: 0,
+          unique: 0,
+          cohort: {
+            morning: 0,
+            afternoon: 0,
+            evening: 0,
+            night: 0,
+          }
+        },
+      }]);
+    }
+  },[audienceTypeWiseData, currentAudienceType]);
+
+  useEffect(() => {
     dispatch(getRegisterHeroDataDetails(urlParams.get("userId")));
-  }, []);
+    if (selectedMarketSite !== "") {
+      dispatch(getAudienceDataAction({
+        dataHeroId: urlParams.get("userId"),
+        selectedMarketSite: selectedMarketSite,
+      }));
+    }
+   
+  }, [dispatch, selectedMarketSite]);
 
   useEffect(() => {
     if (error) {
       message.error(error);
       dispatch({ type: GET_HERO_DATA_DETAILS_RESET });
     }
-  }, [error]);
+    if (errorAudienceData) {
+      message.error(errorAudienceData);
+    }
 
-  const [audienceTypeWiseData, setAudienceTypeWiseData] = useState<any>([]);
-  const [currentAudienceType, setCurrentAudienceType] = useState<number>(0);
-  console.log("audienceTypeWiseData :", audienceTypeWiseData);
+    if (errorSave) {
+      message.error(errorAudienceData);
+      dispatch({
+        type: SAVE_AUDIENCE_DATA_RESET
+      });
+    }
+
+    if (heroDataDetails?.audienceData?.audiencePercentCategories?.length > 0) {
+      // setAudienceTypeWiseData(heroDataDetails?.audienceData);
+      setSelectedMarketSite(heroDataDetails?.user?.touchPoints[0].marketSites?.[0]);
+      // setTotalCount(heroDataDetails?.audienceData?.totalAudienceCount);
+    }
+    
+    if (gotAudienceData) {
+      setAudienceTypeWiseData(gotAudienceData.audiencePercentCategories)
+      setTotalCount(gotAudienceData.totalAudienceCount);
+    }
+
+  }, [dispatch, heroDataDetails, error, gotAudienceData]);
 
   useEffect(() => {
-    let ddd = ALL_COHORTS?.map((value: string) => {
-      return {
-        categoryType: value,
-        percentage: 0.1514,
-        genderWiseData: [
-          {
-            gender: "Male",
-            weight: 45,
-            weekdays: {
-              days: 22,
-              monthly: 0.7,
-              daily: 0.03,
-              unique: 0.3,
-              cohort: {
-                morning: 0.5,
-                afternoon: 0.1,
-                evening: 0.2,
-                night: 0.2,
-              },
-            },
-            saturdays: {
-              days: 4,
-              monthly: 0.2,
-              daily: 0.05,
-              unique: 0.4,
-              cohort: {
-                morning: 0.2,
-                afternoon: 0.2,
-                evening: 0.2,
-                night: 0.4,
-              },
-            },
-            sundays: {
-              days: 4,
-              monthly: 0.1,
-              daily: 0.025,
-              unique: 0.2,
-              cohort: {
-                morning: 0.2,
-                afternoon: 0.2,
-                evening: 0.3,
-                night: 0.3,
-              },
-            },
-          },
-          {
-            gender: "Female",
-            weight: 0.6598,
-            weekdays: {
-              days: 22,
-              monthly: 0.6,
-              daily: 0.027,
-              unique: 0.4,
-              cohort: {
-                morning: 0.3,
-                afternoon: 0.2,
-                evening: 0.3,
-                night: 0.2,
-              },
-            },
-            saturdays: {
-              days: 4,
-              monthly: 0.3,
-              daily: 0.075,
-              unique: 0.4,
-              cohort: {
-                morning: 0.2,
-                afternoon: 0.1,
-                evening: 0.3,
-                night: 0.4,
-              },
-            },
-            sundays: {
-              days: 4,
-              monthly: 0.1,
-              daily: 0.025,
-              unique: 0.2,
-              cohort: {
-                morning: 0.2,
-                afternoon: 0.1,
-                evening: 0.4,
-                night: 0.3,
-              },
-            },
-          },
-        ],
-        impact_factor: {
-          govt_holidays: 0.11,
-          long_weekends_holidays: 0.7,
-          festivals: 0.8,
-          peak_winters: 0.6,
-          peak_summers: 0.8,
-          summer_holidays_school: 0.6,
-        },
-      };
-    });
-    if (heroDataDetails?.audienceData?.length > 0) {
-      setAudienceTypeWiseData(heroDataDetails?.audienceData);
-    } else {
-      setAudienceTypeWiseData(() => {
-        return ALL_COHORTS?.map((val: any) => {
-          return {
-            categoryType: val,
-            percentage: 0,
-            genderWiseData: [],
-            impact_factor: {
-              govt_holidays: 0,
-              long_weekends_holidays: 0,
-              festivals: 0,
-              peak_winters: 0,
-              peak_summers: 0,
-              summer_holidays_school: 0,
-            }
-          }
-        })
-      })
+    if (successSave) {
+      message.success("Your response for audience data has been updated successfully...")
+      setAudienceTypeWiseData(savedData.audiencePercentCategories)
+      setTotalCount(savedData.totalAudienceCount);
+      dispatch({
+        type: SAVE_AUDIENCE_DATA_RESET
+      });
     }
-  }, [heroDataDetails?.audienceData]);
+  },[dispatch, successSave, savedData]);
+
+  const handleSaveData = (audienceData: any) => {
+    const bodyToSend = {
+      dataHeroUserId: heroDataUser?.user?._id,
+      dataHeroUserEmail: heroDataUser?.user?.email,
+      market: heroDataUser?.user?.market,
+      marketSite: selectedMarketSite,
+      touchPoints: heroDataUser?.user?.touchPoints?.filter((t: any) => t.marketSite === selectedMarketSite).map((g: any) => g.touchPoint),
+      totalAudienceCount: totalCount,
+      audiencePercentCategories: audienceData,
+      certified: certified,
+    }
+
+    dispatch(saveAudienceDataAction(bodyToSend));
+  }
 
   return (
     <div>
       <div className="p-12 gap-4 flex flex-col bg-gray-100">
-        <HeroDataDetailPage data={heroDataUser?.user} />
+        <HeroDataDetailPage totalCount={totalCount} data={heroDataUser?.user} setSelectedMarketSite={setSelectedMarketSite} selectedMarketSite={selectedMarketSite} />
         <div className="bg-white rounded-md">
-          <div className="p-8">
-            <h1 className="text-[12px] text-[#74848E] pb-8">
+          <div className="px-8 py-4">
+            <h1 className="text-[12px] text-[#74848E] pb-4">
              Note: Approval Shall Be Granted In Hours Post Application And The
               Research Paper Shall Be Completed In 48 hours...
             </h1>
@@ -175,52 +229,107 @@ export const HomePage = () => {
               <h1 className="text-[16px] text-[#0E212E] font-bold py-4">
                 1. Enter Audience Segment Wise Data
               </h1>
-              <div className="flex items-center">
+              <div className="flex items-center" onClick={() => {
+                handleSaveData(audienceTypeWiseData)
+              }}>
                 <i className="fi fi-sr-check-circle flex items-center"></i>
               </div>
             </div>
 
             <EnterWeightCohortWise
+              totalCount={totalCount}
               audienceTypeWiseData={audienceTypeWiseData}
               setAudienceTypeWiseData={setAudienceTypeWiseData}
               currentAudienceType={currentAudienceType}
             />
           </div>
-          <div className="p-8">
-            <h1 className="text-[16px] text-[#0E212E] font-bold">
-              2. Enter Audience Type Wise Data
-            </h1>
+          <div className="px-8 py-4">
+            <div className="flex justify-between items-center">
+              <h1 className="text-[16px] text-[#0E212E] font-bold">
+                2. Enter Audience Type Wise Data
+              </h1>
+              <div className="flex items-center" onClick={() => {
+                handleSaveData(audienceTypeWiseData)
+              }}>
+                <i className="fi fi-sr-check-circle flex items-center"></i>
+              </div>
+            </div>
             <div className="py-4">
               <MyTab
                 data={audienceTypeWiseData?.map((data: any, index: number) => {
-                  return { label: data.categoryType, key: index };
+                  return { label: data.categoryType, key: index, value: data.percentage };
                 })}
                 current={currentAudienceType}
                 setCurrent={(value: number) => setCurrentAudienceType(value)}
               />
             </div>
             <EnterAudienceTypeDataTable
+              genderData={genderData}
+              setGenderData={setGenderData}
+              monthDays={monthDays}
+              totalCount={totalCount}
               audienceTypeWiseData={audienceTypeWiseData}
               setAudienceTypeWiseData={setAudienceTypeWiseData}
               currentAudienceType={currentAudienceType}
             />
           </div>
-          <div className="p-8">
-            <h1 className="text-[16px] text-[#0E212E] font-bold py-4">
-              3. Enter Audience Data TIme Zone Wise
-            </h1>
-            <EnterAudienceDataTimeZoonWiseTable />
+          <div className="px-8 py-4">
+            <div className="flex justify-between items-center">
+              <h1 className="text-[16px] text-[#0E212E] font-bold py-4">
+                3. Enter Audience Data TIme Zone Wise
+              </h1>
+              <div className="flex items-center" onClick={() => {
+                  handleSaveData(audienceTypeWiseData)
+                }}>
+                  <i className="fi fi-sr-check-circle flex items-center"></i>
+                </div>
+            </div>
+            <EnterAudienceDataTimeZoonWiseTable
+                genderData={genderData}
+                setGenderData={setGenderData}
+                monthDays={monthDays}
+                totalCount={totalCount}
+                audienceTypeWiseData={audienceTypeWiseData}
+                setAudienceTypeWiseData={setAudienceTypeWiseData}
+                currentAudienceType={currentAudienceType}
+              />
+          </div>
+          <div className="px-8 py-4">
+            <div className="flex justify-between items-center">
+              <h1 className="text-[16px] text-[#0E212E] font-bold py-4">
+                  4. Impact Factor Analysis
+                </h1>
+                <div className="flex items-center" onClick={() => {
+                  handleSaveData(audienceTypeWiseData)
+                }}>
+                  <i className="fi fi-sr-check-circle flex items-center"></i>
+                </div>
+            </div>
+            <EnterImpactFactorTable
+              genderData={genderData}
+              setGenderData={setGenderData}
+              monthDays={monthDays}
+              totalCount={totalCount}
+              audienceTypeWiseData={audienceTypeWiseData}
+              setAudienceTypeWiseData={setAudienceTypeWiseData}
+              currentAudienceType={currentAudienceType}
+            />
           </div>
         </div>
         <div className="bg-white rounded-md">
           <div className="p-8 flex flex-col">
-            <h1>I Certified</h1>
-            <Checkbox>
+            <h1 className="text-[14px] py-1">I certify that, </h1>
+            {/* <Checkbox>
               I have filled out this form based on my knowledge and experience
-            </Checkbox>
-            <Checkbox disabled>
+            </Checkbox> */}
+            <Checkbox
+              onChange={(e) => {
+                console.log(e.target.checked)
+                setCertified(e.target.checked);
+              }}
+            >
               I have provided information in this form according to my own
-              knowledge and experience
+              knowledge and experience.
             </Checkbox>
           </div>
         </div>
@@ -234,8 +343,20 @@ export const HomePage = () => {
             outLine="2"
             color="#000000"
             bgColor="#FFFFFF"
+            disabled={true}
+            onClick={() => {
+
+            }}
           />
-          <MyButton title="Save" width="72px" height="24px" />
+          <MyButton
+            title="Save"
+            width="72px"
+            height="24px"
+            disabled={!certified}
+            onClick={() => {
+              handleSaveData(audienceTypeWiseData)
+            }}
+          />
         </div>
       </div>
     </div>

@@ -4,11 +4,9 @@ import { SingleRowTable } from "./table";
 import { dataAsPerOurIotDevices } from "../HardCodedData/tabData";
 import { DropdownInput } from "./atoms/DropdownInput";
 
-export const HeroDataDetailPage = ({ data }: any) => {
+export const HeroDataDetailPage = ({ data, selectedMarketSite, setSelectedMarketSite }: any) => {
   const [open, setOpen] = useState<boolean>(false);
   const [current, setCurrent] = useState<number>(0);
-
-  const [selectedMarketSite, setSelectedMarketSite] = useState<any>(data?.touchPoints[0].marketSites?.[0]);
 
   const handleOpen = useCallback(() => {
     setOpen(true);

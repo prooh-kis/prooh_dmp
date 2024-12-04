@@ -12,6 +12,8 @@ import {
   userUpdatePasswordReducer,
 } from "../reducers/userReducers";
 import {
+  audienceDataSaveReducer,
+  audienceDataGetReducer,
   getHeroDataDetailsReducer,
   heroDataRegisterReducer,
 } from "../reducers/heroDataReducers";
@@ -40,6 +42,8 @@ const store = configureStore({
     // hero Data
     heroDataRegister: heroDataRegisterReducer,
     heroDataDetails: getHeroDataDetailsReducer,
+    audienceDataSave: audienceDataSaveReducer,
+    audienceDataGet: audienceDataGetReducer,
   },
   // middleware: thunk
   // devTools: process.env.NODE_ENV !== 'production'

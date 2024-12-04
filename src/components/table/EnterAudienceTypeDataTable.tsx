@@ -1,254 +1,214 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export const EnterAudienceTypeDataTable = ({
+  genderData,
+  setGenderData,
+  totalCount,
   audienceTypeWiseData,
   setAudienceTypeWiseData,
   currentAudienceType,
+  monthDays,
 }: any) => {
-  const ss = 1000000;
-  console.log("audienceTypeWiseData : ", audienceTypeWiseData);
+  // console.log("audienceTypeWiseData : ", audienceTypeWiseData);
 
-  const handleData = (gender: string, value: any) => {
-    const ddd = audienceTypeWiseData?.map((d: any, i: number) => {
-      if (i === currentAudienceType) {
-        return {
-          ...d,
-          genderWiseData: d?.genderWiseData?.map((d1: any, index: number) => {
-            if (d1?.gender == gender) {
-              d1.weight = value;
-              return d1;
-            } else {
-              d1.weight = 100 - Number(value);
-              return d1;
-            }
-          }),
-        };
-      } else return d;
+  const handleData = (gender: string, value: any, day: any) => {
+    const enterValue = Number(value / 100);
+    const newGenderData = JSON.parse(JSON.stringify(genderData?.find((d: any) => d.gender === gender)));
+  
+    if (day === null) {
+      newGenderData.weight = enterValue;
+    } else {
+      newGenderData[day] = {
+        ...newGenderData[day],
+        monthly: enterValue,
+        daily: parseFloat((enterValue / newGenderData[day].days).toFixed(3)),
+      };
+    }
+  
+    const updatedGenderData = genderData.map((d: any) =>
+      d.gender === gender ? newGenderData : d
+    );
+  
+    setGenderData(updatedGenderData);
+  
+    setAudienceTypeWiseData((prev: any) => {
+      const updatedAudienceTypeData = JSON.parse(JSON.stringify(prev));
+      updatedAudienceTypeData[currentAudienceType].genderWiseData = updatedGenderData;
+      return updatedAudienceTypeData;
     });
-    setAudienceTypeWiseData(ddd);
   };
+  
+
+
+
   return (
-    <table className="border-collapse w-full text-[14px]">
-      <thead>
-        <tr className="text-[#FFFFFF] bg-[#1297E2] ">
-          <th className="border border-slate-300 py-2" colSpan={3}>
-            Audience Sprit
-          </th>
-          <th className="border border-slate-300 py-2">
-            Distribution Of Month
-          </th>
-          <th className="border border-slate-300 py-2">Total Days</th>
-          <th className="border border-slate-300 py-2" colSpan={4}>
-            Total Audience Weighage
-          </th>
-        </tr>
-      </thead>
-      <tbody className="w-full border border-1">
-        <tr>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 bg-blue-50">
-            Type
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 bg-blue-50">
-            {"         " + "%" + "     "}
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 bg-blue-50">
-            Monthly Count
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 bg-blue-50"></td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 bg-blue-50"></td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 bg-blue-50">
-            Monthly
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 bg-blue-50">
-            Daily
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 bg-blue-50">
-            Daily Count
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 bg-blue-50">
-            Unique Impression/Month
-          </td>
-        </tr>
-        <tr>
-          <td
-            rowSpan={3}
-            className="border border-slate-300 text-[#1297E2] cursor-pointer text-center py-2 bg-blue-50"
-          >
-            Male
-          </td>
-          <td rowSpan={3} className="border border-slate-300 text-[#1297E2]">
-            <input
-              title=""
-              placeholder="male"
-              className="text-[#1297E2] cursor-pointer  text-center w-full h-100% bg-blue-200 py-4"
-              value={
-                audienceTypeWiseData?.[currentAudienceType]?.genderWiseData[0]
-                  ?.weight ?? 0
-              }
-              onChange={(e) => {
-                handleData("Male", e.target.value);
-              }}
-            />
-          </td>
-          <td
-            rowSpan={3}
-            className="border border-slate-300  cursor-pointer  text-center py-2 "
-          >
-            {ss *
-              audienceTypeWiseData?.[currentAudienceType]?.genderWiseData[0]
-                ?.weight *
-              0.01}
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            WeekDay
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            22
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            70%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            3.1%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            545212
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 ">
-            70
-          </td>
-        </tr>
-        <tr>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            Saturday
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            4
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            70%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            3.1%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            545212
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 ">
-            70
-          </td>
-        </tr>
-        <tr>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            Sunday
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            4
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            70%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            3.1%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            545212
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 ">
-            70
-          </td>
-        </tr>
-        <tr>
-          <td
-            rowSpan={3}
-            className="border border-slate-300 text-[#6C21C7] cursor-pointer  text-center py-2 bg-[#6C21C7]-50"
-          >
-            Female
-          </td>
-          <td rowSpan={3} className="">
-            <input
-              title=""
-              placeholder="female"
-              className="text-[#1297E2] cursor-pointer  text-center w-full h-100% bg-blue-200 py-4"
-              value={
-                audienceTypeWiseData?.[currentAudienceType]?.genderWiseData[1]
-                  ?.weight ?? 0
-              }
-              onChange={(e) => {
-                handleData("Female", e.target.value);
-              }}
-            />
-          </td>
-          <td
-            rowSpan={3}
-            className="border border-slate-300  cursor-pointer  text-center py-2 "
-          >
-            {ss *
-              audienceTypeWiseData?.[currentAudienceType]?.genderWiseData[1]
-                ?.weight *
-              0.01}
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            WeekDay
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            22
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            70%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            3.1%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            545212
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 ">
-            70
-          </td>
-        </tr>
-        <tr>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            Saturday
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            4
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            70%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            3.1%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            545212
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 ">
-            70
-          </td>
-        </tr>
-        <tr>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            Sunday
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            4
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            70%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            3.1%
-          </td>
-          <td className="border border-slate-300  cursor-pointer  text-center py-2 ">
-            545212
-          </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 ">
-            70
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div>
+      <table className="border-collapse w-full text-[14px]">
+        <thead>
+          <tr>
+            <th className="border text-[#FFFFFF] bg-[#1297E2]">
+              <div>
+                <div className="border-b py-4">
+                  <h1>Audience Spirit</h1>
+                </div>
+                <div className="bg-blue-50 font-semibold text-[#1297E2] grid grid-cols-3">
+                  <div className="col-span-1 flex items-center justify-center p-2">
+                    <p >Type</p>
+                  </div>
+                  <div className="col-span-1 border-x flex items-center justify-center p-2">
+                    <p>%</p>
+                  </div>
+                  <div className="col-span-1 flex items-center justify-center p-2">
+                    <p className="truncate">Monthly Count</p>
+                  </div>
+                </div>
+              </div>
+            </th>
+            <th className="border text-[#FFFFFF] bg-[#1297E2]">
+              <div className="">
+                <h1>
+                  Month Distribution
+                </h1>
+              </div>
+            </th>
+            <th className="border text-[#FFFFFF] bg-[#1297E2]">
+              <div>
+                <h1>Total Days</h1>
+              </div>
+            </th>
+            <th className="border text-[#FFFFFF] bg-[#1297E2]">
+              <div>
+                <div className="border-b py-4">
+                  <h1>Total Audience Weight</h1>
+                </div>
+                <div className="bg-blue-50 font-semibold text-[#1297E2] grid grid-cols-4">
+                  <div className="col-span-1 flex items-center justify-center p-2">
+                    <h1 className="truncate">
+                      Monthly (%)
+                    </h1>
+                  </div>
+                  <div className="col-span-1 border-x flex items-center justify-center p-2">
+                    <h1 className="truncate">
+                      Daily (%)
+                    </h1>
+                  </div>
+                  <div className="col-span-1 border-r flex items-center justify-center p-2">
+                    <h1 className="truncate">
+                      Daily Count
+                    </h1>
+                  </div>
+                  <div className="col-span-1 flex items-center justify-center p-2 truncate">
+                    <h1 className="truncate">
+                      Unique Impression/Day
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {genderData?.map((gd: any, i: any) => (
+            <tr key={i}>
+              <td className="border">
+                <div className="grid grid-cols-3">
+                  <div className="h-full col-span-1 flex justify-center items-center">
+                    <h1 className="">
+                      {gd.gender}
+                    </h1>
+                  </div>
+                  <div className="col-span-1 flex">
+                    <input
+                      title=""
+                      type="number"
+                      placeholder="male"
+                      value={Number(gd?.weight * 100).toFixed(0)}
+                      className="text-[#1297E2] cursor-pointer text-center w-full h-full"
+                      onChange={(e) => {
+                        handleData(gd.gender, e.target.value, null);
+                      }}
+                    />
+                  </div>
+                  <div className="col-span-1 flex justify-center items-center">
+                    {
+                      Number(totalCount * audienceTypeWiseData[currentAudienceType].percentage * gd?.weight).toFixed(0) ?? 0
+                    }
+                  </div>
+                </div>
+              </td>
+              <td className="border">
+                <div className="">
+                  {Object.keys(monthDays)?.map((m: any, i: any) => (
+                    <div className={`${i+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={i}>
+                      {m.toUpperCase()}
+                    </div>
+                  ))}
+                </div>
+              </td>
+              <td className="border">
+                <div className="">
+                  {Object.keys(monthDays)?.map((m: any, j: any) => (
+                    <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
+                      {monthDays[m]}
+                    </div>
+                  ))}
+                </div>
+              </td>
+              <td className="border">
+                {Object.keys(monthDays)?.map((m: any, j: any) => (
+                  <div key={j} className="grid grid-cols-4">
+                    <div className="col-span-1">
+                      <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
+                        <input
+                          disabled={gd.weight === 0}
+                          title=""
+                          type="number"
+                          placeholder="male"
+                          className="text-[#1297E2] cursor-pointer text-center w-full h-full bg-blue-200"
+                          value={
+                            Number(gd[`${m}`].monthly * 100).toFixed(0)
+                          }
+                          onChange={(e) => {
+                            handleData(gd.gender, e.target.value, m);
+                          }}
+                        />%
+                      </div>
+                    </div>
+                    <div className="col-span-1 border-x">
+                        <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
+                          {gd[`${m}`].daily}
+                        </div>
+                    </div>
+                    <div className="col-span-1 border-r">
+                        <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
+                          {Number(totalCount * audienceTypeWiseData[currentAudienceType].percentage * gd?.weight * gd[`${m}`].daily).toFixed(0) ?? 0}
+                        </div>
+                    </div>
+                    <div className="col-span-1">
+                        <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
+                          <input
+                            disabled
+                            title=""
+                            placeholder="male"
+                            className="text-[#1297E2] cursor-pointer text-center w-full h-full bg-blue-200"
+                            value={
+                              Number(gd?.weight).toFixed(0) ?? 0
+                            }
+                            onChange={(e) => {
+                              // handleData(gd.gender, e.target.value, m);
+                            }}
+                          />%
+                        </div>
+                    </div>
+                  </div>
+                ))}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
   );
 };
 

@@ -2,6 +2,7 @@ import React from "react";
 interface Data {
   label: String;
   icon: any;
+  value: any;
   key: number;
 }
 interface Props {
@@ -12,31 +13,34 @@ interface Props {
 
 export const MyTab = ({ data, current, setCurrent }: Props) => {
   return (
-    <div className="flex text-[14px] font-bold w-full truncate">
-      {data?.map(({ label, icon, key }: Data) => (
-        <div
-          onClick={() => setCurrent(key)}
-          key={key}
-          className="flex flex-col gap-2"
-        >
+    <div className="w-full overflow-x-auto no-scrollbar">
+      <div className="flex text-[14px] font-bold whitespace-nowrap">
+        {data?.map(({ label, icon, value, key }: Data) => (
           <div
-            className={
-              current === key
-                ? "flex gap-1 text-[#1297E2] pr-6 items-center "
-                : "flex gap-1 text-[#949494] pr-6 items-center "
-            }
+            onClick={() => setCurrent(key)}
+            key={key}
+            className="flex flex-col gap-2"
           >
-            {icon} {label}
+            <div
+              className={
+                current === key
+                  ? "flex gap-1 text-[#1297E2] pr-6 items-center "
+                  : "flex gap-1 text-[#949494] pr-6 items-center "
+              }
+            >
+              {icon} {label} {value ? `(${(value * 100).toFixed(0)}%)` : ""}
+            </div>
+            <div
+              className={
+                current === key
+                  ? "border border-2 border-[#1297E2]"
+                  : " border border-2border-[#949494]"
+              }
+            ></div>
           </div>
-          <div
-            className={
-              current === key
-                ? "border border-2 border-[#1297E2]"
-                : " border border-2border-[#949494]"
-            }
-          ></div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
+
   );
 };

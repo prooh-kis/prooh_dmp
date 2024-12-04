@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
 export const EnterWeightCohortWise = ({
+  totalCount,
   audienceTypeWiseData,
   setAudienceTypeWiseData,
-  currentAudienceType,
 }: any) => {
   const [editableCell, setEditableCell] = useState<any>(null);
 
@@ -17,20 +17,21 @@ export const EnterWeightCohortWise = ({
     newData[rowIndex][column] = event.target.value * 0.01;
     setAudienceTypeWiseData(newData);
   };
+  // console.log(totalCount);
 
   return (
     <table className="border-collapse w-full text-[14px]">
       <thead>
         <tr className="text-[#FFFFFF] bg-[#1297E2] ">
-          <th className="border border-slate-300 py-2">Type</th>
-          <th className="border border-slate-300 py-2">Weightage</th>
-          <th className="border border-slate-300 py-2">Audiences Count</th>
+          <th className="border border-slate-300 py-2 w-full">Type</th>
+          <th className="border border-slate-300 py-2 w-full">Weightage</th>
+          <th className="border border-slate-300 py-2 w-full">Audiences Count</th>
         </tr>
       </thead>
       <tbody className="w-full border border-1">
         {audienceTypeWiseData?.map((data: any, index: number) => (
           <tr key={index}>
-            <td className="border border-slate-300  cursor-pointer  text-left py-2 px-2 ">
+            <td className="border border-slate-300 cursor-pointer text-left py-2 px-2 ">
               {data?.categoryType}
             </td>
             <td
@@ -38,7 +39,7 @@ export const EnterWeightCohortWise = ({
                 setEditableCell({ index, column: "percentage" })
               }
               onMouseLeave={handleBlur}
-              className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 px-2 "
+              className="border border-slate-300 text-[#1297E2] cursor-pointer text-center py-2 px-2 "
             >
               {editableCell?.index === index &&
               editableCell?.column === "percentage" ? (
@@ -46,17 +47,17 @@ export const EnterWeightCohortWise = ({
                   title=""
                   placeholder="percentage"
                   type="number"
-                  value={data?.percentage * 100}
+                  value={Number(data?.percentage * 100).toFixed(0)}
                   onBlur={handleBlur}
                   onChange={(e) => handleChange(e, index, "percentage")}
                   autoFocus
                 />
               ) : (
-                `${data?.percentage * 100}%`
+                `${Number(data?.percentage * 100).toFixed(0)}%`
               )}
             </td>
             <td className="border border-slate-300  cursor-pointer  text-center py-2 px-2 ">
-              {1000000 * data?.percentage}
+              {(totalCount * data?.percentage).toFixed(0)}
             </td>
           </tr>
         ))}
@@ -65,10 +66,10 @@ export const EnterWeightCohortWise = ({
             Total
           </td>
           <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 px-2 ">
-
+            {Number(audienceTypeWiseData?.reduce((sum: any, item: any) => sum + item.percentage, 0) * 100).toFixed(0)} %
           </td>
-          <td className="border border-slate-300 text-[#1297E2] cursor-pointer  text-center py-2 px-2 ">
-
+          <td className="border border-slate-300 cursor-pointer  text-center py-2 px-2 ">
+            {Number(totalCount * audienceTypeWiseData?.reduce((sum: any, item: any) => sum + item.percentage, 0) * 100).toFixed(0)}
           </td>
         </tr>
       </tbody>
