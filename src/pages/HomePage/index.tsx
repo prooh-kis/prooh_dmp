@@ -324,7 +324,6 @@ export const HomePage = () => {
             </Checkbox> */}
             <Checkbox
               onChange={(e) => {
-                console.log(e.target.checked)
                 setCertified(e.target.checked);
               }}
             >

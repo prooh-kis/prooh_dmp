@@ -5,9 +5,12 @@ import image3 from "../../assets/images/bbb.png";
 import image4 from "../../assets/images/cccc.png";
 import { Footer } from "../../components/footer";
 import { MyButton, RegisterHeroDataForm } from "../../components/index";
+import { useNavigate } from "react-router-dom";
 
 export const LandingPage: React.FC = () => {
   const scrollToRef = useRef<any>(null);
+  const navigate = useNavigate();
+
   const handleClick = () => {
     scrollToRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -56,6 +59,9 @@ export const LandingPage: React.FC = () => {
                 outLine="2"
                 color="#000000"
                 bgColor="#FFFFFF"
+                onClick={() => {
+                  navigate("/dashboard")
+                }}
               />
             </div>
           </div>

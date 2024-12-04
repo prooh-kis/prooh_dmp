@@ -4,6 +4,7 @@ import { Header, HomePageLayout } from "../components";
 
 import {
   AuthPage,
+  DashboardPage,
   ForgetPassword,
   HomePage,
   LandingPage,
@@ -15,6 +16,7 @@ import {
 import { PrivateRoute } from "./PrivateRoute";
 import {
   AUTH,
+  DASHBOARD,
   FORGET_PASSWORD,
   HOME,
   HOMEPAGE,
@@ -61,6 +63,8 @@ const Routers: React.FC = () => {
         />
         <Route path={HOME} element={<LandingPage />} />
         <Route path={HOMEPAGE} element={<HomePage />} />
+        <Route path={DASHBOARD} element={<DashboardPage />} />
+
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>

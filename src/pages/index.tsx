@@ -8,3 +8,4 @@ export {
 } from "./AuthPage";
 export { LandingPage } from "./LandingPage";
 export { HomePage } from "./HomePage";
+export { DashboardPage } from "./DashboardPage";

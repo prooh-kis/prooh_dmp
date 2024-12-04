@@ -4,7 +4,6 @@ export const FORGET_PASSWORD = "/forget-password";
 export const UPDATE_PASSWORD = "/update-password";
 
 export const HOME = "/";
-export const HOMEPAGE= "/homepage"
-
-
+export const HOMEPAGE = "/homepage"
+export const DASHBOARD = "/dashboard";
 
