@@ -31,24 +31,16 @@ export const HomePage = () => {
   const [totalCount, setTotalCount] = useState<number>(100000);
   const [selectedMarketSite, setSelectedMarketSite] = useState<any>("");
   const [certified, setCertified] = useState<any>(false);
+  const [genderData, setGenderData] = useState<any>(null);
 
   const [audienceTypeWiseData, setAudienceTypeWiseData] = useState<any>(ALL_COHORTS?.map((val: any) => {
     return {
       categoryType: val,
       percentage: 0,
       genderWiseData: [],
-      impact_factor: {
-        govt_holidays: 0,
-        long_weekends_holidays: 0,
-        festivals: 0,
-        peak_winters: 0,
-        peak_summers: 0,
-        summer_holidays_school: 0,
-      }
     }
   }));
   const [currentAudienceType, setCurrentAudienceType] = useState<number>(0);
-  const [genderData, setGenderData] = useState<any>(null);
 
   const heroDataDetails = useSelector((state: any) => state.heroDataDetails);
   const { loading, error, success, data: heroDataUser } = heroDataDetails;
@@ -81,6 +73,14 @@ export const HomePage = () => {
             evening: 0,
             night: 0,
           },
+          impactFactor: {
+            govtHolidays: 0,
+            longWeekendHolidays: 0,
+            festivals: 0,
+            peakWinters: 0,
+            peakSummers: 0,
+            summerHolidaysSchool: 0,
+          }
         },
         saturdays: {
           days: 4,
@@ -92,6 +92,14 @@ export const HomePage = () => {
             afternoon: 0,
             evening: 0,
             night: 0,
+          },
+          impactFactor: {
+            govtHolidays: 0,
+            longWeekendHolidays: 0,
+            festivals: 0,
+            peakWinters: 0,
+            peakSummers: 0,
+            summerHolidaysSchool: 0,
           }
         },
         sundays: {
@@ -104,6 +112,14 @@ export const HomePage = () => {
             afternoon: 0,
             evening: 0,
             night: 0,
+          },
+          impactFactor: {
+            govtHolidays: 0,
+            longWeekendHolidays: 0,
+            festivals: 0,
+            peakWinters: 0,
+            peakSummers: 0,
+            summerHolidaysSchool: 0,
           }
         },
       },{
@@ -119,6 +135,14 @@ export const HomePage = () => {
             afternoon: 0,
             evening: 0,
             night: 0,
+          },
+          impactFactor: {
+            govtHolidays: 0,
+            longWeekendHolidays: 0,
+            festivals: 0,
+            peakWinters: 0,
+            peakSummers: 0,
+            summerHolidaysSchool: 0,
           }
         },
         saturdays: {
@@ -131,6 +155,14 @@ export const HomePage = () => {
             afternoon: 0,
             evening: 0,
             night: 0,
+          },
+          impactFactor: {
+            govtHolidays: 0,
+            longWeekendHolidays: 0,
+            festivals: 0,
+            peakWinters: 0,
+            peakSummers: 0,
+            summerHolidaysSchool: 0,
           }
         },
         sundays: {
@@ -143,6 +175,14 @@ export const HomePage = () => {
             afternoon: 0,
             evening: 0,
             night: 0,
+          },
+          impactFactor: {
+            govtHolidays: 0,
+            longWeekendHolidays: 0,
+            festivals: 0,
+            peakWinters: 0,
+            peakSummers: 0,
+            summerHolidaysSchool: 0,
           }
         },
       }]);
@@ -177,17 +217,19 @@ export const HomePage = () => {
     }
 
     if (heroDataDetails?.audienceData?.audiencePercentCategories?.length > 0) {
-      // setAudienceTypeWiseData(heroDataDetails?.audienceData);
-      setSelectedMarketSite(heroDataDetails?.user?.touchPoints[0].marketSites?.[0]);
+      setAudienceTypeWiseData(heroDataDetails?.audienceData);
+      if (selectedMarketSite === "") {
+        setSelectedMarketSite(heroDataDetails?.user?.touchPoints[0].marketSites?.[0]);
+      }
       // setTotalCount(heroDataDetails?.audienceData?.totalAudienceCount);
     }
     
-    if (gotAudienceData) {
+    if (gotAudienceData && gotAudienceData?.audiencePercentCategories?.length > 0) {
       setAudienceTypeWiseData(gotAudienceData.audiencePercentCategories)
       setTotalCount(gotAudienceData.totalAudienceCount);
     }
 
-  }, [dispatch, heroDataDetails, error, gotAudienceData]);
+  }, [dispatch, selectedMarketSite, heroDataDetails, errorAudienceData, errorSave, error, gotAudienceData]);
 
   useEffect(() => {
     if (successSave) {
@@ -232,7 +274,7 @@ export const HomePage = () => {
               <div className="flex items-center" onClick={() => {
                 handleSaveData(audienceTypeWiseData)
               }}>
-                <i className="fi fi-sr-check-circle flex items-center"></i>
+                <i className={`fi fi-sr-check-circle text-green-500 flex items-center`}></i>
               </div>
             </div>
 
@@ -251,7 +293,7 @@ export const HomePage = () => {
               <div className="flex items-center" onClick={() => {
                 handleSaveData(audienceTypeWiseData)
               }}>
-                <i className="fi fi-sr-check-circle flex items-center"></i>
+                <i className="fi fi-sr-check-circle text-green-500 flex items-center"></i>
               </div>
             </div>
             <div className="py-4">
@@ -281,7 +323,7 @@ export const HomePage = () => {
               <div className="flex items-center" onClick={() => {
                   handleSaveData(audienceTypeWiseData)
                 }}>
-                  <i className="fi fi-sr-check-circle flex items-center"></i>
+                  <i className="fi fi-sr-check-circle text-green-500 flex items-center"></i>
                 </div>
             </div>
             <EnterAudienceDataTimeZoonWiseTable
@@ -302,7 +344,7 @@ export const HomePage = () => {
                 <div className="flex items-center" onClick={() => {
                   handleSaveData(audienceTypeWiseData)
                 }}>
-                  <i className="fi fi-sr-check-circle flex items-center"></i>
+                  <i className="fi fi-sr-check-circle text-green-500 flex items-center"></i>
                 </div>
             </div>
             <EnterImpactFactorTable
@@ -335,7 +377,7 @@ export const HomePage = () => {
       </div>
       <div className="bg-white rounded-md w-full">
         <div className="px-16  py-4 flex justify-end gap-4">
-          <MyButton
+          {/* <MyButton
             title="Reset"
             width="72px"
             height="24px"
@@ -346,7 +388,7 @@ export const HomePage = () => {
             onClick={() => {
 
             }}
-          />
+          /> */}
           <MyButton
             title="Save"
             width="72px"

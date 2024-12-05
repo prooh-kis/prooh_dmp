@@ -10,6 +10,15 @@ export const EnterAudienceTypeDataTable = ({
   monthDays,
 }: any) => {
   // console.log("audienceTypeWiseData : ", audienceTypeWiseData);
+  const [editableCell, setEditableCell] = useState<any>(null);
+  const [editableCell1, setEditableCell1] = useState<any>(null);
+  const [editableCell2, setEditableCell2] = useState<any>(null);
+
+  const handleBlur = () => {
+    setEditableCell(null);
+    setEditableCell1(null);
+    setEditableCell2(null);
+  };
 
   const handleData = (gender: string, value: any, day: any) => {
     const enterValue = Number(value / 100);
@@ -39,7 +48,26 @@ export const EnterAudienceTypeDataTable = ({
   };
   
 
+  const handleUniqueData = (gender: string, value: any, day: any) => {
+    const enterValue = Number(value / 100);
+    const newGenderData = JSON.parse(JSON.stringify(genderData?.find((d: any) => d.gender === gender)));
+    newGenderData[day] = {
+      ...newGenderData[day],
+      unique: enterValue,
+    };
 
+    const updatedGenderData = genderData.map((d: any) =>
+      d.gender === gender ? newGenderData : d
+    );
+
+    setGenderData(updatedGenderData);
+  
+    setAudienceTypeWiseData((prev: any) => {
+      const updatedAudienceTypeData = JSON.parse(JSON.stringify(prev));
+      updatedAudienceTypeData[currentAudienceType].genderWiseData = updatedGenderData;
+      return updatedAudienceTypeData;
+    });
+  }
 
   return (
     <div>
@@ -117,21 +145,32 @@ export const EnterAudienceTypeDataTable = ({
                       {gd.gender}
                     </h1>
                   </div>
-                  <div className="col-span-1 flex">
-                    <input
-                      title=""
-                      type="number"
-                      placeholder="male"
-                      value={Number(gd?.weight * 100).toFixed(0)}
-                      className="text-[#1297E2] cursor-pointer text-center w-full h-full"
-                      onChange={(e) => {
-                        handleData(gd.gender, e.target.value, null);
-                      }}
-                    />
+                  <div
+                    onMouseEnter={() => {
+                      setEditableCell({ index: i, column: "percentage" })
+                    }}
+                    onMouseLeave={handleBlur}
+                    className="col-span-1 border-x border-slate-300 text-[#1297E2] cursor-pointer text-center"
+                  >
+                    {editableCell?.index === i &&
+                    editableCell?.column === "percentage" ? (
+                      <input
+                        title=""
+                        placeholder="percentage"
+                        type="number"
+                        value={Number(gd?.weight * 100).toFixed(0)}
+                        onBlur={handleBlur}
+                        onChange={(e) => handleData(gd.gender, e.target.value, null)}
+                        autoFocus
+                        className="w-full"
+                      />
+                    ) : (
+                      `${Number(gd?.weight * 100).toFixed(0)}%`
+                    )}
                   </div>
                   <div className="col-span-1 flex justify-center items-center">
                     {
-                      Number(totalCount * audienceTypeWiseData[currentAudienceType].percentage * gd?.weight).toFixed(0) ?? 0
+                      Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight).toFixed(0) ?? 0
                     }
                   </div>
                 </div>
@@ -157,22 +196,30 @@ export const EnterAudienceTypeDataTable = ({
               <td className="border">
                 {Object.keys(monthDays)?.map((m: any, j: any) => (
                   <div key={j} className="grid grid-cols-4">
-                    <div className="col-span-1">
-                      <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
+                    <div
+                      onMouseEnter={() => {
+                        setEditableCell1({ gender: gd.gender, index: j, column: "percentage" })
+                      }}
+                      onMouseLeave={handleBlur}
+                      className={`col-span-1 ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } col-span-1 border-slate-300 text-[#1297E2] cursor-pointer text-center p-2 flex justify-center items-center`} key={j}
+                    >
+                      {editableCell1?.index === j &&
+                      editableCell1?.gender === gd.gender &&
+                      editableCell1?.column === "percentage" ? (
                         <input
-                          disabled={gd.weight === 0}
+                          // disabled={gd.weight === 0}
                           title=""
+                          placeholder="percentage"
                           type="number"
-                          placeholder="male"
-                          className="text-[#1297E2] cursor-pointer text-center w-full h-full bg-blue-200"
-                          value={
-                            Number(gd[`${m}`].monthly * 100).toFixed(0)
-                          }
-                          onChange={(e) => {
-                            handleData(gd.gender, e.target.value, m);
-                          }}
-                        />%
-                      </div>
+                          value={Number(gd[`${m}`].monthly * 100).toFixed(0)}
+                          onBlur={handleBlur}
+                          onChange={(e) => handleData(gd.gender, e.target.value, m)}
+                          autoFocus
+                          className="w-full"
+                        />
+                      ) : (
+                        `${Number(gd[`${m}`].monthly * 100).toFixed(0)}%`
+                      )}
                     </div>
                     <div className="col-span-1 border-x">
                         <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
@@ -181,24 +228,36 @@ export const EnterAudienceTypeDataTable = ({
                     </div>
                     <div className="col-span-1 border-r">
                         <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                          {Number(totalCount * audienceTypeWiseData[currentAudienceType].percentage * gd?.weight * gd[`${m}`].daily).toFixed(0) ?? 0}
+                          {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily).toFixed(0) ?? 0}
                         </div>
                     </div>
                     <div className="col-span-1">
-                        <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                          <input
-                            disabled
-                            title=""
-                            placeholder="male"
-                            className="text-[#1297E2] cursor-pointer text-center w-full h-full bg-blue-200"
-                            value={
-                              Number(gd?.weight).toFixed(0) ?? 0
-                            }
-                            onChange={(e) => {
-                              // handleData(gd.gender, e.target.value, m);
-                            }}
-                          />%
-                        </div>
+                      <div
+                        onMouseEnter={() => {
+                          setEditableCell2({ gender: gd.gender, index: j, column: "unique" })
+                        }}
+                        onMouseLeave={handleBlur}
+                        className={`col-span-1 ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } col-span-1 border-slate-300 text-[#1297E2] cursor-pointer text-center p-2 flex justify-center items-center`}
+                        key={j}
+                      >
+                        {editableCell2?.index === j &&
+                          editableCell2?.gender === gd.gender &&
+                          editableCell2?.column === "unique" ? (
+                            <input
+                              // disabled={gd.weight === 0}
+                              title=""
+                              placeholder="unique"
+                              type="number"
+                              value={Number(gd?.[m]?.unique * 100).toFixed(0)}
+                              onBlur={handleBlur}
+                              onChange={(e) => handleUniqueData(gd.gender, e.target.value, m)}
+                              autoFocus
+                              className="w-full"
+                            />
+                          ) : (
+                            `${Number(gd?.[m]?.unique * 100).toFixed(0)}%`
+                          )}
+                      </div>
                     </div>
                   </div>
                 ))}

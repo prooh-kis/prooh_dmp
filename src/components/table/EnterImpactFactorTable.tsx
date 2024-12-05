@@ -11,6 +11,10 @@ export const EnterImpactFactorTable = ({
 }: any) => {
   const [editableCell, setEditableCell] = useState<any>(null);
 
+  const handleBlur = () => {
+    // setEditableCell(null);
+  };
+
   const getImpactFactorKeys = (data: any) => {
     const keys = new Set();
 
@@ -60,11 +64,6 @@ export const EnterImpactFactorTable = ({
   };
   
 
-  const handleBlur = () => {
-    setEditableCell(null);
-  };
-
-
   return (
     <table className="border-collapse w-full text-[14px]">
       <thead>
@@ -75,7 +74,7 @@ export const EnterImpactFactorTable = ({
                 <h1>Audience Split</h1>
               </div>
               <div className="py-2 bg-[#EDF8FF] text-gray-900 font-semibold grid grid-cols-3">
-                <div className="col-span-1">
+                <div className="bo col-span-1">
                   <h1>Type</h1>
                 </div>
                 <div className="col-span-2">
@@ -89,7 +88,12 @@ export const EnterImpactFactorTable = ({
               <div className="w-full py-2">
                 <h1>Impact of factors on visit</h1>
               </div>
-              <div className="py-2 h-full bg-[#EDF8FF] text-gray-900 font-semibold w-full grid grid-cols-6">
+              <div className="py-2 h-full bg-[#EDF8FF] text-gray-900 font-semibold w-full grid grid-cols-6"
+                onClick={() => {
+                  console.log(genderData)
+                  console.log(getImpactFactorKeys(genderData));
+                }}
+              >
                 {getImpactFactorKeys(genderData)?.filter((fgd: any) => fgd !== "_id")?.map((gdi: any, z: any) => (
                   <div key={z} className="col-span-1 px-2">
                     <h1 className="truncate">
@@ -134,10 +138,36 @@ export const EnterImpactFactorTable = ({
               <td className="border-b border-r col-span-2">
                 <div className="grid grid-cols-6 h-full flex justify-center items-center">
                   {getImpactFactorKeys(genderData)?.filter((fgd: any) => fgd !== "_id")?.map((gdi: any, z: any) => (
-                    <div key={z} className={`${z === 0 ? "" : "border-l" } w-full`}>
+                    <div key={z} className={`${z === 0 ? "" : "border-l" } w-full`} >
                       {Object.keys(monthDays)?.map((m: any, i: any) => (
-                        <div className={`${i+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-[10px] flex justify-center items-center`} key={i}>
-                          <input
+                        <div
+                          onMouseEnter={() =>
+                            setEditableCell({ factor: gdi, gender: gd.gender, day: gd?.[m], index: i, column: "percentage" })
+                          }
+                          onMouseLeave={handleBlur}
+                          className={`${i+1 === Object.keys(monthDays)?.length ? "" : "border-b" } border-slate-300 text-[#1297E2] cursor-pointer text-center p-[8px] flex justify-center items-center`}
+                          key={i}
+                        >
+                          {editableCell?.index === i &&
+                          editableCell?.gender === gd?.gender &&
+                          editableCell?.day === gd?.[m] &&
+                          editableCell?.factor === gdi &&
+                          editableCell?.column === "percentage" ? (
+                            <input
+                                title=""
+                                placeholder="percentage"
+                                type="number"
+                                value={Number(gd[`${m}`]?.impactFactor[gdi] * 100).toFixed(0)}
+                                onBlur={handleBlur}
+                                onChange={(e) => handleData(gd.gender, e.target.value, m, gdi)}
+                                autoFocus
+                                className="w-full"
+                              />
+                            ) : (
+                              `${Number(gd[`${m}`]?.impactFactor[gdi] * 100).toFixed(0)}%`
+                            )}
+                          
+                          {/* <input
                             disabled={gd.weight === 0}
                             title=""
                             type="number"
@@ -149,7 +179,7 @@ export const EnterImpactFactorTable = ({
                             onChange={(e) => {
                               handleData(gd.gender, e.target.value, m, gdi);
                             }}
-                          />
+                          /> */}
                         </div>
                       ))}
                     </div>

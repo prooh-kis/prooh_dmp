@@ -20,10 +20,10 @@ export const HeroDataDetailPage = ({ data, selectedMarketSite, setSelectedMarket
   );
 
   useEffect(() => {
-    if (data) {
+    if (data && selectedMarketSite === "") {
       setSelectedMarketSite(data?.touchPoints[0].marketSites?.[0]);
     }
-  },[data]);
+  },[data, selectedMarketSite, setSelectedMarketSite]);
 
   const getTable = (current: number) => {
     switch (current) {
@@ -79,12 +79,7 @@ export const HeroDataDetailPage = ({ data, selectedMarketSite, setSelectedMarket
     <div className="bg-white">
       <div className="p-8 flex justify-between">
         <div className="flex gap-4 justify-center items-center ">
-          <i className="fi fi-bs-angle-left"></i>
-          <img
-            src="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
-            alt=""
-            className="h-[64px] w-[64px] rounded-md"
-          />
+          {/* <i className="fi fi-bs-angle-left"></i> */}
           <div>
             <h1 className="text-[#0E212E] text-[24px] font-semibold">
               {data?.name}
