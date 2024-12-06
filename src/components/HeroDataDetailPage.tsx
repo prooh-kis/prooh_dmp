@@ -76,8 +76,8 @@ export const HeroDataDetailPage = ({ data, selectedMarketSite, setSelectedMarket
   };
 
   return (
-    <div className="bg-white">
-      <div className="p-8 flex justify-between">
+    <div className="bg-white mt-6">
+      <div className="px-8 pt-8 pb-4 flex justify-between">
         <div className="flex gap-4 justify-center items-center ">
           {/* <i className="fi fi-bs-angle-left"></i> */}
           <div>
@@ -105,7 +105,7 @@ export const HeroDataDetailPage = ({ data, selectedMarketSite, setSelectedMarket
         </div>
       </div>
       <div className="border border-1"></div>
-      <div className="p-8">
+      <div className="px-8 py-4">
         <div className="flex items-center justify-between">
           <h1 className="py-4 text-[14px]">You Are Working On</h1>
           <div className="w-1/4">

@@ -73,8 +73,8 @@ export const EnterAudienceTypeDataTable = ({
     <div>
       <table className="border-collapse w-full text-[14px]">
         <thead>
-          <tr>
-            <th className="border text-[#FFFFFF] bg-[#1297E2]">
+          <tr className="grid grid-cols-12">
+            <th className="col-span-3 border text-[#FFFFFF] bg-[#1297E2]">
               <div>
                 <div className="border-b py-4">
                   <h1>Audience Spirit</h1>
@@ -92,19 +92,19 @@ export const EnterAudienceTypeDataTable = ({
                 </div>
               </div>
             </th>
-            <th className="border text-[#FFFFFF] bg-[#1297E2]">
+            <th className="col-span-2 border flex flex-col justify-center items-center text-[#FFFFFF] bg-[#1297E2]">
               <div className="">
                 <h1>
                   Month Distribution
                 </h1>
               </div>
             </th>
-            <th className="border text-[#FFFFFF] bg-[#1297E2]">
+            <th className="col-span-1 border flex flex-col justify-center items-center text-[#FFFFFF] bg-[#1297E2]">
               <div>
                 <h1>Total Days</h1>
               </div>
             </th>
-            <th className="border text-[#FFFFFF] bg-[#1297E2]">
+            <th className="col-span-6 border text-[#FFFFFF] bg-[#1297E2]">
               <div>
                 <div className="border-b py-4">
                   <h1>Total Audience Weight</h1>
@@ -137,9 +137,9 @@ export const EnterAudienceTypeDataTable = ({
         </thead>
         <tbody>
           {genderData?.map((gd: any, i: any) => (
-            <tr key={i}>
-              <td className="border">
-                <div className="grid grid-cols-3">
+            <tr key={i} className="grid grid-cols-12">
+              <td className="col-span-3 border flex flex-col justify-center items-between">
+                <div className="grid grid-cols-3 h-full">
                   <div className="h-full col-span-1 flex justify-center items-center">
                     <h1 className="">
                       {gd.gender}
@@ -150,7 +150,7 @@ export const EnterAudienceTypeDataTable = ({
                       setEditableCell({ index: i, column: "percentage" })
                     }}
                     onMouseLeave={handleBlur}
-                    className="col-span-1 border-x border-slate-300 text-[#1297E2] cursor-pointer text-center"
+                    className="col-span-1 border-x border-slate-300 text-[#1297E2] cursor-pointer text-center flex justify-center items-center"
                   >
                     {editableCell?.index === i &&
                     editableCell?.column === "percentage" ? (
@@ -175,7 +175,7 @@ export const EnterAudienceTypeDataTable = ({
                   </div>
                 </div>
               </td>
-              <td className="border">
+              <td className="col-span-2 border">
                 <div className="">
                   {Object.keys(monthDays)?.map((m: any, i: any) => (
                     <div className={`${i+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={i}>
@@ -184,7 +184,7 @@ export const EnterAudienceTypeDataTable = ({
                   ))}
                 </div>
               </td>
-              <td className="border">
+              <td className="col-span-1 border">
                 <div className="">
                   {Object.keys(monthDays)?.map((m: any, j: any) => (
                     <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
@@ -193,7 +193,7 @@ export const EnterAudienceTypeDataTable = ({
                   ))}
                 </div>
               </td>
-              <td className="border">
+              <td className="col-span-6 border">
                 {Object.keys(monthDays)?.map((m: any, j: any) => (
                   <div key={j} className="grid grid-cols-4">
                     <div

@@ -13,13 +13,15 @@ interface Props {
 
 export const MyTab = ({ data, current, setCurrent }: Props) => {
   return (
-    <div className="w-full overflow-x-auto no-scrollbar">
-      <div className="flex text-[14px] font-bold whitespace-nowrap">
+    // <div className="w-full overflow-x-auto no-scrollbar">
+    <div className="w-full ">
+
+      <div className="flex flex-wrap text-[14px] font-bold whitespace-nowrap">
         {data?.map(({ label, icon, value, key }: Data) => (
           <div
             onClick={() => setCurrent(key)}
             key={key}
-            className="flex flex-col gap-2"
+            className="flex flex-col gap-2 py-2"
           >
             <div
               className={

@@ -272,7 +272,7 @@ export const HomePage = () => {
                 1. Enter Audience Segment Wise Data
               </h1>
               <div className="flex items-center" onClick={() => {
-                handleSaveData(audienceTypeWiseData)
+                handleSaveData(audienceTypeWiseData);
               }}>
                 <i className={`fi fi-sr-check-circle text-green-500 flex items-center`}></i>
               </div>
@@ -291,7 +291,7 @@ export const HomePage = () => {
                 2. Enter Audience Type Wise Data
               </h1>
               <div className="flex items-center" onClick={() => {
-                handleSaveData(audienceTypeWiseData)
+                handleSaveData(audienceTypeWiseData);
               }}>
                 <i className="fi fi-sr-check-circle text-green-500 flex items-center"></i>
               </div>
@@ -321,7 +321,7 @@ export const HomePage = () => {
                 3. Enter Audience Data TIme Zone Wise
               </h1>
               <div className="flex items-center" onClick={() => {
-                  handleSaveData(audienceTypeWiseData)
+                  handleSaveData(audienceTypeWiseData);
                 }}>
                   <i className="fi fi-sr-check-circle text-green-500 flex items-center"></i>
                 </div>
@@ -342,7 +342,7 @@ export const HomePage = () => {
                   4. Impact Factor Analysis
                 </h1>
                 <div className="flex items-center" onClick={() => {
-                  handleSaveData(audienceTypeWiseData)
+                  handleSaveData(audienceTypeWiseData);
                 }}>
                   <i className="fi fi-sr-check-circle text-green-500 flex items-center"></i>
                 </div>
