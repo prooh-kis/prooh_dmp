@@ -16,3 +16,14 @@ export {
 
 export { RegisterHeroDataForm } from "./RegisterHeroDataForm";
 export { HeroDataDetailPage } from "./HeroDataDetailPage";
+export { LinearBar } from "./LinearBar";
+
+// graphView
+
+export { AudienceTypeWiseView } from "./graphView/AudienceTypeWiseView";
+export { DailyWiseDistribution } from "./graphView/DailyWiseDistribution";
+export { AudienceDataTimeZoneWiseView } from "./graphView/AudienceDataTimeZoneWiseView";
+export { AudienceDataTimeZoneWiseFemaleView } from "./graphView/AudienceDataTimeZoneWiseFemaleView";
+export { ChartInfo } from "./graphView/ChartInfo";
+export { ImpactOfOtherThingVisit } from "./graphView/ImpactOfOtherThingVisit";
+export { ImpactView } from "./graphView/ImpactView";

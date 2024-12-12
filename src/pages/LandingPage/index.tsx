@@ -60,7 +60,7 @@ export const LandingPage: React.FC = () => {
                 color="#000000"
                 bgColor="#FFFFFF"
                 onClick={() => {
-                  navigate("/dashboard")
+                  navigate("/dashboard?userId=674cf966c5991c8fd79e575a");
                 }}
               />
             </div>
