@@ -218,7 +218,7 @@ export const HomePage = () => {
         })
       );
     }
-  }, [dispatch, selectedMarketSite]);
+  }, [dispatch, selectedMarketSite, urlParams.get("userId")]);
 
   useEffect(() => {
     if (error) {

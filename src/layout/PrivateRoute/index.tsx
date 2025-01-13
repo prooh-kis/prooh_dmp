@@ -15,11 +15,11 @@ export const PrivateRoute = (props: any) => {
   const userSignin = useSelector((state: any) => state.userSignin);
   const { userInfo } = userSignin;
 
-//   useEffect(() => {
-//     if (!userInfo) {
-//       navigate(AUTH);
-//     }
-//   }, [userInfo]);
+  useEffect(() => {
+    if (!userInfo) {
+      navigate(AUTH);
+    }
+  }, [userInfo]);
 
   return (
     <div className="h-[100vh] w-[100vw] p-0 m-0">

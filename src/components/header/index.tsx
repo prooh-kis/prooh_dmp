@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AUTH } from "../../routes/routes";
+import { message } from "antd";
 
 export const Header: React.FC = () => {
   const dispatch = useDispatch<any>();
@@ -24,22 +25,23 @@ export const Header: React.FC = () => {
       path: "/",
     },
     {
-      label: "About Us",
-      path: "/aboutUs",
-    },
-    {
-      label: "Contact Us",
-      path: "/contactUs",
-    },
-    {
       label: "Research",
       path: `/homepage?userId=${userInfo?._id}`,
     },
-    {
-      label: "Help",
-      path: "/home",
-    },
   ]);
+
+  const handleClick = (index: number) => {
+    setCurrent(tabs[index]?.label);
+    if (index == 1) {
+      if (!userInfo) {
+        message.error("please  signIn");
+        navigate("/auth");
+      }
+      navigate(`/homepage?userId=${userInfo?._id}`);
+    } else {
+      navigate(tabs[index].path);
+    }
+  };
 
   const handleSignOut = () => {
     dispatch(signout());
@@ -62,10 +64,7 @@ export const Header: React.FC = () => {
             <button
               key={d1?.label}
               type="button"
-              onClick={() => {
-                setCurrent(d1.label);
-                navigate(d1.path);
-              }}
+              onClick={() => handleClick(index)}
               className={`${
                 current === d1.label
                   ? "text-sm lg:text-base text-[#129BFF] border-b-2 border-[#129BFF] py-5 leading-[20.69px] tracking-[0.01rem]"
