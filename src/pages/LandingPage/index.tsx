@@ -6,6 +6,8 @@ import image4 from "../../assets/images/cccc.png";
 import { Footer } from "../../components/footer";
 import { MyButton, RegisterHeroDataForm } from "../../components/index";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { AUTH } from "../../routes/routes";
 
 export const LandingPage: React.FC = () => {
   const scrollToRef = useRef<any>(null);
@@ -13,6 +15,21 @@ export const LandingPage: React.FC = () => {
 
   const handleClick = () => {
     scrollToRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const userSignin = useSelector((state: any) => state.userSignin);
+  const {
+    error: errorSignIn,
+    success: successSignin,
+    userInfo: userInfo,
+  } = userSignin;
+  // console.log("userInfo : ", userInfo);
+  const handleGoReach = () => {
+    if (userInfo) {
+      navigate(`/dashboard?userId=${userInfo?._id}`);
+    } else {
+      navigate(AUTH);
+    }
   };
   return (
     <div>
@@ -59,9 +76,7 @@ export const LandingPage: React.FC = () => {
                 outLine="2"
                 color="#000000"
                 bgColor="#FFFFFF"
-                onClick={() => {
-                  navigate("/dashboard?userId=674cf966c5991c8fd79e575a");
-                }}
+                onClick={handleGoReach}
               />
             </div>
           </div>
@@ -189,7 +204,7 @@ export const LandingPage: React.FC = () => {
             </div>
             <h1 className="text-[16px]  pt-4">
               2. We Are Currently Looking To Seek Data In The Following
-              Touchpoints
+              Touch points
             </h1>
             <div className="flex gap-8 items-center text-[#254354] pt-4">
               <div className="flex gap-2 items-center">

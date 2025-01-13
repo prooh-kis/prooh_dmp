@@ -13,7 +13,6 @@ import {
   VerifyEmail,
 } from "../pages";
 
-import { PrivateRoute } from "./PrivateRoute";
 import {
   AUTH,
   DASHBOARD,
@@ -23,47 +22,45 @@ import {
   UPDATE_PASSWORD,
   VERIFY_EMAIL,
 } from "./routes";
+import { PublicRoute } from "../layout/PublicRoute";
+import { PrivateRoute } from "../layout/PrivateRoute";
 
 const Routers: React.FC = () => {
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
         <Route
           path={AUTH}
           element={
-            <PrivateRoute layout={HomePageLayout}>
+            <PublicRoute>
               <AuthPage />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path={HOME}
+          element={
+            <PublicRoute>
+              <LandingPage />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path={HOMEPAGE}
+          element={
+            <PrivateRoute>
+              <HomePage />
             </PrivateRoute>
           }
         />
         <Route
-          path={VERIFY_EMAIL}
+          path={DASHBOARD}
           element={
-            <PrivateRoute layout={HomePageLayout}>
-              <VerifyEmail />
+            <PrivateRoute>
+              <DashboardPage />
             </PrivateRoute>
           }
         />
-        <Route
-          path={FORGET_PASSWORD}
-          element={
-            <PrivateRoute layout={HomePageLayout}>
-              <ForgetPassword />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={UPDATE_PASSWORD}
-          element={
-            <PrivateRoute layout={HomePageLayout}>
-              <UpdatePassword />
-            </PrivateRoute>
-          }
-        />
-        <Route path={HOME} element={<LandingPage />} />
-        <Route path={HOMEPAGE} element={<HomePage />} />
-        <Route path={DASHBOARD} element={<DashboardPage />} />
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>

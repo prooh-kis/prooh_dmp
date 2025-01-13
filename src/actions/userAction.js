@@ -1,4 +1,3 @@
-
 import Axios from "axios";
 // import { logoutAfterTimeOut } from "../utils/utilityFunctions";
 import {
@@ -28,6 +27,7 @@ import { removeDispatchData } from "../utils/dispatchUtils";
 import { removeAllKeyFromLocalStorage } from "../utils/localStorageUtils";
 
 const USER_URL = `${process.env.REACT_APP_PROOH_SERVER}/api/v1/users`;
+const HERO_DATA_URL = `${process.env.REACT_APP_PROOH_SERVER}/api/v2/heroData`;
 
 export const signup = (reqBody) => async (dispatch) => {
   dispatch({
@@ -88,23 +88,20 @@ export const createUser = (reqBody) => async (dispatch, getState) => {
   }
 };
 
-export const signin = (email, password) => async (dispatch) => {
+export const signin = (email) => async (dispatch) => {
   dispatch({
     type: USER_SIGNIN_REQUEST,
-    payload: { email, password },
+    payload: { email },
   });
   try {
-    const { data } = await Axios.post(`${USER_URL}/signin`, {
+    const { data } = await Axios.post(`${HERO_DATA_URL}/signIn`, {
       email,
-      password,
     });
 
     dispatch({
       type: USER_SIGNIN_SUCCESS,
       payload: data,
     });
-    // localStorage.setItem("userInfo", JSON.stringify(data));
-
     const loginTime = new Date().getTime();
     const loginData = {
       userInfo: data,
@@ -256,56 +253,64 @@ export const googleSignupSignin =
     }
   };
 
-export const sendEmailForConfirmation = (formData) => async (dispatch, getState) => {
-  dispatch({
-    type: SEND_EMAIL_FOR_CONFIRMATION_REQUEST,
-    // payload: ,
-  });
-  try {
+export const sendEmailForConfirmation =
+  (formData) => async (dispatch, getState) => {
+    dispatch({
+      type: SEND_EMAIL_FOR_CONFIRMATION_REQUEST,
+      // payload: ,
+    });
+    try {
+      const { data } = await Axios.post(
+        `${USER_URL}/sendEmailForConfirmation`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      dispatch({
+        type: SEND_EMAIL_FOR_CONFIRMATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: SEND_EMAIL_FOR_CONFIRMATION_ERROR,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
-    const { data } = await Axios.post(`${USER_URL}/sendEmailForConfirmation`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      }
-    });
+export const sendEmailForVendorConfirmation =
+  (emailData) => async (dispatch, getState) => {
     dispatch({
-      type: SEND_EMAIL_FOR_CONFIRMATION_SUCCESS,
-      payload: data,
+      type: SEND_EMAIL_FOR_VENDOR_CONFIRMATION_REQUEST,
+      // payload: ,
     });
-  } catch (error) {
-    dispatch({
-      type: SEND_EMAIL_FOR_CONFIRMATION_ERROR,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-}
-
-export const sendEmailForVendorConfirmation = (emailData) => async (dispatch, getState) => {
-  dispatch({
-    type: SEND_EMAIL_FOR_VENDOR_CONFIRMATION_REQUEST,
-    // payload: ,
-  });
-  try {
-
-    const { data } = await Axios.post(`${USER_URL}/sendEmailForVendorConfirmation`, emailData, {
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
-    dispatch({
-      type: SEND_EMAIL_FOR_VENDOR_CONFIRMATION_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: SEND_EMAIL_FOR_VENDOR_CONFIRMATION_ERROR,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-}
+    try {
+      const { data } = await Axios.post(
+        `${USER_URL}/sendEmailForVendorConfirmation`,
+        emailData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      dispatch({
+        type: SEND_EMAIL_FOR_VENDOR_CONFIRMATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: SEND_EMAIL_FOR_VENDOR_CONFIRMATION_ERROR,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };

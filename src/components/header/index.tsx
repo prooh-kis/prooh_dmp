@@ -1,14 +1,27 @@
+import { signout } from "../../actions/userAction";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AUTH } from "../../routes/routes";
 
 export const Header: React.FC = () => {
+  const dispatch = useDispatch<any>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [current, setCurrent] = useState<string>("Home");
-  useEffect(() => {}, []);
-  const sss = [
+
+  const userSignin = useSelector((state: any) => state.userSignin);
+  const {
+    error: errorSignIn,
+    success: successSignin,
+    userInfo: userInfo,
+  } = userSignin;
+
+  const [tabs, setTabs] = useState<any>([
     {
       label: "Home",
-      path: "/home",
+      path: "/",
     },
     {
       label: "About Us",
@@ -20,17 +33,18 @@ export const Header: React.FC = () => {
     },
     {
       label: "Research",
-      path: "/research",
+      path: `/homepage?userId=${userInfo?._id}`,
     },
     {
       label: "Help",
       path: "/home",
     },
-    {
-      label: "Login",
-      path: "/home",
-    },
-  ];
+  ]);
+
+  const handleSignOut = () => {
+    dispatch(signout());
+    navigate("/");
+  };
 
   return (
     <div className="w-full h-16 bg-white border border-b flex items-center justify-between fixed z-50">
@@ -42,20 +56,42 @@ export const Header: React.FC = () => {
           <h1 className="text-xl font-black">PROOH.AI</h1>
         </div>
       </div>
-      <div className="col-span-2 flex items-center justify-end pr-4">
-        <div className="flex gap-4">
-          {sss?.map((data: any, index: any) => (
-            <div
-              className="flex flex-col gap-1 text-[#888888]"
-              key={index}
-              onClick={() => setCurrent(data?.label)}
+      <div className="col-span-2 flex items-center justify-end pr-8">
+        <div className="flex gap-4 items-center">
+          {tabs?.map((d1: any, index: any) => (
+            <button
+              key={d1?.label}
+              type="button"
+              onClick={() => {
+                setCurrent(d1.label);
+                navigate(d1.path);
+              }}
+              className={`${
+                current === d1.label
+                  ? "text-sm lg:text-base text-[#129BFF] border-b-2 border-[#129BFF] py-5 leading-[20.69px] tracking-[0.01rem]"
+                  : "text-sm lg:text-base py-1 text-[#888888] leading-[20.69px] tracking-[0.01rem]"
+              }`}
             >
-              <h1>{data?.label}</h1>
-              {current === data?.label && (
-                <div className="border border-1 border-[#129BFF] "></div>
-              )}
-            </div>
+              {d1?.label}
+            </button>
           ))}
+          {userInfo ? (
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className={`${"text-sm lg:text-base py-1 text-[#888888] leading-[20.69px] tracking-[0.01rem]"}`}
+            >
+              {`Sign Out`}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => navigate(AUTH)}
+              className={`${"text-sm lg:text-base py-1 text-[#888888] leading-[20.69px] tracking-[0.01rem]"}`}
+            >
+              {`Log In`}
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -12,7 +12,6 @@ import {
 import { PrimaryButton } from "../../components/atoms/PrimaryButton";
 
 export function MiddleArea(props: any) {
-
   const [option, setOption] = useState<string>("signin");
   const navigate = useNavigate();
   const [signInText, setSignInText] = useState<string>("Sign In");
@@ -81,7 +80,7 @@ export function MiddleArea(props: any) {
     setSignInText("Loading....");
     dispatch({ type: USER_SIGNOUT });
     if (validateSignIn()) {
-      dispatch(signin(email, password));
+      dispatch(signin(email));
     }
   };
   // auth
@@ -310,4 +309,4 @@ export function MiddleArea(props: any) {
       </div>
     </div>
   );
-};
+}

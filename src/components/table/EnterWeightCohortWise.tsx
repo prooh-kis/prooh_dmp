@@ -1,76 +1,103 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 
-export const EnterWeightCohortWise = ({
+interface AudienceData {
+  categoryType: string;
+  percentage: number; // Stored as a fraction (e.g., 0.25 for 25%)
+}
+
+interface EnterWeightCohortWiseProps {
+  totalCount: number;
+  audienceTypeWiseData: AudienceData[];
+  setAudienceTypeWiseData: React.Dispatch<React.SetStateAction<AudienceData[]>>;
+}
+
+export const EnterWeightCohortWise: React.FC<EnterWeightCohortWiseProps> = ({
   totalCount,
   audienceTypeWiseData,
   setAudienceTypeWiseData,
-}: any) => {
-  const [editableCell, setEditableCell] = useState<any>(null);
+}) => {
+  const [editableCell, setEditableCell] = useState<{
+    index: number;
+    column: string;
+  } | null>(null);
 
   const handleBlur = () => {
     setEditableCell(null);
   };
-  // percentage
-  // Handler to update data when input field changes
-  const handleChange = (event: any, rowIndex: number, column: string) => {
-    const newData = [...audienceTypeWiseData];
-    newData[rowIndex][column] = event.target.value * 0.01;
-    setAudienceTypeWiseData(newData);
+
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    rowIndex: number
+  ) => {
+    const value = parseFloat(event.target.value) / 100 || 0;
+    setAudienceTypeWiseData((prevData) => {
+      const updatedData = [...prevData];
+      updatedData[rowIndex].percentage = value;
+      return updatedData;
+    });
   };
-  // console.log(totalCount);
+
+  const getTotalPercent = () => {
+    const totalPercentage = audienceTypeWiseData.reduce(
+      (sum, item) => sum + (item.percentage || 0),
+      0
+    );
+    return (totalPercentage * 100).toFixed(0);
+  };
 
   return (
     <table className="border-collapse w-full text-[14px]">
       <thead>
-        <tr className="grid grid-cols-6 text-[#FFFFFF] bg-[#1297E2] ">
-          <th className="col-span-4 border border-slate-300 py-2 w-full">Type</th>
-          <th className="col-span-1 border border-slate-300 py-2 w-full">Weightage</th>
-          <th className="col-span-1 border border-slate-300 py-2 w-full">Audiences Count</th>
+        <tr className="grid grid-cols-6 text-white bg-[#1297E2]">
+          <th className="col-span-4 border border-slate-300 py-2">Type</th>
+          <th className="col-span-1 border border-slate-300 py-2">Weighage</th>
+          <th className="col-span-1 border border-slate-300 py-2">
+            Audiences Count
+          </th>
         </tr>
       </thead>
-      <tbody className="w-full border">
-        {audienceTypeWiseData?.map((data: any, index: number) => (
+      <tbody>
+        {audienceTypeWiseData.map((data, index) => (
           <tr key={index} className="grid grid-cols-6">
-            <td className="col-span-4 border border-slate-300 cursor-pointer text-left py-2 px-2 ">
-              {data?.categoryType}
+            <td className="col-span-4 border border-slate-300 py-2 px-2">
+              {data.categoryType}
             </td>
             <td
+              className="col-span-1 border border-slate-300 text-center py-2"
               onMouseEnter={() =>
                 setEditableCell({ index, column: "percentage" })
               }
               onMouseLeave={handleBlur}
-              className="col-span-1 border border-slate-300 text-[#1297E2] cursor-pointer text-center py-2 px-2 "
             >
               {editableCell?.index === index &&
-              editableCell?.column === "percentage" ? (
+              editableCell.column === "percentage" ? (
                 <input
-                  title=""
-                  placeholder="percentage"
                   type="number"
-                  value={Number(data?.percentage * 100).toFixed(0)}
+                  value={(data.percentage * 100).toFixed(0)}
                   onBlur={handleBlur}
-                  onChange={(e) => handleChange(e, index, "percentage")}
-                  autoFocus
-                  className="w-full"
+                  onChange={(e) => handleChange(e, index)}
+                  className="w-full text-center"
+                  aria-label="Edit percentage"
+                  title="Edit percentage"
                 />
               ) : (
-                `${Number(data?.percentage * 100).toFixed(0)}%`
+                `${(data.percentage * 100).toFixed(0)}%`
               )}
             </td>
-            <td className="col-span-1 border border-slate-300 cursor-pointer text-center py-2 px-2 ">
-              {(totalCount * data?.percentage).toFixed(0)}
+            <td className="col-span-1 border border-slate-300 text-center py-2">
+              {(totalCount * data.percentage).toFixed(0)}
             </td>
           </tr>
         ))}
-        <tr className="grid grid-cols-6">
-          <td className="col-span-4 border border-slate-300  cursor-pointer  text-left py-2 px-2 ">
+        <tr className="grid grid-cols-6 font-bold">
+          <td className="col-span-4 border border-slate-300 py-2 px-2">
             Total
           </td>
-          <td className="col-span-1 border border-slate-300 text-[#1297E2] cursor-pointer text-center py-2 px-2 ">
-            {Number(audienceTypeWiseData?.reduce((sum: any, item: any) => sum + item.percentage, 0) * 100).toFixed(0)} %
+          <td className="col-span-1 border border-slate-300 text-center py-2">
+            {getTotalPercent()}%
           </td>
-          <td className="col-span-1 border border-slate-300 cursor-pointer text-center py-2 px-2 ">
-            {Number(totalCount * audienceTypeWiseData?.reduce((sum: any, item: any) => sum + item.percentage, 0) * 100).toFixed(0)}
+          <td className="col-span-1 border border-slate-300 text-center py-2">
+            {(totalCount * parseFloat(getTotalPercent()) * 0.01).toFixed(0)}
           </td>
         </tr>
       </tbody>
