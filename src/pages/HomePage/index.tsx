@@ -35,7 +35,7 @@ export const HomePage = () => {
   const dispatch = useDispatch<any>();
   const urlParams = new URLSearchParams(window.location.search);
 
-  const [totalCount, setTotalCount] = useState<number>(100000);
+  const [totalCount, setTotalCount] = useState<number>(1000000);
   const [selectedMarketSite, setSelectedMarketSite] = useState<any>("");
   const [certified, setCertified] = useState<any>(false);
   const [genderData, setGenderData] = useState<any>(null);
