@@ -90,15 +90,15 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
               </td>
               <td className="border h-full">
                 {Object.keys(monthDays)?.map((m: any, j: any) => (
-                  <div className={`h-[20vh] ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                    {gd[`${m}`].daily}
+                  <div className={`h-[20vh] ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-1 flex justify-center items-center`} key={j}>
+                    {gd[`${m}`].daily} %
                   </div>
                 ))}
               </td>
               <td className="border h-full">
                 {Object.keys(monthDays)?.map((m: any, j: any) => (
                   <div className={`h-[20vh] ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                    {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily).toFixed(1) ?? 0}
+                    {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].monthly / gd[`${m}`].days).toFixed(1) ?? 0}
                   </div>
                 ))}
               </td>
@@ -151,8 +151,8 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
                 {Object.keys(monthDays)?.map((m: any, j: any) => (
                   <div className={`h-[20vh] w-full ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } flex flex-col justify-center items-center`} key={j}>
                     {Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
-                      <div key={k} className={`h-[5vh] ${k+1 === Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
-                        <h1>{(gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`]).toFixed(1)}</h1>
+                      <div key={k} className={`h-[5vh] ${k+1 === Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-1 flex justify-center items-center w-full`}>
+                        <h1>{(gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`]).toFixed(3)} %</h1>
                       </div>
                     ))}
                   </div>

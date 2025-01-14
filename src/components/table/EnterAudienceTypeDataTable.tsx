@@ -223,7 +223,7 @@ export const EnterAudienceTypeDataTable = ({
                     </div>
                     <div className="col-span-1 border-x">
                         <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                          {gd[`${m}`].daily.toFixed(1)}
+                          {gd[`${m}`].daily.toFixed(3)} %
                         </div>
                     </div>
                     <div className="col-span-1 border-r"
