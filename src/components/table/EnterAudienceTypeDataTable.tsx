@@ -30,7 +30,7 @@ export const EnterAudienceTypeDataTable = ({
       newGenderData[day] = {
         ...newGenderData[day],
         monthly: enterValue,
-        daily: parseFloat((enterValue / newGenderData[day].days).toFixed(3)),
+        daily: parseFloat((enterValue / newGenderData[day].days).toFixed(1)),
       };
     }
   
@@ -223,7 +223,7 @@ export const EnterAudienceTypeDataTable = ({
                     </div>
                     <div className="col-span-1 border-x">
                         <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                          {gd[`${m}`].daily}
+                          {gd[`${m}`].daily.toFixed(1)}
                         </div>
                     </div>
                     <div className="col-span-1 border-r">
