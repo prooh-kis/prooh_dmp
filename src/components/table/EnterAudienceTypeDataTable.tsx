@@ -226,9 +226,20 @@ export const EnterAudienceTypeDataTable = ({
                           {gd[`${m}`].daily.toFixed(1)}
                         </div>
                     </div>
-                    <div className="col-span-1 border-r">
+                    <div className="col-span-1 border-r"
+                      onClick={() => {
+                        // console.log(
+                        //   totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily
+                        // )
+                        // console.log(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].monthly / gd[`${m}`].days);
+                        // console.log("percentage", audienceTypeWiseData?.[currentAudienceType]?.percentage);
+                        // console.log("weight", gd?.weight);
+                        // console.log("", gd[`${m}`].days);
+                        // console.log(gd[`${m}`])
+                      }}
+                    >
                         <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                          {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily).toFixed(1) ?? 0}
+                          {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].monthly / gd[`${m}`].days).toFixed(1) ?? 0}
                         </div>
                     </div>
                     <div className="col-span-1">
