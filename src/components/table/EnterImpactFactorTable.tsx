@@ -157,14 +157,14 @@ export const EnterImpactFactorTable = ({
                                 title=""
                                 placeholder="percentage"
                                 type="number"
-                                value={Number(gd[`${m}`]?.impactFactor[gdi] * 100).toFixed(0)}
+                                value={Number(gd[`${m}`]?.impactFactor[gdi] * 100).toFixed(2)}
                                 onBlur={handleBlur}
                                 onChange={(e) => handleData(gd.gender, e.target.value, m, gdi)}
                                 autoFocus
                                 className="w-full"
                               />
                             ) : (
-                              `${Number(gd[`${m}`]?.impactFactor[gdi] * 100).toFixed(0)}%`
+                              `${Number(gd[`${m}`]?.impactFactor[gdi] * 100).toFixed(2)}%`
                             )}
                           
                           {/* <input

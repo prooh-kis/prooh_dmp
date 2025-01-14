@@ -98,7 +98,7 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
               <td className="border h-full">
                 {Object.keys(monthDays)?.map((m: any, j: any) => (
                   <div className={`h-[20vh] ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                    {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily).toFixed(0) ?? 0}
+                    {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily).toFixed(2) ?? 0}
                   </div>
                 ))}
               </td>
@@ -133,14 +133,14 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
                             title=""
                             placeholder="percentage"
                             type="number"
-                            value={Number(gd?.[`${m}`]?.cohort?.[`${n}`] * 100).toFixed(0)}
+                            value={Number(gd?.[`${m}`]?.cohort?.[`${n}`] * 100).toFixed(2)}
                             onBlur={handleBlur}
                             onChange={(e) => handleData(gd.gender, e.target.value, m, n)}
                             autoFocus
                             className="w-full"
                           />
                         ) : (
-                          `${Number(gd?.[`${m}`]?.cohort?.[`${n}`] * 100).toFixed(0)}%`
+                          `${Number(gd?.[`${m}`]?.cohort?.[`${n}`] * 100).toFixed(2)}%`
                         )}
                       </div>
                     ))}
@@ -163,7 +163,7 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
                   <div className={`h-[20vh] w-full ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } flex flex-col justify-center items-center`} key={j}>
                     {Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                       <div key={k} className={`h-[5vh] ${k+1 === Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
-                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`]).toFixed(0)}</h1>
+                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`]).toFixed(2)}</h1>
                       </div>
                     ))}
                   </div>
@@ -174,7 +174,7 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
                   <div className={`h-[20vh] w-full ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } flex flex-col justify-center items-center`} key={j}>
                     {Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                       <div key={k} className={`h-[5vh] ${k+1 === Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
-                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`] / (4 * 20)).toFixed(0)}</h1>
+                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`] / (4 * 20)).toFixed(2)}</h1>
                       </div>
                     ))}
                   </div>
@@ -185,7 +185,7 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
                   <div className={`h-[20vh] w-full ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } flex flex-col justify-center items-center`} key={j}>
                     {Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                       <div key={k} className={`h-[5vh] ${k+1 === Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
-                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`] / (4 * 20) * 10).toFixed(0)}</h1>
+                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`] / (4 * 20) * 10).toFixed(2)}</h1>
                       </div>
                     ))}
                   </div>

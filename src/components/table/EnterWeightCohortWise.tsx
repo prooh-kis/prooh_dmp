@@ -42,7 +42,7 @@ export const EnterWeightCohortWise: React.FC<EnterWeightCohortWiseProps> = ({
       (sum, item) => sum + (item.percentage || 0),
       0
     );
-    return (totalPercentage * 100).toFixed(0);
+    return (totalPercentage * 100).toFixed(2);
   };
 
   return (
@@ -73,7 +73,7 @@ export const EnterWeightCohortWise: React.FC<EnterWeightCohortWiseProps> = ({
               editableCell.column === "percentage" ? (
                 <input
                   type="number"
-                  value={(data.percentage * 100).toFixed(0)}
+                  value={(data.percentage * 100).toFixed(2)}
                   onBlur={handleBlur}
                   onChange={(e) => handleChange(e, index)}
                   className="w-full text-center"
@@ -81,11 +81,11 @@ export const EnterWeightCohortWise: React.FC<EnterWeightCohortWiseProps> = ({
                   title="Edit percentage"
                 />
               ) : (
-                `${(data.percentage * 100).toFixed(0)}%`
+                `${(data.percentage * 100).toFixed(2)}%`
               )}
             </td>
             <td className="col-span-1 border border-slate-300 text-center py-2">
-              {(totalCount * data.percentage).toFixed(0)}
+              {(totalCount * data.percentage).toFixed(2)}
             </td>
           </tr>
         ))}
@@ -97,7 +97,7 @@ export const EnterWeightCohortWise: React.FC<EnterWeightCohortWiseProps> = ({
             {getTotalPercent()}%
           </td>
           <td className="col-span-1 border border-slate-300 text-center py-2">
-            {(totalCount * parseFloat(getTotalPercent()) * 0.01).toFixed(0)}
+            {(totalCount * parseFloat(getTotalPercent()) * 0.01).toFixed(2)}
           </td>
         </tr>
       </tbody>

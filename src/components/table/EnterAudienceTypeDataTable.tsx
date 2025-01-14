@@ -158,19 +158,19 @@ export const EnterAudienceTypeDataTable = ({
                         title=""
                         placeholder="percentage"
                         type="number"
-                        value={Number(gd?.weight * 100).toFixed(0)}
+                        value={Number(gd?.weight * 100).toFixed(2)}
                         onBlur={handleBlur}
                         onChange={(e) => handleData(gd.gender, e.target.value, null)}
                         autoFocus
                         className="w-full"
                       />
                     ) : (
-                      `${Number(gd?.weight * 100).toFixed(0)}%`
+                      `${Number(gd?.weight * 100).toFixed(2)}%`
                     )}
                   </div>
                   <div className="col-span-1 flex justify-center items-center">
                     {
-                      Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight).toFixed(0) ?? 0
+                      Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight).toFixed(2) ?? 0
                     }
                   </div>
                 </div>
@@ -211,14 +211,14 @@ export const EnterAudienceTypeDataTable = ({
                           title=""
                           placeholder="percentage"
                           type="number"
-                          value={Number(gd[`${m}`].monthly * 100).toFixed(0)}
+                          value={Number(gd[`${m}`].monthly * 100).toFixed(2)}
                           onBlur={handleBlur}
                           onChange={(e) => handleData(gd.gender, e.target.value, m)}
                           autoFocus
                           className="w-full"
                         />
                       ) : (
-                        `${Number(gd[`${m}`].monthly * 100).toFixed(0)}%`
+                        `${Number(gd[`${m}`].monthly * 100).toFixed(2)}%`
                       )}
                     </div>
                     <div className="col-span-1 border-x">
@@ -228,7 +228,7 @@ export const EnterAudienceTypeDataTable = ({
                     </div>
                     <div className="col-span-1 border-r">
                         <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                          {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily).toFixed(0) ?? 0}
+                          {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily).toFixed(2) ?? 0}
                         </div>
                     </div>
                     <div className="col-span-1">
@@ -248,14 +248,14 @@ export const EnterAudienceTypeDataTable = ({
                               title=""
                               placeholder="unique"
                               type="number"
-                              value={Number(gd?.[m]?.unique * 100).toFixed(0)}
+                              value={Number(gd?.[m]?.unique * 100).toFixed(2)}
                               onBlur={handleBlur}
                               onChange={(e) => handleUniqueData(gd.gender, e.target.value, m)}
                               autoFocus
                               className="w-full"
                             />
                           ) : (
-                            `${Number(gd?.[m]?.unique * 100).toFixed(0)}%`
+                            `${Number(gd?.[m]?.unique * 100).toFixed(2)}%`
                           )}
                       </div>
                     </div>
