@@ -26,7 +26,7 @@ export const Header: React.FC = () => {
     },
     {
       label: "Research",
-      path: `/homepage?userId=${userInfo?._id}`,
+      path: `/homepage?userId=${userInfo ? userInfo?._id : ""}`,
     },
   ]);
 
@@ -37,7 +37,9 @@ export const Header: React.FC = () => {
         message.error("please  signIn");
         navigate("/auth");
       }
-      navigate(`/homepage?userId=${userInfo?._id}`);
+      if (userInfo?._id) {
+        navigate(`/homepage?userId=${userInfo?._id}`);
+      }
     } else {
       navigate(tabs[index].path);
     }

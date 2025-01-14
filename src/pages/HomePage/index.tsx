@@ -251,7 +251,7 @@ export const HomePage = () => {
       gotAudienceData?.audiencePercentCategories?.length > 0
     ) {
       setAudienceTypeWiseData(gotAudienceData.audiencePercentCategories);
-      setTotalCount(gotAudienceData.totalAudienceCount);
+      // setTotalCount(gotAudienceData.totalAudienceCount);
     }
   }, [
     dispatch,
@@ -269,7 +269,7 @@ export const HomePage = () => {
         "Your response for audience data has been updated successfully..."
       );
       setAudienceTypeWiseData(savedData.audiencePercentCategories);
-      setTotalCount(savedData.totalAudienceCount);
+      // setTotalCount(savedData.totalAudienceCount);
       dispatch({
         type: SAVE_AUDIENCE_DATA_RESET,
       });

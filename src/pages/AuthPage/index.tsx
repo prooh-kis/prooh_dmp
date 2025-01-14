@@ -78,7 +78,7 @@ export const AuthPage: React.FC = () => {
 
             <div className="flex flex-row justify-between">
               <div className="flex flex-row gap-1">
-                <input title="q" type="checkbox" id="rememberMe" checked />
+                <input title="q" type="checkbox" id="rememberMe" checked onChange={() => {}} />
                 <label className="text-sm" htmlFor="rememberMe">
                   Remember me
                 </label>
