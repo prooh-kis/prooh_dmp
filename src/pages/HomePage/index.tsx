@@ -51,6 +51,9 @@ export const HomePage = () => {
   );
   const [currentAudienceType, setCurrentAudienceType] = useState<number>(0);
 
+  
+  const userSignin = useSelector((state: any) => state.userSignin);
+  const { userInfo } = userSignin;
   const heroDataDetails = useSelector((state: any) => state.heroDataDetails);
   const { loading, error, success, data: heroDataUser } = heroDataDetails;
 
@@ -209,7 +212,9 @@ export const HomePage = () => {
   }, [audienceTypeWiseData, currentAudienceType]);
 
   useEffect(() => {
-    dispatch(getRegisterHeroDataDetails(urlParams.get("userId")));
+    if (userInfo) {
+      dispatch(getRegisterHeroDataDetails(urlParams.get("userId")));
+    }
     if (selectedMarketSite !== "") {
       dispatch(
         getAudienceDataAction({
@@ -218,7 +223,7 @@ export const HomePage = () => {
         })
       );
     }
-  }, [dispatch, selectedMarketSite, urlParams.get("userId")]);
+  }, [dispatch, userInfo, selectedMarketSite, urlParams.get("userId")]);
 
   useEffect(() => {
     if (error) {
