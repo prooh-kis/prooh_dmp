@@ -29,7 +29,6 @@ export const ALL_MARKET_SITES = {
       "Cybercity Gurgaon",
       "GK2 Greater Kailash South Delhi",
       "CP Outer Circle Delhi",
-      "Default Audience",
       "CP Inner Circle Delhi",
       "CyberHub Gurgaon",
       "GK1 Greater Kailash South Delhi",
@@ -69,9 +68,7 @@ export const ALL_MARKET_SITES = {
   ],
   "Arterial Route": [
       "Gol Dakkhana Delhi",
-      "Patel Chowk Delhi"
-  ],
-  "Arterial route": [
+      "Patel Chowk Delhi",
       "Safdarjung Delhi"
   ],
   "CBD- SOHO": [
