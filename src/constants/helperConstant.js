@@ -44,7 +44,6 @@ export const ALL_MARKET_SITES = {
   ],
   "Neighborhood Premium Mall": [
       "South Point Mall Gurgaon",
-      "Cannaught Place Delhi"
   ],
   "Neighborhood Hi-Street": [
       "Nehru Palace South Delhi",
