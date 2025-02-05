@@ -36,21 +36,21 @@ export const ALL_MARKET_SITES = {
       "IFC M3M Gurgaon",
       "Sector 29 Gurgaon"
   ],
-  "Golf course": [
+  "Golf Course": [
       "Delhi Golf Course Delhi",
       "ITC Golf Course Gurgaon",
       "Jaypee Greens Golf Course Greater Noida",
       "Noida Golf Course Sector 37"
   ],
-  "Neighborhood premium Mall": [
+  "Neighborhood Premium Mall": [
       "South Point Mall Gurgaon",
       "Cannaught Place Delhi"
   ],
-  "Neighborhood hi-street": [
+  "Neighborhood Hi-Street": [
       "Nehru Palace South Delhi",
       "JwalaHeri West Delhi"
   ],
-  "Feeder route": [
+  "Feeder Route": [
       "Udyog Bhawan Delhi",
       "RK Ashram Delhi",
       "San Martin Marg Delhi",
@@ -71,13 +71,13 @@ export const ALL_MARKET_SITES = {
       "Patel Chowk Delhi",
       "Safdarjung Delhi"
   ],
-  "CBD- SOHO": [
+  "CBD-SOHO": [
       "Jasola South Delhi",
       "Signature Tower Gurgaon",
       "Signature Tower Google Building Gurgaon",
       "Global Business Park Gurgaon"
   ],
-  "luxury residential": [
+  "Luxury Residential": [
       "Shanti Niketan South Delhi"
   ]
 }
