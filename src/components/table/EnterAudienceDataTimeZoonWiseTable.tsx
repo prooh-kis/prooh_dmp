@@ -135,9 +135,10 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
                             type="number"
                             value={Number(gd?.[`${m}`]?.cohort?.[`${n}`] * 100).toFixed(1)}
                             onBlur={handleBlur}
+                            onWheel={(e) => e.currentTarget.blur()}
                             onChange={(e) => handleData(gd.gender, e.target.value, m, n)}
                             autoFocus
-                            className="w-full"
+                            className="w-full cursor-pointer"
                           />
                         ) : (
                           `${Number(gd?.[`${m}`]?.cohort?.[`${n}`] * 100).toFixed(1)}%`

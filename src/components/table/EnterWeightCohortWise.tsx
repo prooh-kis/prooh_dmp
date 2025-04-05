@@ -75,8 +75,9 @@ export const EnterWeightCohortWise: React.FC<EnterWeightCohortWiseProps> = ({
                   type="number"
                   value={(data.percentage * 100).toFixed(0)}
                   onBlur={handleBlur}
+                  onWheel={(e) => e.currentTarget.blur()}
                   onChange={(e) => handleChange(e, index)}
-                  className="w-full text-center"
+                  className="w-full text-center cursor-pointer"
                   aria-label="Edit percentage"
                   title="Edit percentage"
                 />

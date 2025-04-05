@@ -159,10 +159,11 @@ export const EnterAudienceTypeDataTable = ({
                         placeholder="percentage"
                         type="number"
                         value={Number(gd?.weight * 100).toFixed(1)}
+                        onWheel={(e) => e.currentTarget.blur()}
                         onBlur={handleBlur}
                         onChange={(e) => handleData(gd.gender, e.target.value, null)}
                         autoFocus
-                        className="w-full"
+                        className="w-full cursor-pointer"
                       />
                     ) : (
                       `${Number(gd?.weight * 100).toFixed(1)}%`
@@ -213,15 +214,21 @@ export const EnterAudienceTypeDataTable = ({
                           type="number"
                           value={Number(gd[`${m}`].monthly * 100).toFixed(1)}
                           onBlur={handleBlur}
+                          onWheel={(e) => e.currentTarget.blur()}
                           onChange={(e) => handleData(gd.gender, e.target.value, m)}
                           autoFocus
-                          className="w-full"
+                          className="w-full cursor-pointer"
                         />
                       ) : (
-                        `${Number(gd[`${m}`].monthly * 100).toFixed(1)}%`
+                        `${Number(gd[`${m}`].monthly * 100).toFixed(1)} %`
                       )}
                     </div>
-                    <div className="col-span-1 border-x">
+                    <div className="col-span-1 border-x"
+                      onClick={() => {
+                        console.log(gd);
+                      }}
+                    
+                    >
                         <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
                           {gd[`${m}`].daily.toFixed(3)} %
                         </div>
@@ -261,9 +268,10 @@ export const EnterAudienceTypeDataTable = ({
                               type="number"
                               value={Number(gd?.[m]?.unique * 100).toFixed(1)}
                               onBlur={handleBlur}
+                              onWheel={(e) => e.currentTarget.blur()}
                               onChange={(e) => handleUniqueData(gd.gender, e.target.value, m)}
                               autoFocus
-                              className="w-full"
+                              className="w-full cursor-pointer"
                             />
                           ) : (
                             `${Number(gd?.[m]?.unique * 100).toFixed(1)}%`

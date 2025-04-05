@@ -55,7 +55,7 @@ export const HeroDataDetailPage = ({ data, selectedMarketSite, setSelectedMarket
       case 2:
         return (
           <SingleRowTable
-            data={{ "Google traffic and RTO data": 53453, Total: 53453 }}
+            data={{ "Google traffic and RTO data": 46331, Total: 46331 }}
           />
         );
       case 3:
@@ -99,7 +99,7 @@ export const HeroDataDetailPage = ({ data, selectedMarketSite, setSelectedMarket
             <h1 className="text-[14px]">{data?.phone}</h1>
           </div>
           <div className="flex gap-4 justify-start items-center flex items-center">
-            <i className="fi fi-sr-envelope text-[#00A0FA]"></i>
+            <i className="fi fi-br-digital-payment text-[#00A0FA]"></i>
             <h1 className="text-[14px]">{data?.upiId}</h1>
           </div>
         </div>
@@ -143,28 +143,14 @@ export const HeroDataDetailPage = ({ data, selectedMarketSite, setSelectedMarket
                 {data?.touchPoints[0].touchPoint}
               </td>
               <td colSpan={3} className="text-center py-2 border border-slate-300">
-                {/* <div className="flex items-center justify-evenly">
-                  {data?.touchPoints[0].marketSites?.map(
-                    (value: string, index: number) => (
-                      <div
-                        className={index === 0 ? "text-center p-2" : "border-l text-center p-2"}
-                        key={index}
-                      >
-                        {value}
-                      </div>
-                    )
-                  )}
-                </div> */}
                 {selectedMarketSite}
-                
               </td>
-              
               <td
                 colSpan={1}
                 onClick={handleOpen}
                 className="border border-slate-300 text-[#1297E2] cursor-pointer hover:text-blue-700 text-center py-2"
               >
-                1000000
+                100000
               </td>
               <td
                 colSpan={1}

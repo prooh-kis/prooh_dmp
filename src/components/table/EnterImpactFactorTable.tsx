@@ -161,7 +161,8 @@ export const EnterImpactFactorTable = ({
                                 onBlur={handleBlur}
                                 onChange={(e) => handleData(gd.gender, e.target.value, m, gdi)}
                                 autoFocus
-                                className="w-full"
+                                onWheel={(e) => e.currentTarget.blur()}
+                                className="w-full cursor-pointer"
                               />
                             ) : (
                               `${Number(gd[`${m}`]?.impactFactor[gdi] * 100).toFixed(1)}%`
