@@ -1,30 +1,30 @@
 export const dataAsPerOurIotDevices = [
   {
-    icon: <i className="fi fi-sr-user-gear"></i>,
+    icon: <i className="fi fi-sr-user-gear flex items-center"></i>,
     label: "As per property management",
     key: 0,
     value: 0,
   },
   {
-    icon: <i className="fi fi-rs-camera-cctv"></i>,
+    icon: <i className="fi fi-rs-camera-cctv flex items-center"></i>,
     label: "As per property management",
     key: 1,
     value: 0,
   },
   {
-    icon: <i className="fi fi-ts-cars"></i>,
+    icon: <i className="fi fi-ts-cars flex items-center"></i>,
     label: "Google traffic and RTO data",
     key: 2,
     value: 0,
   },
   {
-    icon: <i className="fi fi-ss-road"></i>,
+    icon: <i className="fi fi-ss-road flex items-center"></i>,
     label: "Roadster Data",
     key: 3,
     value: 0,
   },
   {
-    icon: <i className="fi fi-bs-smartphone"></i>,
+    icon: <i className="fi fi-bs-smartphone flex items-center"></i>,
     label: "Mobile  Device SDK Data",
     key: 4,
     value: 0,
