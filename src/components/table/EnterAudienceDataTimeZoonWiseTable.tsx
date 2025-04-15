@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 export const EnterAudienceDataTimeZoonWiseTable = ({
   genderData,
@@ -9,6 +9,17 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
   currentAudienceType,
   monthDays
 }: any) => {
+  const [decimal, setDecimal] = useState<any>(0);
+
+  const inputRefs = useRef<HTMLInputElement[]>([]);
+
+  const handleKeyDown = (e: any, index: any) => {
+    if (e.key === 'Tab' && !e.shiftKey) {
+      e.preventDefault();
+      const next: any = inputRefs.current[index + 1];
+      if (next) next.focus();
+    }
+  };
 
   const [editableCell, setEditableCell] = useState<any>(null);
 
@@ -18,7 +29,6 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
 
   const handleData = (gender: string, value: any, day: any, timezone: any) => {
     const enterValue = Number(value / 100);
-    console.log(gender, value, day, timezone)
     const newGenderData = JSON.parse(JSON.stringify(genderData?.find((d: any) => d.gender === gender)));
   
     // if (day === null) {
@@ -58,7 +68,13 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
             Per Day Audience count
           </th>
           <th className="border border-slate-300 py-2">Time Zones</th>
-          <th className="border border-slate-300 py-2">% share of visits</th>
+          <th className="border border-slate-300 py-2"onClick={() => {
+            if (decimal == 1) {
+              setDecimal(0)
+            } else {
+              setDecimal(1)
+            }
+          }}>% share of visits</th>
           <th className="border border-slate-300 py-2">Audience %</th>
           <th className="border border-slate-300 py-2">
             Total impression count per time Zone
@@ -98,7 +114,7 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
               <td className="border h-full">
                 {Object.keys(monthDays)?.map((m: any, j: any) => (
                   <div className={`h-[20vh] ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                    {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].monthly / gd[`${m}`].days).toFixed(1) ?? 0}
+                    {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].monthly / gd[`${m}`].days).toFixed(decimal) ?? 0}
                   </div>
                 ))}
               </td>
@@ -130,18 +146,21 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
                         editableCell?.day === gd?.[m] &&
                         editableCell?.column === "percentage" ? (
                           <input
+                            // disabled={gd.weight === 0}
                             title=""
-                            placeholder="percentage"
+                            placeholder="unique"
                             type="number"
-                            value={Number(gd?.[`${m}`]?.cohort?.[`${n}`] * 100).toFixed(1)}
+                            value={Number(gd?.[`${m}`]?.cohort?.[`${n}`] * 100).toFixed(0)}
                             onBlur={handleBlur}
                             onWheel={(e) => e.currentTarget.blur()}
                             onChange={(e) => handleData(gd.gender, e.target.value, m, n)}
-                            autoFocus
+                            ref={(el: any) => (inputRefs.current[j] = el)}
+                            onKeyDown={(e) => handleKeyDown(e, j)}
+                            autoFocus={j==0}
                             className="w-full cursor-pointer"
                           />
                         ) : (
-                          `${Number(gd?.[`${m}`]?.cohort?.[`${n}`] * 100).toFixed(1)}%`
+                          `${Number(gd?.[`${m}`]?.cohort?.[`${n}`] * 100).toFixed(decimal)}%`
                         )}
                       </div>
                     ))}
@@ -153,7 +172,7 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
                   <div className={`h-[20vh] w-full ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } flex flex-col justify-center items-center`} key={j}>
                     {Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                       <div key={k} className={`h-[5vh] ${k+1 === Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-1 flex justify-center items-center w-full`}>
-                        <h1>{(gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`]).toFixed(3)} %</h1>
+                        <h1>{(gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`]).toFixed(decimal)} %</h1>
                       </div>
                     ))}
                   </div>
@@ -164,7 +183,7 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
                   <div className={`h-[20vh] w-full ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } flex flex-col justify-center items-center`} key={j}>
                     {Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                       <div key={k} className={`h-[5vh] ${k+1 === Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
-                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`]).toFixed(1)}</h1>
+                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`]).toFixed(decimal)}</h1>
                       </div>
                     ))}
                   </div>
@@ -175,7 +194,7 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
                   <div className={`h-[20vh] w-full ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } flex flex-col justify-center items-center`} key={j}>
                     {Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                       <div key={k} className={`h-[5vh] ${k+1 === Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
-                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`] / (4 * 20)).toFixed(1)}</h1>
+                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`] / (4 * 20)).toFixed(decimal)}</h1>
                       </div>
                     ))}
                   </div>
@@ -186,7 +205,7 @@ export const EnterAudienceDataTimeZoonWiseTable = ({
                   <div className={`h-[20vh] w-full ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } flex flex-col justify-center items-center`} key={j}>
                     {Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                       <div key={k} className={`h-[5vh] ${k+1 === Object.keys(gd?.[`${m}`]?.cohort)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
-                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`] / (4 * 20) * 10).toFixed(1)}</h1>
+                        <h1>{(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].daily * gd?.[`${m}`]?.cohort?.[`${n}`] / (4 * 20) * 10).toFixed(decimal)}</h1>
                       </div>
                     ))}
                   </div>

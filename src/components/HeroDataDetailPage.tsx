@@ -99,7 +99,7 @@ export const HeroDataDetailPage = ({ data, selectedMarketSite, setSelectedMarket
             <h1 className="text-[14px]">{data?.phone}</h1>
           </div>
           <div className="flex gap-4 justify-start items-center flex items-center">
-            <i className="fi fi-br-digital-payment text-[#00A0FA]"></i>
+            <i className="fi fi-sr-reservation-smartphone text-[#00A0FA]"></i>
             <h1 className="text-[14px]">{data?.upiId}</h1>
           </div>
         </div>

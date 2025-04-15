@@ -155,36 +155,40 @@ export const RegisterHeroDataForm = () => {
               },
             ]}
           >
-            <Select
-              size="large"
-              placeholder="Please select locations"
-              mode="multiple"
-              value={selectedLocations}
-              onChange={handleLocationChange}
-              disabled={filteredLocations.length === 0}
-            >
-              {filteredLocations.map((location, index) => (
-                <Option value={location} key={index}>
-                  {location}
-                </Option>
-              ))}
-            </Select>
-            <div className="col-span-2 flex flex-wrap gap-2 pt-2">
-              {selectedLocations.map((location) => (
-                <Tag
-                  key={location}
-                  color="blue"
-                  closable
-                  onClose={() => {
-                    setSelectedLocations((prev) =>
-                      prev.filter((item) => item !== location)
-                    );
-                  }}
-                >
-                  {location}
-                </Tag>
-              ))}
+            <div>
+
+              <Select
+                size="large"
+                placeholder="Please select locations"
+                mode="multiple"
+                value={selectedLocations}
+                onChange={handleLocationChange}
+                disabled={filteredLocations.length === 0}
+              >
+                {filteredLocations.map((location, index) => (
+                  <Option value={location} key={index}>
+                    {location}
+                  </Option>
+                ))}
+              </Select>
+              <div className="col-span-2 flex flex-wrap gap-2 pt-2">
+                {selectedLocations.map((location) => (
+                  <Tag
+                    key={location}
+                    color="blue"
+                    closable
+                    onClose={() => {
+                      setSelectedLocations((prev) =>
+                        prev.filter((item) => item !== location)
+                      );
+                    }}
+                  >
+                    {location}
+                  </Tag>
+                ))}
+              </div>
             </div>
+
           </Form.Item>
 
           <Form.Item

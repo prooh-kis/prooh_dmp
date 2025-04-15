@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export const EnterAudienceTypeDataTable = ({
   genderData,
@@ -9,6 +9,17 @@ export const EnterAudienceTypeDataTable = ({
   currentAudienceType,
   monthDays,
 }: any) => {
+
+  const [decimal, setDecimal] = useState<any>(0);
+  const inputRefs = useRef<HTMLInputElement[]>([]);
+
+  const handleKeyDown = (e: any, index: any) => {
+    if (e.key === 'Tab' && !e.shiftKey) {
+      e.preventDefault();
+      const next: any = inputRefs.current[index + 1];
+      if (next) next.focus();
+    }
+  };
   // console.log("audienceTypeWiseData : ", audienceTypeWiseData);
   const [editableCell, setEditableCell] = useState<any>(null);
   const [editableCell1, setEditableCell1] = useState<any>(null);
@@ -21,16 +32,16 @@ export const EnterAudienceTypeDataTable = ({
   };
 
   const handleData = (gender: string, value: any, day: any) => {
-    const enterValue = Number(value / 100);
+    const enterValue = parseFloat(value) / 100;
     const newGenderData = JSON.parse(JSON.stringify(genderData?.find((d: any) => d.gender === gender)));
-  
+    // console.log("new gender data", newGenderData);
     if (day === null) {
       newGenderData.weight = enterValue;
     } else {
       newGenderData[day] = {
         ...newGenderData[day],
         monthly: enterValue,
-        daily: parseFloat((enterValue / newGenderData[day].days).toFixed(1)),
+        daily: parseFloat((enterValue * 100 / newGenderData[day].days).toFixed(decimal)),
       };
     }
   
@@ -105,7 +116,13 @@ export const EnterAudienceTypeDataTable = ({
               </div>
             </th>
             <th className="col-span-6 border text-[#FFFFFF] bg-[#1297E2]">
-              <div>
+              <div onClick={() => {
+                  if (decimal == 1) {
+                    setDecimal(0)
+                  } else {
+                    setDecimal(1)
+                  }
+                }}>
                 <div className="border-b py-4">
                   <h1>Total Audience Weight</h1>
                 </div>
@@ -149,29 +166,31 @@ export const EnterAudienceTypeDataTable = ({
                     onMouseEnter={() => {
                       setEditableCell({ index: i, column: "percentage" })
                     }}
-                    onMouseLeave={handleBlur}
+                    onClick={() => 
+                      setEditableCell({ index: i, column: "percentage" })
+                    }
+                    // onMouseLeave={handleBlur}
                     className="col-span-1 border-x border-slate-300 text-[#1297E2] cursor-pointer text-center flex justify-center items-center"
                   >
                     {editableCell?.index === i &&
                     editableCell?.column === "percentage" ? (
                       <input
-                        title=""
-                        placeholder="percentage"
                         type="number"
-                        value={Number(gd?.weight * 100).toFixed(1)}
-                        onWheel={(e) => e.currentTarget.blur()}
+                        value={(gd?.weight * 100).toFixed(0)}
                         onBlur={handleBlur}
+                        onWheel={(e) => e.currentTarget.blur()}
                         onChange={(e) => handleData(gd.gender, e.target.value, null)}
-                        autoFocus
-                        className="w-full cursor-pointer"
+                        className="w-full h-full text-center border-[#1297E2] cursor-pointer focus:border-[#1297E2]"
+                        aria-label="Edit percentage"
+                        title="Edit percentage"
                       />
                     ) : (
-                      `${Number(gd?.weight * 100).toFixed(1)}%`
+                      `${Number(gd?.weight * 100).toFixed(decimal)}%`
                     )}
                   </div>
                   <div className="col-span-1 flex justify-center items-center">
                     {
-                      Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight).toFixed(1) ?? 0
+                      Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight).toFixed(decimal) ?? 0
                     }
                   </div>
                 </div>
@@ -201,36 +220,32 @@ export const EnterAudienceTypeDataTable = ({
                       onMouseEnter={() => {
                         setEditableCell1({ gender: gd.gender, index: j, column: "percentage" })
                       }}
-                      onMouseLeave={handleBlur}
+                      onClick={() => 
+                        setEditableCell({ index: j, column: "percentage" })
+                      }
+                      // onMouseLeave={handleBlur}
                       className={`col-span-1 ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } col-span-1 border-slate-300 text-[#1297E2] cursor-pointer text-center p-2 flex justify-center items-center`} key={j}
                     >
                       {editableCell1?.index === j &&
                       editableCell1?.gender === gd.gender &&
                       editableCell1?.column === "percentage" ? (
                         <input
-                          // disabled={gd.weight === 0}
-                          title=""
-                          placeholder="percentage"
                           type="number"
-                          value={Number(gd[`${m}`].monthly * 100).toFixed(1)}
+                          value={(gd[`${m}`].monthly * 100).toFixed(0)}
                           onBlur={handleBlur}
                           onWheel={(e) => e.currentTarget.blur()}
                           onChange={(e) => handleData(gd.gender, e.target.value, m)}
-                          autoFocus
-                          className="w-full cursor-pointer"
+                          className="w-full h-full text-center cursor-pointer"
+                          aria-label="Edit percentage"
+                          title="Edit percentage"
                         />
                       ) : (
-                        `${Number(gd[`${m}`].monthly * 100).toFixed(1)} %`
+                        `${Number(gd[`${m}`].monthly * 100).toFixed(decimal)} %`
                       )}
                     </div>
-                    <div className="col-span-1 border-x"
-                      onClick={() => {
-                        console.log(gd);
-                      }}
-                    
-                    >
+                    <div className="col-span-1 border-x">
                         <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                          {gd[`${m}`].daily.toFixed(3)} %
+                          {gd[`${m}`].daily.toFixed(decimal) || 0} %
                         </div>
                     </div>
                     <div className="col-span-1 border-r"
@@ -246,7 +261,7 @@ export const EnterAudienceTypeDataTable = ({
                       }}
                     >
                         <div className={`${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } p-2 flex justify-center items-center`} key={j}>
-                          {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].monthly / gd[`${m}`].days).toFixed(1) ?? 0}
+                          {Number(totalCount * audienceTypeWiseData?.[currentAudienceType]?.percentage * gd?.weight * gd[`${m}`].monthly / gd[`${m}`].days).toFixed(decimal) || 0}
                         </div>
                     </div>
                     <div className="col-span-1">
@@ -254,7 +269,10 @@ export const EnterAudienceTypeDataTable = ({
                         onMouseEnter={() => {
                           setEditableCell2({ gender: gd.gender, index: j, column: "unique" })
                         }}
-                        onMouseLeave={handleBlur}
+                        onClick={() => 
+                          setEditableCell({ index: j, column: "percentage" })
+                        }
+                        // onMouseLeave={handleBlur}
                         className={`col-span-1 ${j+1 === Object.keys(monthDays)?.length ? "" : "border-b" } col-span-1 border-slate-300 text-[#1297E2] cursor-pointer text-center p-2 flex justify-center items-center`}
                         key={j}
                       >
@@ -266,15 +284,17 @@ export const EnterAudienceTypeDataTable = ({
                               title=""
                               placeholder="unique"
                               type="number"
-                              value={Number(gd?.[m]?.unique * 100).toFixed(1)}
+                              value={Number(gd?.[m]?.unique * 100).toFixed(0)}
                               onBlur={handleBlur}
                               onWheel={(e) => e.currentTarget.blur()}
                               onChange={(e) => handleUniqueData(gd.gender, e.target.value, m)}
-                              autoFocus
+                              ref={(el: any) => (inputRefs.current[j] = el)}
+                              onKeyDown={(e) => handleKeyDown(e, j)}
+                              autoFocus={j==0}
                               className="w-full cursor-pointer"
                             />
                           ) : (
-                            `${Number(gd?.[m]?.unique * 100).toFixed(1)}%`
+                            `${Number(gd?.[m]?.unique * 100).toFixed(decimal)}%`
                           )}
                       </div>
                     </div>

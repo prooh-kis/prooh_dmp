@@ -9,6 +9,8 @@ export const EnterImpactFactorTable = ({
   setAudienceTypeWiseData,
   currentAudienceType,
 }: any) => {
+  const [decimal, setDecimal] = useState<any>(0);
+
   const [editableCell, setEditableCell] = useState<any>(null);
 
   const handleBlur = () => {
@@ -84,7 +86,13 @@ export const EnterImpactFactorTable = ({
             </div>
           </th>
           <th className="col-span-2 border border-slate-300 w-full">
-            <div className="w-full">
+            <div className="w-full" onClick={() => {
+              if (decimal == 1) {
+                setDecimal(0)
+              } else {
+                setDecimal(1)
+              }
+            }}>
               <div className="w-full py-2">
                 <h1>Impact of factors on visit</h1>
               </div>
@@ -153,19 +161,29 @@ export const EnterImpactFactorTable = ({
                           editableCell?.day === gd?.[m] &&
                           editableCell?.factor === gdi &&
                           editableCell?.column === "percentage" ? (
-                            <input
-                                title=""
-                                placeholder="percentage"
+                              // <input
+                              //   title=""
+                              //   placeholder="percentage"
+                              //   type="number"
+                              //   value={Number(gd[`${m}`]?.impactFactor[gdi] * 100).toFixed(1)}
+                              //   onBlur={handleBlur}
+                              //   onChange={(e) => handleData(gd.gender, e.target.value, m, gdi)}
+                              //   autoFocus
+                              //   onWheel={(e) => e.currentTarget.blur()}
+                              //   className="w-full cursor-pointer"
+                              // />
+                              <input
                                 type="number"
-                                value={Number(gd[`${m}`]?.impactFactor[gdi] * 100).toFixed(1)}
+                                value={(gd[`${m}`].monthly * 100).toFixed(0)}
                                 onBlur={handleBlur}
-                                onChange={(e) => handleData(gd.gender, e.target.value, m, gdi)}
-                                autoFocus
                                 onWheel={(e) => e.currentTarget.blur()}
-                                className="w-full cursor-pointer"
+                                onChange={(e) => handleData(gd.gender, e.target.value, m, gdi)}
+                                className="w-full h-full text-center active:bg-[#F4F9FF] cursor-pointer"
+                                aria-label="Edit percentage"
+                                title="Edit percentage"
                               />
                             ) : (
-                              `${Number(gd[`${m}`]?.impactFactor[gdi] * 100).toFixed(1)}%`
+                              `${Number(gd[`${m}`]?.impactFactor[gdi] * 100).toFixed(decimal)}%`
                             )}
                           
                           {/* <input
