@@ -1,5 +1,7 @@
 export { HomePageLayout } from "./layouts/HomePageLayout";
 
+export { DataCard } from "./atoms/DataCard"
+
 export { MainContentContainer } from "./containers/MainContentContainer";
 
 export { Header } from "./header";
@@ -8,10 +10,7 @@ export { MyButton } from "./atoms/MyButton";
 export { MyTab } from "./MyTab";
 
 export {
-  EnterAudienceTypeDataTable,
-  EnterAudienceDataTimeZoonWiseTable,
   SingleRowTable,
-  EnterWeightCohortWise,
 } from "./table";
 
 export { RegisterHeroDataForm } from "./RegisterHeroDataForm";

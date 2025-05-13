@@ -1,0 +1,1 @@
+export const AUDIENCE_URL = `${process.env.REACT_APP_PROOH_SERVER}/api/v2/audiences`;

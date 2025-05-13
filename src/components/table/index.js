@@ -1,4 +1,4 @@
-export { EnterAudienceTypeDataTable } from "./EnterAudienceTypeDataTable";
-export { EnterAudienceDataTimeZoonWiseTable } from "./EnterAudienceDataTimeZoonWiseTable";
+export { AudienceGenderWiseTable } from "./AudienceGenderWiseTable";
+export { AudienceTimezoneWiseTable } from "./AudienceTimezoneWiseTable";
 export { SingleRowTable } from "./tableDataAsPerOurIotDevices";
-export { EnterWeightCohortWise } from "./EnterWeightCohortWise";
+export { AudiencePercentTable } from "./AudiencePercentTable";

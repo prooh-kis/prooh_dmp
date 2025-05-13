@@ -1,11 +1,8 @@
 import {
-  EnterAudienceDataTimeZoonWiseTable,
-  EnterAudienceTypeDataTable,
   MyButton,
   SingleRowTable,
   MyTab,
   HeroDataDetailPage,
-  EnterWeightCohortWise,
 } from "../../components/index";
 import { Checkbox } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
@@ -23,7 +20,7 @@ import {
   SAVE_AUDIENCE_DATA_RESET,
 } from "../../constants/heroDataConstant";
 import { ALL_COHORTS } from "../../constants/helperConstant";
-import { EnterImpactFactorTable } from "../../components/table/EnterImpactFactorTable";
+import { ImpactFactorTable } from "../../components/table/ImpactFactorTable";
 
 const monthDays = {
   weekdays: 22,
@@ -329,11 +326,11 @@ export const HomePage = () => {
               </div>
             </div>
 
-            <EnterWeightCohortWise
+            {/* <EnterWeightCohortWise
               totalCount={totalCount}
               audienceTypeWiseData={audienceTypeWiseData}
               setAudienceTypeWiseData={setAudienceTypeWiseData}
-            />
+            /> */}
           </div>
           <div className="px-8 py-4">
             <div className="flex justify-between items-center">
@@ -362,7 +359,7 @@ export const HomePage = () => {
                 setCurrent={(value: number) => setCurrentAudienceType(value)}
               />
             </div>
-            <EnterAudienceTypeDataTable
+            {/* <EnterAudienceTypeDataTable
               genderData={genderData}
               setGenderData={setGenderData}
               monthDays={monthDays}
@@ -370,7 +367,7 @@ export const HomePage = () => {
               audienceTypeWiseData={audienceTypeWiseData}
               setAudienceTypeWiseData={setAudienceTypeWiseData}
               currentAudienceType={currentAudienceType}
-            />
+            /> */}
           </div>
           <div className="px-8 py-4">
             <div className="flex justify-between items-center">
@@ -386,7 +383,7 @@ export const HomePage = () => {
                 <i className="fi fi-sr-check-circle text-green-500 flex items-center"></i>
               </div>
             </div>
-            <EnterAudienceDataTimeZoonWiseTable
+            {/* <EnterAudienceDataTimeZoonWiseTable
               genderData={genderData}
               setGenderData={setGenderData}
               monthDays={monthDays}
@@ -394,7 +391,7 @@ export const HomePage = () => {
               audienceTypeWiseData={audienceTypeWiseData}
               setAudienceTypeWiseData={setAudienceTypeWiseData}
               currentAudienceType={currentAudienceType}
-            />
+            /> */}
           </div>
           <div className="px-8 py-4">
             <div className="flex justify-between items-center">
@@ -410,7 +407,7 @@ export const HomePage = () => {
                 <i className="fi fi-sr-check-circle text-green-500 flex items-center"></i>
               </div>
             </div>
-            <EnterImpactFactorTable
+            {/* <ImpactFactorTable
               genderData={genderData}
               setGenderData={setGenderData}
               monthDays={monthDays}
@@ -418,7 +415,7 @@ export const HomePage = () => {
               audienceTypeWiseData={audienceTypeWiseData}
               setAudienceTypeWiseData={setAudienceTypeWiseData}
               currentAudienceType={currentAudienceType}
-            />
+            /> */}
           </div>
         </div>
         <div className="bg-white rounded-md">

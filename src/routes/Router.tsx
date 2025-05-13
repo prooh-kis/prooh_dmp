@@ -11,6 +11,7 @@ import {
   PageNotFound,
   UpdatePassword,
   VerifyEmail,
+  Dashboard
 } from "../pages";
 
 import {
@@ -56,9 +57,9 @@ const Routers: React.FC = () => {
         <Route
           path={DASHBOARD}
           element={
-            <PrivateRoute>
-              <DashboardPage />
-            </PrivateRoute>
+            <PublicRoute>
+              <Dashboard />
+            </PublicRoute>
           }
         />
 

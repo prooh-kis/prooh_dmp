@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import { thunk } from "redux-thunk"
 import authReducer from "./authSlice";
 
 import {
@@ -17,6 +16,14 @@ import {
   getHeroDataDetailsReducer,
   heroDataRegisterReducer,
 } from "../reducers/heroDataReducers";
+import {
+  getAudienceTypePercentForGenderWiseTabReducer,
+  getAvgAudienceDataByMarketSiteReducer,
+  getAvgFootfallDataByMarketSiteReducer,
+  getGenderWiseDataByAudienceTypeMarketSiteReducer,
+  getImpactfactorDataByMarketSiteReducer,
+  getTimezoneWiseDataByAudienceTypeMarketSiteReducer
+} from "../reducers/audienceReducers";
 
 const initialState = {
   userSignin: {
@@ -44,6 +51,13 @@ const store = configureStore({
     heroDataDetails: getHeroDataDetailsReducer,
     audienceDataSave: audienceDataSaveReducer,
     audienceDataGet: audienceDataGetReducer,
+
+    getAvgAudienceDataByMarketSite: getAvgAudienceDataByMarketSiteReducer,
+    getAvgFootfallDataByMarketSite: getAvgFootfallDataByMarketSiteReducer,
+    getGenderWiseDataByAudienceTypeMarketSite: getGenderWiseDataByAudienceTypeMarketSiteReducer,
+    getTimezoneWiseDataByAudienceTypeMarketSite: getTimezoneWiseDataByAudienceTypeMarketSiteReducer,
+    getAudienceTypePercentForGenderWiseTab: getAudienceTypePercentForGenderWiseTabReducer,
+    getImpactFactorDataByMarketSite: getImpactfactorDataByMarketSiteReducer
   },
   // middleware: thunk
   // devTools: process.env.NODE_ENV !== 'production'
