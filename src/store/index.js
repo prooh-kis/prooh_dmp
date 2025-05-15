@@ -17,6 +17,10 @@ import {
   heroDataRegisterReducer,
 } from "../reducers/heroDataReducers";
 import {
+  addAudienceTypePercentDataReducer,
+  addGenderWiseDataByAudienceTypeReducer,
+  addImpactFactorDataReducer,
+  addTimezoneWiseDataByAudienceTypeReducer,
   getAudienceTypePercentForGenderWiseTabReducer,
   getAvgAudienceDataByMarketSiteReducer,
   getAvgFootfallDataByMarketSiteReducer,
@@ -57,7 +61,12 @@ const store = configureStore({
     getGenderWiseDataByAudienceTypeMarketSite: getGenderWiseDataByAudienceTypeMarketSiteReducer,
     getTimezoneWiseDataByAudienceTypeMarketSite: getTimezoneWiseDataByAudienceTypeMarketSiteReducer,
     getAudienceTypePercentForGenderWiseTab: getAudienceTypePercentForGenderWiseTabReducer,
-    getImpactFactorDataByMarketSite: getImpactfactorDataByMarketSiteReducer
+    getImpactFactorDataByMarketSite: getImpactfactorDataByMarketSiteReducer,
+
+    addAudienceTypePercentData : addAudienceTypePercentDataReducer,
+    addGenderWiseDataByAudienceType : addGenderWiseDataByAudienceTypeReducer,
+    addTimezoneWiseDataByAudienceType : addTimezoneWiseDataByAudienceTypeReducer,
+    addImpactFactorData : addImpactFactorDataReducer
   },
   // middleware: thunk
   // devTools: process.env.NODE_ENV !== 'production'

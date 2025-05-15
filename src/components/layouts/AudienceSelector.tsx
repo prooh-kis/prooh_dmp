@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CheckCircle, Circle } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { getAudienceTypePercentForGenderWiseTab } from 'actions/audienceAction';
+import { getAudienceTypePercentForGenderWiseTab } from '../../actions/audienceAction';
 
 type AudienceSelectorProps = {
     id: string;

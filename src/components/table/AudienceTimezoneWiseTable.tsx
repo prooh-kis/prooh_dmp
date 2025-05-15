@@ -1,30 +1,39 @@
 import { GenderSelector } from '../../components/layouts/GenderSelector';
 import { AudienceTableHeader } from '../../components/layouts/AudienceTableHeader';
-import { getTimezoneWiseDataByAudienceTypeMarketSite } from 'actions/audienceAction';
-import { useEffect, useRef, useState } from 'react'
+import { addTimezoneWiseDataByAudienceType, getTimezoneWiseDataByAudienceTypeMarketSite } from '../../actions/audienceAction';
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import {
+  ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_RESET,
+  GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_RESET
+} from '../../constants/audienceConstant';
+import { message } from 'antd';
 
 interface AudienceTimezoneWiseTableProps {
   marketSite: String;
   audienceCategory: String;
   audiencePercent: number;
-  id : string;
-  setId : string;
+  id: string;
+  setId: string;
+  dataCheckStatus: {};
+  setDataCheckStatus: Function;
 }
 
 export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps> = ({
   marketSite,
   audienceCategory,
   audiencePercent,
-  id , 
-  setId
+  id,
+  setId,
+  dataCheckStatus,
+  setDataCheckStatus
 }: any) => {
 
   const dispatch = useDispatch<any>();
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
-  const getTimezoneWiseDataByAudienceTypeMarketSiteData = useSelector(
+  const getTimezoneWiseDataByAudienceTypeMarketSiteSelector = useSelector(
     (state: any) => state.getTimezoneWiseDataByAudienceTypeMarketSite
   );
   const {
@@ -32,120 +41,85 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
     data: timezoneWiseDataByMarketSite,
     success: timezoneWiseDataByMarketSiteSuccess,
     error: timezoneWiseDataByMarketSiteError
-  } = getTimezoneWiseDataByAudienceTypeMarketSiteData;
+  } = getTimezoneWiseDataByAudienceTypeMarketSiteSelector;
 
+
+  const addTimezoneWiseDataByAudienceTypeSelector = useSelector(
+    (state: any) => state.addTimezoneWiseDataByAudienceType
+  );
+  const {
+    loading: addTimezoneWiseDataByAudienceTypeLoading,
+    data: addTimezoneWiseDataByAudienceTypeData,
+    success: addTimezoneWiseDataByAudienceTypeSuccess,
+    error: addTimezoneWiseDataByAudienceTypeError
+  } = addTimezoneWiseDataByAudienceTypeSelector;
+
+  const [lockStatus, setLockStatus] = useState(dataCheckStatus["Timezone Wise Data"][audienceCategory]);
   const [genderType, setGenderType] = useState("Male")
   const [decimal, setDecimal] = useState<any>(0);
+  const [data, setData] = useState<any>({});
+  const [genders, setGenders] = useState<any>({
+    "Male": 50,
+    "Female": 50
+  });
   const [editableCell, setEditableCell] = useState<any>(null);
-  const [timezoneDataByMarketSite, setTimezoneDataByMarketSite] = useState<any>({
-    "weekdays": {
-      "percent": 0.18532800000000002,
-      "count": 185.328,
-      "timezoneWiseData": {
-        "morning": {
-          "percent": 21,
-          "audiencePercent": 0.03891888,
-          "count": 38.91888,
-          "unique": 5.448643200000001
-        },
-        "afternoon": {
-          "percent": 24,
-          "audiencePercent": 0.04447872,
-          "count": 44.47872,
-          "unique": 6.227020800000001
-        },
-        "evening": {
-          "percent": 13,
-          "audiencePercent": 0.024092640000000002,
-          "count": 24.092640000000003,
-          "unique": 3.3729696000000007
-        },
-        "night": {
-          "percent": 42,
-          "audiencePercent": 0.07783776,
-          "count": 77.83776,
-          "unique": 10.897286400000002
-        }
-      }
-    },
-    "saturdays": {
-      "percent": 0.555984,
-      "count": 555.984,
-      "timezoneWiseData": {
-        "morning": {
-          "percent": 46,
-          "audiencePercent": 0.25575264000000003,
-          "count": 0,
-          "unique": 0
-        },
-        "afternoon": {
-          "percent": 0,
-          "audiencePercent": 0,
-          "count": 0,
-          "unique": 0
-        },
-        "evening": {
-          "percent": 0,
-          "audiencePercent": 0,
-          "count": 0,
-          "unique": 0
-        },
-        "night": {
-          "percent": 0,
-          "audiencePercent": 0,
-          "count": 0,
-          "unique": 0
-        }
-      }
-    },
-    "sundays": {
-      "percent": 0,
-      "count": 0,
-      "timezoneWiseData": {
-        "morning": {
-          "percent": 0,
-          "audiencePercent": 0,
-          "count": 0,
-          "unique": 0
-        },
-        "afternoon": {
-          "percent": 0,
-          "audiencePercent": 0,
-          "count": 0,
-          "unique": 0
-        },
-        "evening": {
-          "percent": 0,
-          "audiencePercent": 0,
-          "count": 0,
-          "unique": 0
-        },
-        "night": {
-          "percent": 0,
-          "audiencePercent": 0,
-          "count": 0,
-          "unique": 0
-        }
-      }
-    }
-  })
+  const [timezoneDataByMarketSite, setTimezoneDataByMarketSite] = useState<any>({})
+
+  const saveTimezoneData = (timezoneData: any , gender : any) => {
+    const newData: any = data;
+    newData[gender] = {};
+    Object.entries(timezoneData)?.map(([dayType, dayTypeData]: [any, any], i: any) => {
+      newData[genderType][dayType] = {}
+      Object.entries(dayTypeData?.timezoneWiseData)?.map(([timezone, timezoneData]: [any, any], k: any) => {
+        newData[genderType][dayType][timezone] = timezoneData?.percent / 100
+      })
+    })
+
+    setData(newData);
+  }
 
   useEffect(() => {
     dispatch(getTimezoneWiseDataByAudienceTypeMarketSite({
-      marketSite: marketSite, categoryType: audienceCategory, gender: genderType
+      marketSite: marketSite, categoryType: audienceCategory, id: id
     }))
-  }, [audienceCategory , genderType])
+    setLockStatus(dataCheckStatus["Timezone Wise Data"][audienceCategory])
+    setGenderType(genderType)
+    setData({})
+  }, [audienceCategory , dataCheckStatus])
 
   useEffect(() => {
     if (timezoneWiseDataByMarketSiteError) {
       alert("Error Fetching Data : " + timezoneWiseDataByMarketSiteError)
+      dispatch({ type: GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_RESET })
     }
 
     if (timezoneWiseDataByMarketSiteSuccess) {
-      setTimezoneDataByMarketSite(timezoneWiseDataByMarketSite)
+      setTimezoneDataByMarketSite(timezoneWiseDataByMarketSite.response)
+      setGenders(timezoneWiseDataByMarketSite.genderResponse)
+      saveTimezoneData(timezoneWiseDataByMarketSite.response[genderType] , genderType)
+      dispatch({ type: GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_RESET })
     }
 
-  }, [timezoneWiseDataByMarketSiteSuccess, timezoneWiseDataByMarketSiteError])
+    if (addTimezoneWiseDataByAudienceTypeSuccess) {
+      message.info("Data Saved Successfully")
+      dispatch({ type: ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_RESET })
+      setDataCheckStatus((prevData: any) => ({
+        ...prevData,
+        ["Timezone Wise Data"]: {
+          ...prevData["Timezone Wise Data"],
+          [audienceCategory] : true
+        }
+      }));
+    }
+
+    if (addTimezoneWiseDataByAudienceTypeError) {
+      alert("Error Saving Data : " + addTimezoneWiseDataByAudienceTypeError)
+      dispatch({ type: ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_RESET })
+    }
+
+  }, [timezoneWiseDataByMarketSiteSuccess, timezoneWiseDataByMarketSiteError,
+    addTimezoneWiseDataByAudienceTypeSuccess, addTimezoneWiseDataByAudienceTypeError
+  ])
 
   const handleKeyDown = (e: any, index: any) => {
     if (e.key === 'Tab' && !e.shiftKey) {
@@ -159,21 +133,85 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
     setEditableCell(null);
   };
 
-  const genders = {
-    "Male": 80,
-    "Female": 80
+  const handleDataChange = (event: ChangeEvent<HTMLInputElement>, day: any, timezone: any) => {
+    const enterValue = parseFloat(event.target.value);
+    const newTimezoneData = JSON.parse(JSON.stringify(timezoneDataByMarketSite));
+    newTimezoneData[genderType][day] = {
+      ...newTimezoneData[genderType][day],
+      timezoneWiseData: {
+        ...newTimezoneData[genderType][day].timezoneWiseData,
+        [timezone]: {
+          ...newTimezoneData[genderType][day].timezoneWiseData[timezone],
+          percent: enterValue,
+          audiencePercent: (enterValue * newTimezoneData[genderType][day].percent) / 100,
+          count: (enterValue * newTimezoneData[genderType][day].count) / 100
+        }
+      }
+    };
+
+    setTimezoneDataByMarketSite(newTimezoneData);
+    saveTimezoneData(newTimezoneData[genderType] , genderType);
+  };
+
+  const checkData = () => {
+    if (data["Male"] == null || data["Female"] == null) {
+      alert("Please Verify Both Male & Female Data")
+      return false
+    }
+
+    for (const genderData of Object.values(data) as { [key: string]: any }[]) {
+      for (const dayTypeData of Object.values(genderData) as { [key: string]: any }[]) {
+        let count = 0;
+        for (const timezoneData of Object.values(dayTypeData) as number[]) {
+          count += timezoneData;
+        }
+        if (count.toFixed(0) != "1") {
+          alert("Timezone Percentage sum should be 100%")
+          return false
+        }
+      }
+    }
+
+    return true
   }
 
-  const handleData = (gender: string, value: any, day: any, timezone: any) => {
-    const enterValue = Number(value / 100);
+  const lockButtonFunction = () => {
+    if (checkData() && lockStatus == false) {
+      setLockStatus(!lockStatus)
+      dispatch(addTimezoneWiseDataByAudienceType({
+        id: id,
+        audienceCategory: audienceCategory,
+        data: data
+      }))
+    }
+    else if (lockStatus === true) {
+      setLockStatus(!lockStatus)
+      setDataCheckStatus((prevData: any) => ({
+        ...prevData,
+        ["Timezone Wise Data"]: {
+          ...prevData["Timezone Wise Data"],
+          [audienceCategory] : false
+        }
+      }));
+    }
+  }
 
-  };
+  const resetButtonFunction = () => {
+    dispatch(getTimezoneWiseDataByAudienceTypeMarketSite({
+      marketSite: marketSite, categoryType: audienceCategory, gender: genderType, id: id
+    }))
+  }
+
+  const genderTabClick = (gender: any) => {
+    setGenderType(gender)
+    saveTimezoneData(timezoneDataByMarketSite[gender] , gender)
+  }
 
   return (
     <div className='flex flex-col'>
       <AudienceTableHeader tableHeader={"Timezone Wise Data"} tableSubHeader={"(" + audienceCategory + ")"} tableType={"horizontal"}
-        resetButton={() => { }} lockButton={() => { }} />
-      <GenderSelector genderData={genders} genderType={genderType} setGenderType={setGenderType} />
+        resetButton={() => resetButtonFunction()} lockButton={() => lockButtonFunction()} lockStatus={lockStatus} />
+      <GenderSelector genderData={genders} genderType={genderType} genderTabClick={genderTabClick} />
       <table className="border-collapse w-full text-[12px]">
         <thead>
           <tr className="text-[#FFFFFF] bg-[#1297E2]">
@@ -204,7 +242,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
           </tr>
         </thead>
         <tbody className="w-full border border-1">
-          {Object.entries(timezoneDataByMarketSite)?.map(([dayType, dayTypeData]: [any, any], i: any) => (
+          {Object.entries(timezoneDataByMarketSite?.[genderType] || {})?.map(([dayType, dayTypeData]: [any, any], i: any) => (
             <tr key={i}>
               <td className="border h-full">
                 <div className="h-full flex justify-center items-center">
@@ -231,7 +269,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
                 ))}
               </td>
               <td className="border-b">
-                {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((m: any, k: any) => (
+                {Object.entries(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map(([timezone, m]: any, k: any) => (
                   <div key={k}
                     onMouseEnter={() => {
                       setEditableCell({ gender: "gender", day: dayType, index: k, column: "percentage" })
@@ -245,21 +283,21 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
                       editableCell?.day === dayType &&
                       editableCell?.column === "percentage" ? (
                       <input
-                        // disabled={gd.weight === 0}
+                        disabled={lockStatus}
                         title=""
                         placeholder="unique"
                         type="number"
-                        value={Number(m?.percent).toFixed(0)}
+                        value={Number(m?.percent)}
                         onBlur={handleBlur}
                         onWheel={(e) => e.currentTarget.blur()}
-                        onChange={(e) => handleData("gender", e.target.value, m, m)}
+                        onChange={(e) => handleDataChange(e, dayType, timezone)}
                         ref={(el: any) => (inputRefs.current[k] = el)}
                         onKeyDown={(e) => handleKeyDown(e, k)}
                         autoFocus={k == 0}
                         className="w-full h-full text-center cursor-pointer"
                       />
                     ) : (
-                      `${Number(m?.percent).toFixed(decimal)}%`
+                      `${Number(m?.percent).toFixed(2)}%`
                     )}
                   </div>
                 ))}

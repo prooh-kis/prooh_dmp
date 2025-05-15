@@ -1,8 +1,13 @@
 import { AudienceTableHeader } from "../../components/layouts/AudienceTableHeader";
-import { getGenderWiseDataByAudienceTypeMarketSite } from "actions/audienceAction";
+import { addGenderWiseDataByAudienceType, getGenderWiseDataByAudienceTypeMarketSite } from "../../actions/audienceAction";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import {
+  ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_RESET,
+  GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_RESET
+} from "../../constants/audienceConstant";
+import { message } from "antd";
 
 interface AudienceGenderWiseTableProps {
   marketSite: String;
@@ -10,6 +15,8 @@ interface AudienceGenderWiseTableProps {
   audiencePercent: number;
   id: string;
   setId: string;
+  dataCheckStatus: {};
+  setDataCheckStatus: Function;
 }
 
 export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = ({
@@ -17,13 +24,15 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   audienceCategory,
   audiencePercent,
   id,
-  setId
+  setId,
+  dataCheckStatus,
+  setDataCheckStatus
 }: any) => {
 
   const dispatch = useDispatch<any>();
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
-  const getGenderWiseDataByAudienceTypeMarketSiteData = useSelector(
+  const getGenderWiseDataByAudienceTypeMarketSiteSelector = useSelector(
     (state: any) => state.getGenderWiseDataByAudienceTypeMarketSite
   );
   const {
@@ -31,7 +40,17 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
     data: genderWiseDataByMarketSite,
     success: genderWiseDataByMarketSiteSuccess,
     error: genderWiseDataByMarketSiteError
-  } = getGenderWiseDataByAudienceTypeMarketSiteData;
+  } = getGenderWiseDataByAudienceTypeMarketSiteSelector;
+
+  const addGenderWiseDataByAudienceTypeSelector = useSelector(
+    (state: any) => state.addGenderWiseDataByAudienceType
+  );
+  const {
+    loading: addGenderWiseDataByAudienceTypeLoading,
+    data: addGenderWiseDataByAudienceTypeData,
+    success: addGenderWiseDataByAudienceTypeSuccess,
+    error: addGenderWiseDataByAudienceTypeError
+  } = addGenderWiseDataByAudienceTypeSelector;
 
   const handleKeyDown = (e: any, index: any) => {
     if (e.key === 'Tab' && !e.shiftKey) {
@@ -45,77 +64,46 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   const [editableCell, setEditableCell] = useState<any>(null);
   const [editableCell1, setEditableCell1] = useState<any>(null);
   const [editableCell2, setEditableCell2] = useState<any>(null);
-  const [genderDataByMarketSite, setGenderDataByMarketSite] = useState<any>({
-    "Male": {
-      "percent": 0,
-      "count": 0,
-      "dayWiseData": {
-        "weekdays": {
-          "days": 22,
-          "monthly": 0,
-          "daily": 0,
-          "count": 0,
-          "unique": 0
-        },
-        "saturdays": {
-          "days": 4,
-          "monthly": 0,
-          "daily": 0,
-          "count": 0,
-          "unique": 0
-        },
-        "sundays": {
-          "days": 4,
-          "monthly": 0,
-          "daily": 0,
-          "count": 0,
-          "unique": 0
-        }
-      }
-    },
-    "Female": {
-      "percent": 0,
-      "count": 0,
-      "dayWiseData": {
-        "weekdays": {
-          "days": 22,
-          "monthly": 0,
-          "daily": 0,
-          "count": 0,
-          "unique": 0
-        },
-        "saturdays": {
-          "days": 4,
-          "monthly": 0,
-          "daily": 0,
-          "count": 0,
-          "unique": 0
-        },
-        "sundays": {
-          "days": 4,
-          "monthly": 0,
-          "daily": 0,
-          "count": 0,
-          "unique": 0
-        }
-      }
-    }
-  })
+  const [lockStatus, setLockStatus] = useState(dataCheckStatus["Gender Wise Data"][audienceCategory]);
+  const [genderDataByMarketSite, setGenderDataByMarketSite] = useState<any>({})
 
   useEffect(() => {
     dispatch(getGenderWiseDataByAudienceTypeMarketSite({ marketSite: marketSite, categoryType: audienceCategory }))
+    setLockStatus(dataCheckStatus["Gender Wise Data"][audienceCategory])
   }, [audienceCategory])
 
   useEffect(() => {
     if (genderWiseDataByMarketSiteError) {
       alert("Error Fetching Data : " + genderWiseDataByMarketSiteError)
+      dispatch({ type: GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_RESET })
     }
 
     if (genderWiseDataByMarketSiteSuccess) {
       setGenderDataByMarketSite(genderWiseDataByMarketSite)
+      dispatch({ type: GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_RESET })
     }
 
-  }, [genderWiseDataByMarketSiteSuccess, genderWiseDataByMarketSiteError])
+    if (addGenderWiseDataByAudienceTypeError) {
+      alert("Error Saving Data : " + addGenderWiseDataByAudienceTypeError)
+      dispatch({ type: ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_RESET })
+    }
+
+    if (addGenderWiseDataByAudienceTypeSuccess) {
+      message.info("Data Saved Successfully")
+      dispatch({ type: ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_RESET })
+      setDataCheckStatus((prevData: any) => ({
+        ...prevData,
+        ["Gender Wise Data"]: {
+          ...prevData["Gender Wise Data"],
+          [audienceCategory]: true
+        }
+      }));
+    }
+
+  }, [genderWiseDataByMarketSiteSuccess, genderWiseDataByMarketSiteError,
+    addGenderWiseDataByAudienceTypeSuccess,
+    addGenderWiseDataByAudienceTypeError
+  ])
 
   const handleBlur = () => {
     setEditableCell(null);
@@ -149,10 +137,79 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
     }));
   };
 
+  const checkData = () => {
+    if (genderDataByMarketSite["Male"].percent + genderDataByMarketSite["Female"].percent !== 100) {
+      alert("Gender Distribution Sum must be 100")
+      return false
+    }
+
+    for (const genderData of Object.values(genderDataByMarketSite) as { dayWiseData: {} }[]) {
+      let count = 0;
+      for (const dayWiseData of Object.values(genderData.dayWiseData) as { monthly: number }[]) {
+        count += dayWiseData?.monthly;
+      }
+      if (count !== 100) {
+        alert("Monthly Distribution Sum must be 100");
+        return false;
+      }
+    }
+
+    return true
+  }
+
+  const lockButtonFunction = () => {
+    if (checkData() && lockStatus === false) {
+      setLockStatus(!lockStatus)
+      const data: any = []
+      Object.entries(genderDataByMarketSite)?.forEach(([gender, genderData]: [any, any]) => {
+        const sampleData: any = {}
+        const weekdays = { ...genderData.dayWiseData.weekdays };
+        const saturdays = { ...genderData.dayWiseData.saturdays };
+        const sundays = { ...genderData.dayWiseData.sundays };
+
+        weekdays.monthly = weekdays.monthly / 100;
+        saturdays.monthly = saturdays.monthly / 100;
+        sundays.monthly = sundays.monthly / 100;
+
+        weekdays.daily = weekdays.monthly / weekdays.days;
+        saturdays.daily = saturdays.monthly / saturdays.days;
+        sundays.daily = weekdays.monthly / sundays.days;
+
+        sampleData["gender"] = gender;
+        sampleData["weight"] = genderData.percent / 100;
+        sampleData["weekdays"] = weekdays;
+        sampleData["saturdays"] = saturdays;
+        sampleData["sundays"] = sundays;
+
+        data.push(sampleData);
+      })
+      dispatch(addGenderWiseDataByAudienceType({
+        id: id,
+        audienceCategory: audienceCategory,
+        data: data
+      }))
+    }
+    else if (lockStatus === true) {
+      setLockStatus(!lockStatus)
+      setDataCheckStatus((prevData: any) => ({
+        ...prevData,
+        ["Gender Wise Data"]: {
+          ...prevData["Gender Wise Data"],
+          [audienceCategory]: false
+        }
+      }));
+    }
+  }
+
+  const resetButtonFunction = () => {
+    dispatch(getGenderWiseDataByAudienceTypeMarketSite({ marketSite: marketSite, categoryType: audienceCategory }))
+  }
+
   return (
     <div className="flex flex-col">
       <AudienceTableHeader tableHeader={"Gender Wise Data"}
-        tableSubHeader={"(" + audienceCategory + ")"} tableType={"horizontal"} resetButton={() => { }} lockButton={() => { }} />
+        tableSubHeader={"(" + audienceCategory + ")"} tableType={"horizontal"} resetButton={() => resetButtonFunction()}
+        lockButton={() => lockButtonFunction()} lockStatus={lockStatus} />
       <table className="border-collapse w-full text-[14px]">
         <thead>
           <tr className="grid grid-cols-12">
@@ -247,13 +304,14 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                       editableCell?.column === "percentage" ? (
                       <input
                         type="number"
-                        value={(genderData?.percent).toFixed(decimal)}
+                        value={(genderData?.percent)}
                         onBlur={handleBlur}
                         onWheel={(e) => e.currentTarget.blur()}
                         onChange={(e) => handleDataChange(gender, e, null, false)}
                         className="w-full h-full text-center border-[#1297E2] cursor-pointer focus:border-[#1297E2]"
                         aria-label="Edit percentage"
                         title="Edit percentage"
+                        disabled={lockStatus}
                         ref={(el: any) => (inputRefs.current[i] = el)}
                         autoFocus={i == 0}
                       />
@@ -311,6 +369,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                           className="w-full h-full text-center cursor-pointer"
                           aria-label="Edit percentage"
                           title="Edit percentage"
+                          disabled={lockStatus}
                           ref={(el: any) => (inputRefs.current[j] = el)}
                           autoFocus={j == 0}
                         />
@@ -356,6 +415,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                             ref={(el: any) => (inputRefs.current[j] = el)}
                             onKeyDown={(e) => handleKeyDown(e, j)}
                             autoFocus={j == 0}
+                            disabled={lockStatus}
                             className="w-full h-full text-center cursor-pointer"
                           />
                         ) : (

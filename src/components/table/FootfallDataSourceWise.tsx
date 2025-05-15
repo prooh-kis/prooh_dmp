@@ -7,11 +7,13 @@ import { getAvgFootfallDataByMarketSite } from "../../actions/audienceAction";
 
 interface FootfallDataSourceWiseProps {
     marketSite: String;
-    id : string;
-    setId : Function;
+    id: string;
+    setId: Function;
+    dataCheckStatus: {};
+    setDataCheckStatus: Function;
 }
 
-export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ marketSite , id , setId }) => {
+export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ marketSite }) => {
 
     const dispatch = useDispatch<any>();
     const [totalCount, setTotalCount] = useState(0);

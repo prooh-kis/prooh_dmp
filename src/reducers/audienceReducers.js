@@ -1,4 +1,20 @@
 import {
+    ADD_AUDIENCE_TYPE_PERCENT_DATA_FAIL,
+    ADD_AUDIENCE_TYPE_PERCENT_DATA_REQUEST,
+    ADD_AUDIENCE_TYPE_PERCENT_DATA_RESET,
+    ADD_AUDIENCE_TYPE_PERCENT_DATA_SUCCESS,
+    ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_FAIL,
+    ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_REQUEST,
+    ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_RESET,
+    ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_SUCCESS,
+    ADD_IMPACT_FACTOR_DATA_FAIL,
+    ADD_IMPACT_FACTOR_DATA_REQUEST,
+    ADD_IMPACT_FACTOR_DATA_RESET,
+    ADD_IMPACT_FACTOR_DATA_SUCCESS,
+    ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_FAIL,
+    ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_REQUEST,
+    ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_RESET,
+    ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_SUCCESS,
     GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_FAIL,
     GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_REQUEST,
     GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_RESET,
@@ -109,6 +125,66 @@ export function getImpactfactorDataByMarketSiteReducer(state = {}, action) {
         case GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_FAIL:
             return { loading: false, error: action.payload };
         case GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_RESET:
+            return {};
+        default:
+            return state;
+    }
+}
+
+export function addAudienceTypePercentDataReducer(state = {}, action) {
+    switch (action.type) {
+        case ADD_AUDIENCE_TYPE_PERCENT_DATA_REQUEST:
+            return { loading: true };
+        case ADD_AUDIENCE_TYPE_PERCENT_DATA_SUCCESS:
+            return { loading: false, data: action.payload, success: true };
+        case ADD_AUDIENCE_TYPE_PERCENT_DATA_FAIL:
+            return { loading: false, error: action.payload };
+        case ADD_AUDIENCE_TYPE_PERCENT_DATA_RESET:
+            return {};
+        default:
+            return state;
+    }
+}
+
+export function addGenderWiseDataByAudienceTypeReducer(state = {}, action) {
+    switch (action.type) {
+        case ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_REQUEST:
+            return { loading: true };
+        case ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_SUCCESS:
+            return { loading: false, data: action.payload, success: true };
+        case ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_FAIL:
+            return { loading: false, error: action.payload };
+        case ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_RESET:
+            return {};
+        default:
+            return state;
+    }
+}
+
+export function addTimezoneWiseDataByAudienceTypeReducer(state = {}, action) {
+    switch (action.type) {
+        case ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_REQUEST:
+            return { loading: true };
+        case ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_SUCCESS:
+            return { loading: false, data: action.payload, success: true };
+        case ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_FAIL:
+            return { loading: false, error: action.payload };
+        case ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_RESET:
+            return {};
+        default:
+            return state;
+    }
+}
+
+export function addImpactFactorDataReducer(state = {}, action) {
+    switch (action.type) {
+        case ADD_IMPACT_FACTOR_DATA_REQUEST:
+            return { loading: true };
+        case ADD_IMPACT_FACTOR_DATA_SUCCESS:
+            return { loading: false, data: action.payload, success: true };
+        case ADD_IMPACT_FACTOR_DATA_FAIL:
+            return { loading: false, error: action.payload };
+        case ADD_IMPACT_FACTOR_DATA_RESET:
             return {};
         default:
             return state;

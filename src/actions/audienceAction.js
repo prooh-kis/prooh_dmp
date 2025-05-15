@@ -1,5 +1,17 @@
 import axios from "axios";
 import {
+    ADD_AUDIENCE_TYPE_PERCENT_DATA_FAIL,
+    ADD_AUDIENCE_TYPE_PERCENT_DATA_REQUEST,
+    ADD_AUDIENCE_TYPE_PERCENT_DATA_SUCCESS,
+    ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_FAIL,
+    ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_REQUEST,
+    ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_SUCCESS,
+    ADD_IMPACT_FACTOR_DATA_FAIL,
+    ADD_IMPACT_FACTOR_DATA_REQUEST,
+    ADD_IMPACT_FACTOR_DATA_SUCCESS,
+    ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_FAIL,
+    ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_REQUEST,
+    ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_SUCCESS,
     GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_FAIL,
     GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_REQUEST,
     GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_SUCCESS,
@@ -139,9 +151,7 @@ export const getImpactFactorDataByMarketSite = (input) => async (dispatch , getS
         payload: input,
     });
     try {
-        console.log(input)
         const { data } = await axios.post(`${AUDIENCE_URL}/getImpactFactorDataByMarketSite`, input);
-        console.log(data)
         dispatch({
             type: GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_SUCCESS,
             payload: data,
@@ -149,6 +159,96 @@ export const getImpactFactorDataByMarketSite = (input) => async (dispatch , getS
     } catch (error) {
         dispatch({
             type: GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        });
+    }
+};
+
+export const addAudienceTypePercentData = (input) => async (dispatch , getState) => {
+    dispatch({
+        type: ADD_AUDIENCE_TYPE_PERCENT_DATA_REQUEST,
+        payload: input,
+    });
+    try {
+        const { data } = await axios.post(`${AUDIENCE_URL}/addAudienceTypePercentData`, input);
+        dispatch({
+            type: ADD_AUDIENCE_TYPE_PERCENT_DATA_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: ADD_AUDIENCE_TYPE_PERCENT_DATA_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        });
+    }
+};
+
+
+export const addGenderWiseDataByAudienceType = (input) => async (dispatch , getState) => {
+    dispatch({
+        type: ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_REQUEST,
+        payload: input,
+    });
+    try {
+        const { data } = await axios.post(`${AUDIENCE_URL}/addGenderWiseDataByAudienceType`, input);
+        dispatch({
+            type: ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        });
+    }
+};
+
+export const addTimezoneWiseDataByAudienceType = (input) => async (dispatch , getState) => {
+    dispatch({
+        type: ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_REQUEST,
+        payload: input,
+    });
+    try {
+        const { data } = await axios.post(`${AUDIENCE_URL}/addTimezoneWiseDataByAudienceType`, input);
+        dispatch({
+            type: ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        });
+    }
+};
+
+
+export const addImpactFactorData = (input) => async (dispatch , getState) => {
+    dispatch({
+        type: ADD_IMPACT_FACTOR_DATA_REQUEST,
+        payload: input,
+    });
+    try {
+        const { data } = await axios.post(`${AUDIENCE_URL}/addImpactFactorData`, input);
+        dispatch({
+            type: ADD_IMPACT_FACTOR_DATA_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: ADD_IMPACT_FACTOR_DATA_FAIL,
             payload:
                 error.response && error.response.data.message
                     ? error.response.data.message
