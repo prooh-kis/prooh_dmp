@@ -11,7 +11,8 @@ import {
   PageNotFound,
   UpdatePassword,
   VerifyEmail,
-  Dashboard
+  Dashboard,
+  DataHeroPage,
 } from "../pages";
 
 import {
@@ -42,7 +43,7 @@ const Routers: React.FC = () => {
           path={HOME}
           element={
             <PublicRoute>
-              <LandingPage />
+              <DataHeroPage />
             </PublicRoute>
           }
         />

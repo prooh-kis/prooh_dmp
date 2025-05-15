@@ -42,7 +42,7 @@ export const AuthPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center ">
+    <div className="flex flex-col justify-center items-center mt-16 ">
       <div className="w-[90%] lg:w-[400px] rounded-[15px] bg-white px-5 lg:px-8 py-6 lg:py-10 shadow-lg">
         <div className="flex flex-col gap-4">
           <h1 className="items-center text-xl font-bold"> Welcome Back</h1>
@@ -78,7 +78,13 @@ export const AuthPage: React.FC = () => {
 
             <div className="flex flex-row justify-between">
               <div className="flex flex-row gap-1">
-                <input title="q" type="checkbox" id="rememberMe" checked onChange={() => {}} />
+                <input
+                  title="q"
+                  type="checkbox"
+                  id="rememberMe"
+                  checked
+                  onChange={() => {}}
+                />
                 <label className="text-sm" htmlFor="rememberMe">
                   Remember me
                 </label>

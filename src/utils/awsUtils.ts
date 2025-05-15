@@ -1,15 +1,11 @@
 import Axios from "axios";
 
-export const getAWSUrlToUploadFile = async (contentType: String) => {
+export const getAWSUrlToUploadFile = async (contentType: String, fileName: string) => {
   try {
     const { data } = await Axios.post(
       `${process.env.REACT_APP_PROOH_SERVER}/api/v1/aws/getURLForFileUplaod`,
-      { contentType }
-      // {
-      //   headers: {
-      //     Authorization: `Bearer ${userInfo?.token}`,
-      //   },
-      // }
+      { contentType, name: fileName }
+
     );
     return data;
   } catch (error) {
