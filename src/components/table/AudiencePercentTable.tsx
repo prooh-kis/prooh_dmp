@@ -110,7 +110,7 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
       }
 
       dispatch(addAudienceTypePercentData({
-        id: id,
+        id: id === "dashboard" ? null : id,
         marketSite: "CyberCity Gurgaon",
         market: "Delhi NCR",
         touchPoints: [],

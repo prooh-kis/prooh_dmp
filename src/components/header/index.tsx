@@ -28,6 +28,10 @@ export const Header: React.FC = () => {
       label: "Research",
       path: `/homepage?userId=${userInfo ? userInfo?._id : ""}`,
     },
+    {
+      label: "Dashboard",
+      path: `/dashboard`,
+    },
   ]);
 
   const handleClick = (index: number) => {
