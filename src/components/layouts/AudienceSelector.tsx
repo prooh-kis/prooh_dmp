@@ -48,6 +48,7 @@ const AudienceSelector: React.FC<AudienceSelectorProps> = ({ id, audienceCategor
         <div className="p-4 w-96">
             <h2 className="text-lg font-semibold mb-4">Select Audience Type</h2>
             <div className="flex flex-col gap-4 relative">
+
                 {Object.entries(audienceTypes).map(([audienceType, percent], index) => {
                     const isSelected = audienceCategory === audienceType;
 
