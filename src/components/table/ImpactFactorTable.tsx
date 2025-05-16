@@ -167,10 +167,10 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
       <table className="border-collapse w-full text-sm">
         <thead>
           <tr className="bg-blue-500 text-white">
-            <th className="border p-2">Gender Type</th>
-            <th className="border p-2">Distribution of Month</th>
+            <th className="border p-2 bg-[#F7F7F7] text-[#6F7F8E]">Gender Type</th>
+            <th className="border p-2 bg-[#F7F7F7] text-[#6F7F8E]">Distribution of Month</th>
             {Object.values(impactFactorLabels).map((label) => (
-              <th key={label} className="border p-2">
+              <th key={label} className="border p-2 text-[#ffffff] bg-[#FF5050]">
                 {label}
               </th>
             ))}
@@ -181,15 +181,15 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
             <tr key={dayType} className="text-center">
               {index === 0 && (
                 <td
-                  className="border p-2 font-bold bg-gray-100"
+                  className="border p-2 font-bold bg-[#F5FFFA] text-[#3A9868]"
                   rowSpan={Object.keys(impactFactorData).length}
                 >
                   {"Male & Female"}
                 </td>
               )}
-              <td className="border p-2 font-medium">{capitalizeFirst(dayType)}</td>
+              <td className="border-b p-2 font-semibold border-r-[#FF5050]">{capitalizeFirst(dayType)}</td>
               {Object.keys(impactFactorLabels).map((factorKey) => (
-                <td key={factorKey} className="border p-2 text-blue-600"
+                <td key={factorKey} className="border border-[#FF5050] p-2 text-[#FF5050]"
                   onMouseEnter={() =>
                     setEditableCell({ dayType, factorKey })
                   }
@@ -204,7 +204,7 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
                       onBlur={handleBlur}
                       onWheel={(e) => e.currentTarget.blur()}
                       onChange={(e) => handleChange(e, dayType, factorKey)}
-                      className="w-full h-full text-center border-[#1297E2] cursor-pointer focus:border-[#1297E2]"
+                      className="w-full h-full text-center cursor-pointer focus:outline-none bg-[#F7F7F7]"
                       aria-label="Edit percentage"
                       title="Edit percentage"
                       disabled={lockStatus}

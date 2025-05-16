@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
         "Audience Type Data": false,
         "Gender Wise Data": {},
         "Timezone Wise Data": {},
-        "Impact Factor Data" : false
+        "Impact Factor Data": false
     })
     const [currentStep, setCurrentStep] = useState(1)
     const [id, setId] = useState("")
@@ -31,6 +31,8 @@ const Dashboard: React.FC = () => {
 
     const handleTabClick = (index: number) => {
         switch (index) {
+            case 0: setCurrentStep(index + 1);
+                break
             case 1: setCurrentStep(index + 1);
                 break
             case 2: {
@@ -75,7 +77,7 @@ const Dashboard: React.FC = () => {
     const StepComponent = stepComponents[currentStep] || null;
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
+        <div className="bg-gray-100">
             <h2 className="text-lg font-semibold mb-2">DLF CyberHub Gurugram, Haryana</h2>
 
             {/* Tabs */}
@@ -86,20 +88,22 @@ const Dashboard: React.FC = () => {
                         label={tab.label}
                         isActive={index === currentStep - 1}
                         onClick={() => handleTabClick(index)}
-                        index={index+1}
+                        index={index + 1}
                         currentIndex={currentStep}
                         dataCheckStatus={dataCheckStatus}
                     />
                 ))}
             </div>
 
-            <StepComponent
-                marketSite={"CyberCity Gurgaon"}
-                id={id}
-                setId={setId}
-                dataCheckStatus={dataCheckStatus}
-                setDataCheckStatus={setDataCheckStatus}
-            />
+            <div className='bg-gray-100'>
+                <StepComponent
+                    marketSite={"CyberCity Gurgaon"}
+                    id={id}
+                    setId={setId}
+                    dataCheckStatus={dataCheckStatus}
+                    setDataCheckStatus={setDataCheckStatus}
+                />
+            </div>
 
             {/* Footer */}
             <Footer currentStep={currentStep} setCurrentStep={setCurrentStep} dataCheckStatus={dataCheckStatus} />

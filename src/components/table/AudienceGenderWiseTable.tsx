@@ -7,7 +7,7 @@ import {
   ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_RESET,
   GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_RESET
 } from "../../constants/audienceConstant";
-import { message } from "antd";
+import { message, Tooltip } from "antd";
 
 interface AudienceGenderWiseTableProps {
   marketSite: String;
@@ -111,6 +111,9 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
     setEditableCell2(null);
   };
 
+  const capitalizeFirst = (str: string) =>
+    str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
   const handleDataChange = (gender: string, event: ChangeEvent<HTMLInputElement>, day: any, unique: boolean) => {
     const enterValue = parseFloat(event.target.value);
     const newGenderData = JSON.parse(JSON.stringify(genderDataByMarketSite?.[gender]));
@@ -155,6 +158,16 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
     }
 
     return true
+  }
+
+  const getTotalMonthlyDistributionPercent = (gender: any) => {
+    var percentSum = 0
+    if (genderDataByMarketSite[gender] && genderDataByMarketSite[gender].dayWiseData) {
+      for (const dayWiseData of Object.values(genderDataByMarketSite[gender].dayWiseData) as { monthly: number }[]) {
+        percentSum += dayWiseData?.monthly;
+      }
+    }
+    return percentSum
   }
 
   const lockButtonFunction = () => {
@@ -206,228 +219,443 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-[#ffffff] p-4">
       <AudienceTableHeader tableHeader={"Gender Wise Data"}
         tableSubHeader={"(" + audienceCategory + ")"} tableType={"horizontal"} resetButton={() => resetButtonFunction()}
         lockButton={() => lockButtonFunction()} lockStatus={lockStatus} />
-      <table className="border-collapse w-full text-[14px]">
+      <table className="border-collapse w-full text-[14px] font-medium border border-[#E7E7E7]">
         <thead>
           <tr className="grid grid-cols-12">
-            <th className="col-span-3 border text-[#FFFFFF] bg-[#1297E2]">
-              <div>
-                <div className="border-b py-4">
-                  <h1>Audience Spirit</h1>
-                </div>
-                <div className="bg-blue-50 font-semibold text-[#1297E2] grid grid-cols-3">
-                  <div className="col-span-1 flex items-center justify-center p-2">
-                    <p >Gender</p>
-                  </div>
-                  <div className="col-span-1 border-x flex items-center justify-center p-2">
-                    <p>%</p>
-                  </div>
-                  <div className="col-span-1 flex items-center justify-center p-2">
-                    <p className="truncate">Monthly Count</p>
-                  </div>
-                </div>
+            <th className="col-span-1 border p-4 text-[#474747] bg-[#F7F7F7]">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Gender">
+                  <p >Gender</p>
+                </Tooltip>
               </div>
             </th>
-            <th className="col-span-2 border flex flex-col justify-center items-center text-[#FFFFFF] bg-[#1297E2]">
-              <div className="">
-                <h1>
-                  Monthly Distribution
-                </h1>
+            <th className="col-span-1 border text-[#ffffff] bg-[#FF5050]">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Gender Wise Audience Percentage">
+                  <p>%</p>
+                </Tooltip>
               </div>
             </th>
-            <th className="col-span-1 border flex flex-col justify-center items-center text-[#FFFFFF] bg-[#1297E2]">
-              <div>
-                <h1>Total Days</h1>
+            <th className="col-span-2 border text-[#474747] bg-[#F7F7F7]">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Gender Wise Audience Monthly Count">
+                  <p className="truncate">Monthly Count</p>
+                </Tooltip>
               </div>
             </th>
-            <th className="col-span-6 border text-[#FFFFFF] bg-[#1297E2]">
-              <div onClick={() => {
-                if (decimal == 1) {
-                  setDecimal(0)
-                } else {
-                  setDecimal(1)
-                }
-              }}>
-                <div className="border-b py-4">
-                  <h1>Total Audience Weight</h1>
-                </div>
-                <div className="bg-blue-50 font-semibold text-[#1297E2] grid grid-cols-4">
-                  <div className="col-span-1 flex items-center justify-center p-2">
-                    <h1 className="truncate">
-                      Monthly (%)
-                    </h1>
-                  </div>
-                  <div className="col-span-1 border-x flex items-center justify-center p-2">
-                    <h1 className="truncate">
-                      Daily (%)
-                    </h1>
-                  </div>
-                  <div className="col-span-1 border-r flex items-center justify-center p-2">
-                    <h1 className="truncate">
-                      Daily Count
-                    </h1>
-                  </div>
-                  <div className="col-span-1 flex items-center justify-center p-2 truncate">
-                    <h1 className="truncate">
-                      Unique Impression/Month
-                    </h1>
-                  </div>
-                </div>
+            <th className="col-span-2 border text-[#474747] bg-[#F7F7F7]">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Monthly Distribution">
+                  <p className="truncate">Monthly Distribution</p>
+                </Tooltip>
+              </div>
+            </th>
+            <th className="col-span-1 border text-[#474747] bg-[#F7F7F7]">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Total Days">
+                  <p className="truncate">Total Days</p>
+                </Tooltip>
+              </div>
+            </th>
+            <th className="col-span-1 border text-[#ffffff] bg-[#FF5050]">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Monthly (%)">
+                  <p className="truncate">Monthly (%)</p>
+                </Tooltip>
+              </div>
+            </th>
+            <th className="col-span-1 border text-[#474747] bg-[#F7F7F7]">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Daily (%)">
+                  <p className="truncate">Daily (%)</p>
+                </Tooltip>
+              </div>
+            </th>
+            <th className="col-span-1 border text-[#474747] bg-[#F7F7F7]">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Daily Count">
+                  <p className="truncate">Daily Count</p>
+                </Tooltip>
+              </div>
+            </th>
+            <th className="col-span-2 border text-[#ffffff] bg-[#FF5050]">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Unique Impression/Month">
+                  <p className="truncate">Unique Impression/Month</p>
+                </Tooltip>
               </div>
             </th>
           </tr>
         </thead>
         <tbody>
-          {Object.entries(genderDataByMarketSite)?.map(([gender, genderData]: [any, any], i: any) => (
-            <tr key={i} className="grid grid-cols-12">
-              <td className="col-span-3 border flex flex-col justify-center items-between">
-                <div className="grid grid-cols-3 h-full">
-                  <div className="h-full col-span-1 flex justify-center items-center">
-                    <h1 className="">
-                      {gender}
-                    </h1>
-                  </div>
-                  <div
-                    onMouseEnter={() => {
-                      setEditableCell({ index: i, column: "percentage" })
-                    }}
-                    onClick={() =>
-                      setEditableCell({ index: i, column: "percentage" })
-                    }
-                    // onMouseLeave={handleBlur}
-                    className="col-span-1 border-x border-slate-300 text-[#1297E2] cursor-pointer text-center flex justify-center items-center"
-                  >
-                    {editableCell?.index === i &&
-                      editableCell?.column === "percentage" ? (
-                      <input
-                        type="number"
-                        value={(genderData?.percent)}
-                        onBlur={handleBlur}
-                        onWheel={(e) => e.currentTarget.blur()}
-                        onChange={(e) => handleDataChange(gender, e, null, false)}
-                        className="w-full h-full text-center border-[#1297E2] cursor-pointer focus:border-[#1297E2]"
-                        aria-label="Edit percentage"
-                        title="Edit percentage"
-                        disabled={lockStatus}
-                        ref={(el: any) => (inputRefs.current[i] = el)}
-                        autoFocus={i == 0}
-                      />
-                    ) : (
-                      `${Number(genderData?.percent).toFixed(decimal)}%`
-                    )}
-                  </div>
-                  <div className="col-span-1 flex justify-center items-center">
-                    {
-                      Number(genderData?.count).toFixed(decimal) ?? 0
-                    }
-                  </div>
+          {Object.entries(genderDataByMarketSite)?.filter(([gender]) => gender === 'Male')?.map(([gender, genderData]: [any, any], i: any) => (
+            <tr key={0} className="grid grid-cols-12 font-[14px]">
+              <td className="col-span-1 border flex flex-col justify-center items-between">
+                <div className="h-full flex justify-center items-center text-[#129BFF] bg-[#EFF8FF]">
+                  <h1 className="font-bold">
+                    {gender}
+                  </h1>
+                </div>
+              </td>
+              <td className="col-span-1 border border-[#FF5050] flex flex-col justify-center items-between">
+                <div
+                  onMouseEnter={() => {
+                    setEditableCell({ index: 0, column: "percentage" })
+                  }}
+                  onClick={() =>
+                    setEditableCell({ index: 0, column: "percentage" })
+                  }
+                  className="border-slate-300 text-[#FF5050] font-semibold cursor-pointer text-center flex justify-center items-center"
+                >
+                  {editableCell?.index === 0 &&
+                    editableCell?.column === "percentage" ? (
+                    <input
+                      type="number"
+                      value={(genderData?.percent)}
+                      onBlur={handleBlur}
+                      onWheel={(e) => e.currentTarget.blur()}
+                      onChange={(e) => handleDataChange(gender, e, null, false)}
+                      className="w-full h-full text-center cursor-pointer focus:outline-none"
+                      aria-label="Edit percentage"
+                      title="Edit percentage"
+                      disabled={lockStatus}
+                      ref={(el: any) => (inputRefs.current[0] = el)}
+                      autoFocus={i == 0}
+                    />
+                  ) : (
+                    `${Number(genderData?.percent).toFixed(decimal)}%`
+                  )}
+                </div>
+              </td>
+              <td className="col-span-2 border flex flex-col justify-center items-between">
+                <div className="flex justify-center items-center">
+                  {
+                    Number(genderData?.count).toFixed(decimal) ?? 0
+                  }
                 </div>
               </td>
               <td className="col-span-2 border">
-                <div className="">
-                  {Object.keys(genderData?.dayWiseData)?.map((m: any, i: any) => (
-                    <div className={`${i + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={i}>
-                      {m.toUpperCase()}
-                    </div>
-                  ))}
-                </div>
+                {Object.keys(genderData?.dayWiseData)?.map((m: any, i: any) => (
+                  <div className={`${i + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={i}>
+                    {capitalizeFirst(m)}
+                  </div>
+                ))}
               </td>
               <td className="col-span-1 border">
-                <div className="">
-                  {Object.values(genderData?.dayWiseData)?.map((m: any, j: any) => (
-                    <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
-                      {m?.days}
-                    </div>
-                  ))}
-                </div>
+                {Object.values(genderData?.dayWiseData)?.map((m: any, j: any) => (
+                  <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
+                    {m?.days}
+                  </div>
+                ))}
               </td>
-              <td className="col-span-6 border">
+
+              <td className="col-span-1 border border-[#FF5050]">
                 {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
-                  <div key={j} className="grid grid-cols-4">
+                  <div
+                    onMouseEnter={() => {
+                      setEditableCell1({ gender: gender, index: j, column: "percentage" })
+                    }}
+                    onClick={() =>
+                      setEditableCell({ index: j, column: "percentage" })
+                    }
+                    className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`} key={j}
+                  >
+                    {editableCell1?.index === j &&
+                      editableCell1?.gender === gender &&
+                      editableCell1?.column === "percentage" ? (
+                      <input
+                        type="number"
+                        value={(dayWiseData?.monthly).toFixed(0)}
+                        onBlur={handleBlur}
+                        onWheel={(e) => e.currentTarget.blur()}
+                        onChange={(e) => handleDataChange(gender, e, day, false)}
+                        className="w-full h-full text-center cursor-pointer focus:outline-none"
+                        aria-label="Edit percentage"
+                        title="Edit percentage"
+                        disabled={lockStatus}
+                        ref={(el: any) => (inputRefs.current[j] = el)}
+                        autoFocus={j == 0}
+                      />
+                    ) : (
+                      `${Number(dayWiseData?.monthly).toFixed(decimal)} %`
+                    )}
+                  </div>
+                ))}
+              </td>
+              <td className="col-span-1 border">
+                {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
+                  <div key={j} className="col-span-1">
+                    <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
+                      {dayWiseData?.daily.toFixed(2) || 0} %
+                    </div>
+                  </div>
+                ))}
+              </td>
+
+              <td className="col-span-1 border">
+                {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
+                  <div key={j} className="col-span-1"
+                    onClick={() => { }}
+                  >
+                    <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
+                      {Number(dayWiseData?.count).toFixed(decimal) || 0}
+                    </div>
+                  </div>
+                ))}
+              </td>
+
+              <td className="col-span-2 border border-[#FF5050]">
+                {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
+                  <div key={j} className="col-span-1">
                     <div
                       onMouseEnter={() => {
-                        setEditableCell1({ gender: gender, index: j, column: "percentage" })
+                        setEditableCell2({ gender: gender, index: j, column: "unique" })
                       }}
                       onClick={() =>
                         setEditableCell({ index: j, column: "percentage" })
                       }
                       // onMouseLeave={handleBlur}
-                      className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} col-span-1 border-slate-300 text-[#1297E2] cursor-pointer text-center p-2 flex justify-center items-center`} key={j}
+                      className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`}
+                      key={j}
                     >
-                      {editableCell1?.index === j &&
-                        editableCell1?.gender === gender &&
-                        editableCell1?.column === "percentage" ? (
+                      {editableCell2?.index === j &&
+                        editableCell2?.gender === gender &&
+                        editableCell2?.column === "unique" ? (
                         <input
+                          title=""
+                          placeholder="unique"
                           type="number"
-                          value={(dayWiseData?.monthly).toFixed(0)}
+                          value={Number(dayWiseData?.unique).toFixed(0)}
                           onBlur={handleBlur}
                           onWheel={(e) => e.currentTarget.blur()}
-                          onChange={(e) => handleDataChange(gender, e, day, false)}
-                          className="w-full h-full text-center cursor-pointer"
-                          aria-label="Edit percentage"
-                          title="Edit percentage"
-                          disabled={lockStatus}
+                          onChange={(e) => handleDataChange(gender, e, day, true)}
                           ref={(el: any) => (inputRefs.current[j] = el)}
+                          onKeyDown={(e) => handleKeyDown(e, j)}
                           autoFocus={j == 0}
+                          disabled={lockStatus}
+                          className="w-full h-full text-center cursor-pointer focus:outline-none"
                         />
                       ) : (
-                        `${Number(dayWiseData?.monthly).toFixed(decimal)} %`
+                        `${Number(dayWiseData?.unique).toFixed(decimal)}%`
                       )}
-                    </div>
-                    <div className="col-span-1 border-x">
-                      <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
-                        {dayWiseData?.daily.toFixed(2) || 0} %
-                      </div>
-                    </div>
-                    <div className="col-span-1 border-r"
-                      onClick={() => { }}
-                    >
-                      <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
-                        {Number(dayWiseData?.count).toFixed(decimal) || 0}
-                      </div>
-                    </div>
-                    <div className="col-span-1">
-                      <div
-                        onMouseEnter={() => {
-                          setEditableCell2({ gender: gender, index: j, column: "unique" })
-                        }}
-                        onClick={() =>
-                          setEditableCell({ index: j, column: "percentage" })
-                        }
-                        // onMouseLeave={handleBlur}
-                        className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} col-span-1 border-slate-300 text-[#1297E2] cursor-pointer text-center p-2 flex justify-center items-center`}
-                        key={j}
-                      >
-                        {editableCell2?.index === j &&
-                          editableCell2?.gender === gender &&
-                          editableCell2?.column === "unique" ? (
-                          <input
-                            title=""
-                            placeholder="unique"
-                            type="number"
-                            value={Number(dayWiseData?.unique).toFixed(0)}
-                            onBlur={handleBlur}
-                            onWheel={(e) => e.currentTarget.blur()}
-                            onChange={(e) => handleDataChange(gender, e, day, true)}
-                            ref={(el: any) => (inputRefs.current[j] = el)}
-                            onKeyDown={(e) => handleKeyDown(e, j)}
-                            autoFocus={j == 0}
-                            disabled={lockStatus}
-                            className="w-full h-full text-center cursor-pointer"
-                          />
-                        ) : (
-                          `${Number(dayWiseData?.unique).toFixed(decimal)}%`
-                        )}
-                      </div>
                     </div>
                   </div>
                 ))}
               </td>
             </tr>
           ))}
+
+          <tr className="grid grid-cols-12 pb-4">
+            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Monthly Distribution Total Percent">
+                  <p className="truncate">Total</p>
+                </Tooltip>
+              </div>
+            </td>
+            <td className="col-span-6 border text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-1 border text-[#FFFFFF] bg-[#000000]">
+              <div className="flex items-center justify-center h-full">
+                <p className="truncate">{getTotalMonthlyDistributionPercent("Male")}%</p>
+              </div>
+            </td>
+            <td className="col-span-4 border text-[#474747] bg-[#F7F7F7]" />
+          </tr>
+
+          {Object.entries(genderDataByMarketSite)?.filter(([gender]) => gender === 'Female')?.map(([gender, genderData]: [any, any], i: any) => (
+            <tr key={1} className="grid grid-cols-12 font-[14px]">
+              <td className="col-span-1 border flex flex-col justify-center items-between">
+                <div className="h-full flex justify-center items-center text-[#61326D] bg-[#FDF5FF]">
+                  <h1 className="font-bold">
+                    {gender}
+                  </h1>
+                </div>
+              </td>
+              <td className="col-span-1 border border-[#FF5050] flex flex-col justify-center items-between">
+                <div
+                  onMouseEnter={() => {
+                    setEditableCell({ index: 1, column: "percentage" })
+                  }}
+                  onClick={() =>
+                    setEditableCell({ index: 1, column: "percentage" })
+                  }
+                  className="border-slate-300 text-[#FF5050] font-semibold cursor-pointer text-center flex justify-center items-center"
+                >
+                  {editableCell?.index === 1 &&
+                    editableCell?.column === "percentage" ? (
+                    <input
+                      type="number"
+                      value={(genderData?.percent)}
+                      onBlur={handleBlur}
+                      onWheel={(e) => e.currentTarget.blur()}
+                      onChange={(e) => handleDataChange(gender, e, null, false)}
+                      className="w-full h-full text-center cursor-pointer focus:outline-none"
+                      aria-label="Edit percentage"
+                      title="Edit percentage"
+                      disabled={lockStatus}
+                      ref={(el: any) => (inputRefs.current[1] = el)}
+                      autoFocus={false}
+                    />
+                  ) : (
+                    `${Number(genderData?.percent).toFixed(decimal)}%`
+                  )}
+                </div>
+              </td>
+              <td className="col-span-2 border flex flex-col justify-center items-between">
+                <div className="flex justify-center items-center">
+                  {
+                    Number(genderData?.count).toFixed(decimal) ?? 0
+                  }
+                </div>
+              </td>
+              <td className="col-span-2 border">
+                {Object.keys(genderData?.dayWiseData)?.map((m: any, i: any) => (
+                  <div className={`${i + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={i}>
+                    {capitalizeFirst(m)}
+                  </div>
+                ))}
+              </td>
+              <td className="col-span-1 border">
+                {Object.values(genderData?.dayWiseData)?.map((m: any, j: any) => (
+                  <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
+                    {m?.days}
+                  </div>
+                ))}
+              </td>
+
+              <td className="col-span-1 border border-[#FF5050]">
+                {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
+                  <div
+                    onMouseEnter={() => {
+                      setEditableCell1({ gender: gender, index: j, column: "percentage" })
+                    }}
+                    onClick={() =>
+                      setEditableCell({ index: j, column: "percentage" })
+                    }
+                    className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`} key={j}
+                  >
+                    {editableCell1?.index === j &&
+                      editableCell1?.gender === gender &&
+                      editableCell1?.column === "percentage" ? (
+                      <input
+                        type="number"
+                        value={(dayWiseData?.monthly).toFixed(0)}
+                        onBlur={handleBlur}
+                        onWheel={(e) => e.currentTarget.blur()}
+                        onChange={(e) => handleDataChange(gender, e, day, false)}
+                        className="w-full h-full text-center cursor-pointer focus:outline-none"
+                        aria-label="Edit percentage"
+                        title="Edit percentage"
+                        disabled={lockStatus}
+                        ref={(el: any) => (inputRefs.current[j] = el)}
+                        autoFocus={j == 0}
+                      />
+                    ) : (
+                      `${Number(dayWiseData?.monthly).toFixed(decimal)} %`
+                    )}
+                  </div>
+                ))}
+              </td>
+              <td className="col-span-1 border">
+                {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
+                  <div key={j} className="col-span-1">
+                    <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
+                      {dayWiseData?.daily.toFixed(2) || 0} %
+                    </div>
+                  </div>
+                ))}
+              </td>
+
+              <td className="col-span-1 border">
+                {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
+                  <div key={j} className="col-span-1"
+                    onClick={() => { }}
+                  >
+                    <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
+                      {Number(dayWiseData?.count).toFixed(decimal) || 0}
+                    </div>
+                  </div>
+                ))}
+              </td>
+
+              <td className="col-span-2 border border-[#FF5050]">
+                {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
+                  <div key={j} className="col-span-1">
+                    <div
+                      onMouseEnter={() => {
+                        setEditableCell2({ gender: gender, index: j, column: "unique" })
+                      }}
+                      onClick={() =>
+                        setEditableCell({ index: j, column: "percentage" })
+                      }
+                      // onMouseLeave={handleBlur}
+                      className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`}
+                      key={j}
+                    >
+                      {editableCell2?.index === j &&
+                        editableCell2?.gender === gender &&
+                        editableCell2?.column === "unique" ? (
+                        <input
+                          title=""
+                          placeholder="unique"
+                          type="number"
+                          value={Number(dayWiseData?.unique).toFixed(0)}
+                          onBlur={handleBlur}
+                          onWheel={(e) => e.currentTarget.blur()}
+                          onChange={(e) => handleDataChange(gender, e, day, true)}
+                          ref={(el: any) => (inputRefs.current[j] = el)}
+                          onKeyDown={(e) => handleKeyDown(e, j)}
+                          autoFocus={j == 0}
+                          disabled={lockStatus}
+                          className="w-full h-full text-center cursor-pointer focus:outline-none"
+                        />
+                      ) : (
+                        `${Number(dayWiseData?.unique).toFixed(decimal)}%`
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </td>
+            </tr>
+          ))}
+
+          <tr className="grid grid-cols-12 pb-4">
+            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Monthly Distribution Total Percent">
+                  <p className="truncate">Total</p>
+                </Tooltip>
+              </div>
+            </td>
+            <td className="col-span-6 border text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-1 border text-[#FFFFFF] bg-[#000000]">
+              <div className="flex items-center justify-center h-full">
+                <p className="truncate">{getTotalMonthlyDistributionPercent("Male")}%</p>
+              </div>
+            </td>
+            <td className="col-span-4 border text-[#474747] bg-[#F7F7F7]" />
+          </tr>
+
+          <tr className="grid grid-cols-12">
+            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Gender Distribution Total Percent">
+                  <p className="truncate">Total</p>
+                </Tooltip>
+              </div>
+            </td>
+            <td className="col-span-1 border text-[#FFFFFF] bg-[#000000]">
+              <div className="flex items-center justify-center h-full">
+                  <p className="truncate">{genderDataByMarketSite["Male"]?.percent + genderDataByMarketSite["Female"]?.percent}%</p>
+              </div>
+            </td>
+            <td className="col-span-10 border text-[#474747] bg-[#F7F7F7]" />
+          </tr>
+
         </tbody>
       </table>
     </div>

@@ -8,7 +8,7 @@ import {
   ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_RESET,
   GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_RESET
 } from '../../constants/audienceConstant';
-import { message } from 'antd';
+import { message, Tooltip } from 'antd';
 
 interface AudienceTimezoneWiseTableProps {
   marketSite: String;
@@ -65,7 +65,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
   const [editableCell, setEditableCell] = useState<any>(null);
   const [timezoneDataByMarketSite, setTimezoneDataByMarketSite] = useState<any>({})
 
-  const saveTimezoneData = (timezoneData: any , gender : any) => {
+  const saveTimezoneData = (timezoneData: any, gender: any) => {
     const newData: any = data;
     newData[gender] = {};
     Object.entries(timezoneData)?.map(([dayType, dayTypeData]: [any, any], i: any) => {
@@ -85,7 +85,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
     setLockStatus(dataCheckStatus["Timezone Wise Data"][audienceCategory])
     setGenderType(genderType)
     setData({})
-  }, [audienceCategory , dataCheckStatus])
+  }, [audienceCategory, dataCheckStatus])
 
   useEffect(() => {
     if (timezoneWiseDataByMarketSiteError) {
@@ -96,7 +96,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
     if (timezoneWiseDataByMarketSiteSuccess) {
       setTimezoneDataByMarketSite(timezoneWiseDataByMarketSite.response)
       setGenders(timezoneWiseDataByMarketSite.genderResponse)
-      saveTimezoneData(timezoneWiseDataByMarketSite.response[genderType] , genderType)
+      saveTimezoneData(timezoneWiseDataByMarketSite.response[genderType], genderType)
       dispatch({ type: GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_RESET })
     }
 
@@ -107,7 +107,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
         ...prevData,
         ["Timezone Wise Data"]: {
           ...prevData["Timezone Wise Data"],
-          [audienceCategory] : true
+          [audienceCategory]: true
         }
       }));
     }
@@ -150,7 +150,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
     };
 
     setTimezoneDataByMarketSite(newTimezoneData);
-    saveTimezoneData(newTimezoneData[genderType] , genderType);
+    saveTimezoneData(newTimezoneData[genderType], genderType);
   };
 
   const checkData = () => {
@@ -175,6 +175,17 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
     return true
   }
 
+  const getTotalTimezoneDistributionPercent = (dayType: any) => {
+    var percentSum = 0
+    console.log(timezoneDataByMarketSite)
+    if (timezoneDataByMarketSite[genderType] && timezoneDataByMarketSite[genderType][dayType]) {
+      for (const timezoneData of Object.values(timezoneDataByMarketSite[genderType][dayType].timezoneWiseData) as any) {
+        percentSum += timezoneData?.percent;
+      }
+    }
+    return percentSum
+  }
+
   const lockButtonFunction = () => {
     if (checkData() && lockStatus == false) {
       setLockStatus(!lockStatus)
@@ -190,7 +201,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
         ...prevData,
         ["Timezone Wise Data"]: {
           ...prevData["Timezone Wise Data"],
-          [audienceCategory] : false
+          [audienceCategory]: false
         }
       }));
     }
@@ -204,71 +215,74 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
 
   const genderTabClick = (gender: any) => {
     setGenderType(gender)
-    saveTimezoneData(timezoneDataByMarketSite[gender] , gender)
+    saveTimezoneData(timezoneDataByMarketSite[gender], gender)
   }
 
+  const capitalizeFirst = (str: string) =>
+    str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col bg-[#ffffff] p-4'>
       <AudienceTableHeader tableHeader={"Timezone Wise Data"} tableSubHeader={"(" + audienceCategory + ")"} tableType={"horizontal"}
         resetButton={() => resetButtonFunction()} lockButton={() => lockButtonFunction()} lockStatus={lockStatus} />
       <GenderSelector genderData={genders} genderType={genderType} genderTabClick={genderTabClick} />
-      <table className="border-collapse w-full text-[12px]">
+      <table className="border-collapse w-full text-[14px]">
         <thead>
-          <tr className="text-[#FFFFFF] bg-[#1297E2]">
-            <th className="border border-slate-300 py-2">
+          <tr className="grid grid-cols-12 text-[#474747] bg-[#F9F9F9] border border-[#E7E7E7]">
+            <th className="col-span-1 border border-slate-300 py-2 flex items-center justify-center">
               Monthly Distribution
             </th>
-            <th className="border border-slate-300 py-2">
+            <th className="col-span-1  border border-slate-300 py-2 flex items-center justify-center">
               Audience Weighage / Day
             </th>
-            <th className="border border-slate-300 py-2">
+            <th className="col-span-1  border border-slate-300 py-2 flex items-center justify-center">
               Audience count / Day
             </th>
-            <th className="border border-slate-300 py-2">Time Zones</th>
-            <th className="border border-slate-300 py-2" onClick={() => {
+            <th className="col-span-2 border border-slate-300 py-2 flex items-center justify-center">Time Zones</th>
+            <th className="col-span-2 border border-slate-300 py-2 text-[#ffffff] bg-[#FF5050] flex items-center justify-center" onClick={() => {
               if (decimal == 1) {
                 setDecimal(0)
               } else {
                 setDecimal(1)
               }
             }}>% share of visits</th>
-            <th className="border border-slate-300 py-2">Audience %</th>
-            <th className="border border-slate-300 py-2">
+            <th className="col-span-1 border border-slate-300 py-2 flex items-center justify-center">Audience %</th>
+            <th className="col-span-2 border border-slate-300 py-2 flex items-center justify-center">
               Audience Count / Timezone
             </th>
-            <th className="border border-slate-300 py-2 bg-[#E2FFD4] text-black">
+            <th className="col-span-2 border border-slate-300 py-2 flex items-center justify-center">
               Unique Audience Count / Timezone
             </th>
           </tr>
         </thead>
         <tbody className="w-full border border-1">
-          {Object.entries(timezoneDataByMarketSite?.[genderType] || {})?.map(([dayType, dayTypeData]: [any, any], i: any) => (
-            <tr key={i}>
-              <td className="border h-full">
+          {Object.entries(timezoneDataByMarketSite?.[genderType] || {})?.filter(([dayType]) => dayType === 'weekdays')?.map(([dayType, dayTypeData]: [any, any], i: any) => (
+            <tr key={0} className='grid grid-cols-12'>
+              <td className="col-span-1 border h-full font-semibold">
                 <div className="h-full flex justify-center items-center">
                   <h1 className="">
-                    {dayType}
+                    {capitalizeFirst(dayType)}
                   </h1>
                 </div>
               </td>
-              <td className="border h-full">
+              <td className="col-span-1 border h-full">
                 <div className={`h-[20vh] p-1 flex justify-center items-center`}>
                   {dayTypeData?.percent.toFixed(2)} %
                 </div>
               </td>
-              <td className="border h-full">
+              <td className="col-span-1 border h-full">
                 <div className={`h-[20vh] p-1 flex justify-center items-center`}>
                   {dayTypeData?.count.toFixed(2)}
                 </div>
               </td>
-              <td className="border">
+              <td className="col-span-2 border h-full">
                 {Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((timezoneKey: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
-                    <h1>{timezoneKey.toUpperCase()}</h1>
+                    <h1>{capitalizeFirst(timezoneKey)}</h1>
                   </div>
                 ))}
               </td>
-              <td className="border-b">
+              <td className="col-span-2 border border-[#FF5050]">
                 {Object.entries(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map(([timezone, m]: any, k: any) => (
                   <div key={k}
                     onMouseEnter={() => {
@@ -276,7 +290,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
                     }
                     }
                     onMouseLeave={handleBlur}
-                    className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} border-slate-300 text-[#1297E2] cursor-pointer text-center p-2 flex justify-center items-center w-full`}
+                    className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center w-full font-semibold`}
                   >
                     {editableCell?.index === k &&
                       editableCell?.gender === "gender" &&
@@ -294,7 +308,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
                         ref={(el: any) => (inputRefs.current[k] = el)}
                         onKeyDown={(e) => handleKeyDown(e, k)}
                         autoFocus={k == 0}
-                        className="w-full h-full text-center cursor-pointer"
+                        className="w-full h-full text-center cursor-pointer focus:outline-none"
                       />
                     ) : (
                       `${Number(m?.percent).toFixed(2)}%`
@@ -302,21 +316,21 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
                   </div>
                 ))}
               </td>
-              <td className="border">
+              <td className="col-span-1 border">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((m: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-1 flex justify-center items-center w-full`}>
                     <h1>{m?.audiencePercent?.toFixed(2)} %</h1>
                   </div>
                 ))}
               </td>
-              <td className="border">
+              <td className="col-span-2 border">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
                     <h1>{n?.count?.toFixed(decimal)}</h1>
                   </div>
                 ))}
               </td>
-              <td className="border">
+              <td className="col-span-2 border">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
                     <h1>{n?.unique?.toFixed(2)}</h1>
@@ -325,9 +339,228 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
               </td>
             </tr>
           ))}
+
+          <tr className="grid grid-cols-12 pb-4">
+            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Monthly Distribution Total Percent">
+                  <p className="truncate">Total</p>
+                </Tooltip>
+              </div>
+            </td>
+            <td className="col-span-4 border text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-2 border text-[#FFFFFF] bg-[#000000]">
+              <div className="flex items-center justify-center h-full">
+                <p className="truncate">{getTotalTimezoneDistributionPercent("weekdays")}%</p>
+              </div>
+            </td>
+            <td className="col-span-5 border text-[#474747] bg-[#F7F7F7]" />
+          </tr>
+
+          {Object.entries(timezoneDataByMarketSite?.[genderType] || {})?.filter(([dayType]) => dayType === 'saturdays')?.map(([dayType, dayTypeData]: [any, any], i: any) => (
+            <tr key={1} className='grid grid-cols-12'>
+              <td className="col-span-1 border h-full font-semibold">
+                <div className="h-full flex justify-center items-center">
+                  <h1 className="">
+                    {capitalizeFirst(dayType)}
+                  </h1>
+                </div>
+              </td>
+              <td className="col-span-1 border h-full">
+                <div className={`h-[20vh] p-1 flex justify-center items-center`}>
+                  {dayTypeData?.percent.toFixed(2)} %
+                </div>
+              </td>
+              <td className="col-span-1 border h-full">
+                <div className={`h-[20vh] p-1 flex justify-center items-center`}>
+                  {dayTypeData?.count.toFixed(2)}
+                </div>
+              </td>
+              <td className="col-span-2 border h-full">
+                {Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((timezoneKey: any, k: any) => (
+                  <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
+                    <h1>{capitalizeFirst(timezoneKey)}</h1>
+                  </div>
+                ))}
+              </td>
+              <td className="col-span-2 border border-[#FF5050]">
+                {Object.entries(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map(([timezone, m]: any, k: any) => (
+                  <div key={k}
+                    onMouseEnter={() => {
+                      setEditableCell({ gender: "gender", day: dayType, index: k, column: "percentage" })
+                    }
+                    }
+                    onMouseLeave={handleBlur}
+                    className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center w-full font-semibold`}
+                  >
+                    {editableCell?.index === k &&
+                      editableCell?.gender === "gender" &&
+                      editableCell?.day === dayType &&
+                      editableCell?.column === "percentage" ? (
+                      <input
+                        disabled={lockStatus}
+                        title=""
+                        placeholder="unique"
+                        type="number"
+                        value={Number(m?.percent)}
+                        onBlur={handleBlur}
+                        onWheel={(e) => e.currentTarget.blur()}
+                        onChange={(e) => handleDataChange(e, dayType, timezone)}
+                        ref={(el: any) => (inputRefs.current[k] = el)}
+                        onKeyDown={(e) => handleKeyDown(e, k)}
+                        autoFocus={k == 0}
+                        className="w-full h-full text-center cursor-pointer focus:outline-none"
+                      />
+                    ) : (
+                      `${Number(m?.percent).toFixed(2)}%`
+                    )}
+                  </div>
+                ))}
+              </td>
+              <td className="col-span-1 border">
+                {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((m: any, k: any) => (
+                  <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-1 flex justify-center items-center w-full`}>
+                    <h1>{m?.audiencePercent?.toFixed(2)} %</h1>
+                  </div>
+                ))}
+              </td>
+              <td className="col-span-2 border">
+                {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
+                  <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
+                    <h1>{n?.count?.toFixed(decimal)}</h1>
+                  </div>
+                ))}
+              </td>
+              <td className="col-span-2 border">
+                {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
+                  <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
+                    <h1>{n?.unique?.toFixed(2)}</h1>
+                  </div>
+                ))}
+              </td>
+            </tr>
+          ))}
+
+          <tr className="grid grid-cols-12 pb-4">
+            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Monthly Distribution Total Percent">
+                  <p className="truncate">Total</p>
+                </Tooltip>
+              </div>
+            </td>
+            <td className="col-span-4 border text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-2 border text-[#FFFFFF] bg-[#000000]">
+              <div className="flex items-center justify-center h-full">
+                <p className="truncate">{getTotalTimezoneDistributionPercent("saturdays")}%</p>
+              </div>
+            </td>
+            <td className="col-span-5 border text-[#474747] bg-[#F7F7F7]" />
+          </tr>
+
+          {Object.entries(timezoneDataByMarketSite?.[genderType] || {})?.filter(([dayType]) => dayType === 'sundays')?.map(([dayType, dayTypeData]: [any, any], i: any) => (
+            <tr key={2} className='grid grid-cols-12'>
+              <td className="col-span-1 border h-full font-semibold">
+                <div className="h-full flex justify-center items-center">
+                  <h1 className="">
+                    {capitalizeFirst(dayType)}
+                  </h1>
+                </div>
+              </td>
+              <td className="col-span-1 border h-full">
+                <div className={`h-[20vh] p-1 flex justify-center items-center`}>
+                  {dayTypeData?.percent.toFixed(2)} %
+                </div>
+              </td>
+              <td className="col-span-1 border h-full">
+                <div className={`h-[20vh] p-1 flex justify-center items-center`}>
+                  {dayTypeData?.count.toFixed(2)}
+                </div>
+              </td>
+              <td className="col-span-2 border h-full">
+                {Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((timezoneKey: any, k: any) => (
+                  <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
+                    <h1>{capitalizeFirst(timezoneKey)}</h1>
+                  </div>
+                ))}
+              </td>
+              <td className="col-span-2 border border-[#FF5050]">
+                {Object.entries(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map(([timezone, m]: any, k: any) => (
+                  <div key={k}
+                    onMouseEnter={() => {
+                      setEditableCell({ gender: "gender", day: dayType, index: k, column: "percentage" })
+                    }
+                    }
+                    onMouseLeave={handleBlur}
+                    className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center w-full font-semibold`}
+                  >
+                    {editableCell?.index === k &&
+                      editableCell?.gender === "gender" &&
+                      editableCell?.day === dayType &&
+                      editableCell?.column === "percentage" ? (
+                      <input
+                        disabled={lockStatus}
+                        title=""
+                        placeholder="unique"
+                        type="number"
+                        value={Number(m?.percent)}
+                        onBlur={handleBlur}
+                        onWheel={(e) => e.currentTarget.blur()}
+                        onChange={(e) => handleDataChange(e, dayType, timezone)}
+                        ref={(el: any) => (inputRefs.current[k] = el)}
+                        onKeyDown={(e) => handleKeyDown(e, k)}
+                        autoFocus={k == 0}
+                        className="w-full h-full text-center cursor-pointer focus:outline-none"
+                      />
+                    ) : (
+                      `${Number(m?.percent).toFixed(2)}%`
+                    )}
+                  </div>
+                ))}
+              </td>
+              <td className="col-span-1 border">
+                {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((m: any, k: any) => (
+                  <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-1 flex justify-center items-center w-full`}>
+                    <h1>{m?.audiencePercent?.toFixed(2)} %</h1>
+                  </div>
+                ))}
+              </td>
+              <td className="col-span-2 border">
+                {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
+                  <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
+                    <h1>{n?.count?.toFixed(decimal)}</h1>
+                  </div>
+                ))}
+              </td>
+              <td className="col-span-2 border">
+                {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
+                  <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
+                    <h1>{n?.unique?.toFixed(2)}</h1>
+                  </div>
+                ))}
+              </td>
+            </tr>
+          ))}
+
+          <tr className="grid grid-cols-12 pb-4">
+            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+              <div className="flex items-center justify-center h-full">
+                <Tooltip title="Monthly Distribution Total Percent">
+                  <p className="truncate">Total</p>
+                </Tooltip>
+              </div>
+            </td>
+            <td className="col-span-4 border text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-2 border text-[#FFFFFF] bg-[#000000]">
+              <div className="flex items-center justify-center h-full">
+                <p className="truncate">{getTotalTimezoneDistributionPercent("sundays")}%</p>
+              </div>
+            </td>
+            <td className="col-span-5 border text-[#474747] bg-[#F7F7F7]" />
+          </tr>
         </tbody>
       </table>
-    </div>
+    </div >
   );
 }
 

@@ -187,27 +187,27 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
 
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col px-6 py-3 bg-[#ffffff]">
       <AudienceTableHeader tableHeader={"Audience Type Data"} tableSubHeader={""} tableType={""}
         resetButton={() => resetButtonFunction()} lockButton={() => lockButtonFunction()} lockStatus={lockStatus} />
       <table className="border-collapse w-full text-[14px]">
         <thead>
-          <tr className="grid grid-cols-6 text-white bg-[#1297E2]">
-            <th className="col-span-4 border border-slate-300 py-2">Audience Type</th>
-            <th className="col-span-1 border border-slate-300 py-2">Weightage</th>
+          <tr className="grid grid-cols-6 bg-[#F7F7F7] text-[#6F7F8E]">
+            <th className="col-span-4 border border-slate-300 py-2 text-left pl-4">Audience Type</th>
+            <th className="col-span-1 border border-slate-300 py-2 text-[#ffffff] bg-[#FF5050]">% share</th>
             <th className="col-span-1 border border-slate-300 py-2">
-              Audiences Count
+              Audience Count
             </th>
           </tr>
         </thead>
         <tbody>
           {audienceTypeWiseData.map((data, index) => (
             <tr key={index} className="grid grid-cols-6">
-              <td className="col-span-4 border border-slate-300 py-2 px-2">
+              <td className="col-span-4 border border-slate-300 py-2 px-4">
                 {data.category}
               </td>
               <td
-                className="col-span-1 h-full border border-slate-300 text-[#1297E2] text-center py-2"
+                className="col-span-1 h-full border border-[#FF5050] text-[#FF5050] text-center py-2"
                 onMouseEnter={() =>
                   setEditableCell({ index, column: "percentage" })
                 }
@@ -224,7 +224,7 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
                     onBlur={handleBlur}
                     onWheel={(e) => e.currentTarget.blur()}
                     onChange={(e) => handleDataChange(e, index)}
-                    className="w-full h-full text-center border-[#1297E2] cursor-pointer focus:border-[#1297E2]"
+                    className="w-full h-full text-center cursor-pointer focus:outline-none"
                     aria-label="Edit percentage"
                     title="Edit percentage"
                     disabled={lockStatus}
@@ -241,8 +241,8 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
               </td>
             </tr>
           ))}
-          <tr className="grid grid-cols-6 font-bold">
-            <td className="col-span-4 border border-slate-300 py-2 px-2">
+          <tr className="grid grid-cols-6 font-bold pt-2">
+            <td className="col-span-4 border border-slate-300 py-2 px-4 bg-[#F7F7F7] text-[#000000]">
               Total
             </td>
             <td className="col-span-1 border border-slate-300 text-center py-2">

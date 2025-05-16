@@ -25,16 +25,18 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
     }, [])
 
     return (
-        <div className="flex flex-row gap-10">
-            <AudienceSelector id={"67a3362484de51a314e207b7"} audienceCategory={audienceCategory} setAudienceCategory={setAudienceCategory}
-                setAudiencePercent={setAudiencePercent} />
-            <div className="flex flex-col gap-10">
+        <div className="grid grid-cols-12 gap-2">
+            <div className="col-span-3 bg-[#ffffff]">
+                <AudienceSelector id={"67a3362484de51a314e207b7"} audienceCategory={audienceCategory} setAudienceCategory={setAudienceCategory}
+                    setAudiencePercent={setAudiencePercent} />
+            </div>
+            <div className="col-span-9 flex flex-col gap-10">
                 <AudienceGenderWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
                     audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
                     setDataCheckStatus={setDataCheckStatus} />
                 {dataCheckStatus["Gender Wise Data"][audienceCategory] && <AudienceTimezoneWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
                     audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
-                    setDataCheckStatus={setDataCheckStatus}/>}
+                    setDataCheckStatus={setDataCheckStatus} />}
             </div>
         </div>
     )
