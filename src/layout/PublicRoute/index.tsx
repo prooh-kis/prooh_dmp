@@ -11,7 +11,7 @@ export const PublicRoute = (props: any) => {
   return (
     <div className="h-full w-full p-0 m-0">
       <Header />
-      <div className="h-[100vh] w-[100vw]  bg-gray-100 pt-24 px-4">{children}</div>
+      <div className="h-[100vh] w-[100vw] bg-gray-100 pt-16">{children}</div>
     </div>
   );
 };

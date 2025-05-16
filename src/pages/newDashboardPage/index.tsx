@@ -4,6 +4,7 @@ import { Footer } from '../../components/atoms/Footer';
 import { FootfallDataSourceWise } from '../../components/table/FootfallDataSourceWise';
 import { AudiencePercentTable } from '../../components/table';
 import { ImpactFactorTable } from '../../components/table/ImpactFactorTable';
+import HeaderIcon from '../../assets/icons/header-icon.svg'
 import { AudienceGenderWiseTimezoneWiseData } from '../../components/layouts/AudienceGenderWiseTimezoneWiseData';
 
 const Dashboard: React.FC = () => {
@@ -76,26 +77,48 @@ const Dashboard: React.FC = () => {
     };
     const StepComponent = stepComponents[currentStep] || null;
 
+    const colorData = [{
+        title: "fixed data",
+        color: "#000000"
+    }, {
+        title: "you can edit",
+        color: "#FF5050"
+    }]
+
     return (
         <div className="bg-gray-100">
-            <h2 className="text-lg font-semibold mb-2">DLF CyberHub Gurugram, Haryana</h2>
+            <div className='bg-[#ffffff] px-6 pt-2'>
+                <div className='flex flex-row gap-2 mt-2 pb-2'>
+                    <h2 className="text-[20px] font-medium">DLF CyberHub Gurugram, Haryana</h2>
+                    <img src={HeaderIcon} />
+                    <h3 className="text-[12px] font-medium text-[#6F7F8E] flex items-center justify-center cursor-pointer">View Images</h3>
+                </div>
 
-            {/* Tabs */}
-            <div className="flex border-b pb-2 mb-4">
-                {tabs.map((tab, index) => (
-                    <Tab
-                        key={index}
-                        label={tab.label}
-                        isActive={index === currentStep - 1}
-                        onClick={() => handleTabClick(index)}
-                        index={index + 1}
-                        currentIndex={currentStep}
-                        dataCheckStatus={dataCheckStatus}
-                    />
-                ))}
+                <div className='flex flex-row justify-between items-center'>
+                    <div className="flex">
+                        {tabs.map((tab, index) => (
+                            <Tab
+                                key={index}
+                                label={tab.label}
+                                isActive={index === currentStep - 1}
+                                onClick={() => handleTabClick(index)}
+                                index={index + 1}
+                                currentIndex={currentStep}
+                                dataCheckStatus={dataCheckStatus}
+                            />
+                        ))}
+                    </div>
+                    <div className='flex gap-4 mr-4'>
+                        {colorData.map((singleData, index) => (
+                            <div key={index} className='flex gap-2 justify-between items-center'>
+                                <div className={`h-3 w-3 bg-[${singleData.color}] rounded-full`} />
+                                <h1 className='flex justify-between items-center'>{singleData.title}</h1>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
-
-            <div className='bg-gray-100'>
+            <div className='p-4'>
                 <StepComponent
                     marketSite={"CyberCity Gurgaon"}
                     id={id}
@@ -105,7 +128,6 @@ const Dashboard: React.FC = () => {
                 />
             </div>
 
-            {/* Footer */}
             <Footer currentStep={currentStep} setCurrentStep={setCurrentStep} dataCheckStatus={dataCheckStatus} />
         </div>
     );

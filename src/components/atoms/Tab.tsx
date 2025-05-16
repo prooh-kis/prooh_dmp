@@ -57,8 +57,7 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, curre
 
     return (
         <div
-            className={`flex items-center border px-2 py-1 mr-2 rounded-t-lg cursor-pointer ${isActive ? 'bg-white border-b-white' : 'bg-gray-100'
-                }`}
+            className={`flex items-center border px-2 py-1 mr-2 rounded-t-lg cursor-pointer ${!isActive ? 'bg-white border-b-white' : 'bg-gray-100'}`}
             onClick={onClick}
         >
             <span className="mr-2 text-sm font-medium">{label}</span>
