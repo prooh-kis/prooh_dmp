@@ -61,12 +61,12 @@ export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ 
                     Approval Shall Be Granted In Hours Post Application And The Research Paper Shall Be Completed In 48
                 </p>
 
-                <div className="flex gap-4 flex-wrap">
-                    <DataCard title="As per property management" source="Drmdb" value={audienceCount?.totalDmfdData} />
-                    <DataCard title="Camera Data" source="Quividi" value={audienceCount?.totalCameraData} />
-                    <DataCard title="Google traffic and RTO data" source="Google" value={audienceCount?.totalTrafficData} />
-                    <DataCard title="Roadster Data" source="" value={audienceCount?.totalRoadsterData} />
-                    <DataCard title="Mobile Device Sdk Data" source="" value={audienceCount?.totalMobileDeviceSdkData} />
+                <div className="grid grid-cols-5 gap-2 flex-wrap">
+                    <DataCard title="As per property management" source="Drmdb" value={audienceCount?.totalDmfdData} icon={"fi fi-rs-apartment"} />
+                    <DataCard title="Camera Data" source="Quividi" value={audienceCount?.totalCameraData} icon={"fi fi-ss-camera-cctv"} />
+                    <DataCard title="Google traffic and RTO data" source="Google" value={audienceCount?.totalTrafficData} icon={"fi fi-rs-cars"} />
+                    <DataCard title="Roadster Data" source="" value={audienceCount?.totalRoadsterData} icon={"fi fi-ss-road"} />
+                    <DataCard title="Mobile Device Sdk Data" source="" value={audienceCount?.totalMobileDeviceSdkData} icon={"fi fi-rr-smartphone"} />
                 </div>
 
                 <div className="mt-4 text-base">

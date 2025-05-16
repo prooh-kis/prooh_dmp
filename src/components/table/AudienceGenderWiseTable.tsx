@@ -634,7 +634,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
             <td className="col-span-6 border text-[#474747] bg-[#F7F7F7]" />
             <td className="col-span-1 border text-[#FFFFFF] bg-[#000000]">
               <div className="flex items-center justify-center h-full">
-                <p className="truncate">{getTotalMonthlyDistributionPercent("Male")}%</p>
+                <p className="truncate">{getTotalMonthlyDistributionPercent("Female")}%</p>
               </div>
             </td>
             <td className="col-span-4 border text-[#474747] bg-[#F7F7F7]" />
