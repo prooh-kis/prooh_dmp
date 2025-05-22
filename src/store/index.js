@@ -28,6 +28,7 @@ import {
   getImpactfactorDataByMarketSiteReducer,
   getTimezoneWiseDataByAudienceTypeMarketSiteReducer
 } from "../reducers/audienceReducers";
+import { getAudienceDataOnFiltersReducer, getRespondentCountIndustryWiseReducer, getRespondentProfileIndustryWiseReducer, getThirdPartyAudienceCountSourceWiseReducer } from "../reducers/dashboardReducers";
 
 const initialState = {
   userSignin: {
@@ -66,7 +67,13 @@ const store = configureStore({
     addAudienceTypePercentData : addAudienceTypePercentDataReducer,
     addGenderWiseDataByAudienceType : addGenderWiseDataByAudienceTypeReducer,
     addTimezoneWiseDataByAudienceType : addTimezoneWiseDataByAudienceTypeReducer,
-    addImpactFactorData : addImpactFactorDataReducer
+    addImpactFactorData : addImpactFactorDataReducer,
+
+    // dashboard
+    getRespondentCountIndustryWise: getRespondentCountIndustryWiseReducer,
+    getThirdPartyAudienceCountSourceWise: getThirdPartyAudienceCountSourceWiseReducer,
+    getRespondentProfileIndustryWise: getRespondentProfileIndustryWiseReducer,
+    getAudienceDataOnFilters: getAudienceDataOnFiltersReducer,
   },
   // middleware: thunk
   // devTools: process.env.NODE_ENV !== 'production'

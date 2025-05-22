@@ -9,7 +9,7 @@ export const PublicRoute = (props: any) => {
   const { children } = props;
 
   return (
-    <div className="h-full w-full p-0 m-0">
+    <div className="h-full w-full p-0 m-0 font-custom">
       <Header />
       <div className="h-[100vh] w-[100vw] bg-gray-100 pt-16">{children}</div>
     </div>

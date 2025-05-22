@@ -21,17 +21,17 @@ export const CheckboxInput: React.FC<CheckboxProps> = ({ disabled, color, textSi
   };
 
   return (
-    <label className="flex items-center space-x-2 cursor-pointer truncate">
+    <label className="grid grid-cols-4 gap-2 flex items-center space-x-2 cursor-pointer truncate">
       <input
         type="checkbox"
-        className="form-checkbox h-4 w-4 text-[#52A2FF]"
+        className={`col-span-1 form-checkbox h-4 w-4 ${disabled ? 'accent-[#3A9868]' : 'accent-[#3A9868]'}`}
         checked={isChecked !== undefined ? isChecked : false}
         disabled={disabled}
         onChange={handleCheckboxChange}
       />
-      <span className={`text-[${color ? color : "#21394F"}] text-[${textSize ? textSize : "14px"}] truncate`}>
+      <span className={`col-span-3 text-[${color ? color : "#21394F"}] text-[${textSize ? textSize : "14px"}] truncate`}>
         {label}
-        </span>
+      </span>
     </label>
   );
 };
