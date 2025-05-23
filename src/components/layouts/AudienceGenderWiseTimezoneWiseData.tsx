@@ -21,7 +21,7 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
     const [audiencePercent, setAudiencePercent] = useState(0.0)
 
     useEffect(() => {
-        navigate(`/dashboard/${id}`)
+        navigate(`/research/${id}`)
     }, [])
 
     return (
