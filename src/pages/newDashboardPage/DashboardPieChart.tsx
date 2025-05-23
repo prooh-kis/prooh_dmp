@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { formatNumber } from "../../utils/formatValue";
@@ -9,13 +9,17 @@ interface DoughnutChartProps {
   data: { [key: string]: { count?: number } };
   type?: string;
   total?: number;
+  setValue?: any;
 }
 
 export const DashboardPieChart: React.FC<DoughnutChartProps> = ({
   total,
   type,
   data,
+  setValue,
 }) => {
+  const chartRef = useRef<any>(null);
+
   // Extract labels (keys of the data object)
   const labels = Object.keys(data)?.map((d: any) => {
     if (type === "Third Party Data") {
@@ -97,6 +101,10 @@ export const DashboardPieChart: React.FC<DoughnutChartProps> = ({
       },
     },
     cutout: "5%", // Adjust inner circle size
+    onClick:(event: any, elements: any[]) => {
+      setValue(labels[elements[0]?.index]);
+      console.log(labels[elements[0]?.index]);
+    }
   };
 
   return (

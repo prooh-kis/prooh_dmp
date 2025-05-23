@@ -13,6 +13,7 @@ import {
   VerifyEmail,
   Dashboard,
   DataHeroPage,
+  InputPage,
 } from "../pages";
 
 import {
@@ -21,6 +22,7 @@ import {
   FORGET_PASSWORD,
   HOME,
   HOMEPAGE,
+  RESEARCH,
   UPDATE_PASSWORD,
   VERIFY_EMAIL,
 } from "./routes";
@@ -60,6 +62,14 @@ const Routers: React.FC = () => {
           element={
             <PublicRoute>
               <Dashboard />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path={RESEARCH}
+          element={
+            <PublicRoute>
+              <InputPage />
             </PublicRoute>
           }
         />

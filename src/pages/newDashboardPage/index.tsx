@@ -7,6 +7,7 @@ import { SectionHeaderWithSwitch } from './SectionHeaderWithSwitch';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAudienceDataOnFiltersAction, getRespondentCountIndustryWiseAction, getRespondentProfileIndustryWiseAction, getThirdPartyAudienceCountSourceWiseAction } from '../../actions/dashboardAction';
 import { DashboardPieChart } from './DashboardPieChart';
+import { DataHeroProfilePopup } from './DataHeroProfilePopup';
 
 const dataSourceTab = [{
     label: "Third Party Data",
@@ -46,17 +47,29 @@ const filterHelperTexts = [{
 },{
     label: "timezones",
     value: "timezoneWiseData",
+},{
+    label: "impactFactor",
+    value: "impactFactorData",
 }]
 
 export const Dashboard: React.FC = () => {
     const dispatch = useDispatch<any>();
+    const disabledOption = "impactFactorData"
     const [industry, setIndustry] = useState<any>(["Advertising", "Sports", "Housing"]);
     const [dataSource, setDataSource] = useState<any>(1);
-    const [audienceType, setAudienceType] = useState<any>(0);
+    const [audienceType, setAudienceType] = useState<any>(-1);
 
     const [thirdPartyData, setThirdPartyData] = useState<any>([]);
     const [respondentData, setRespondentData] = useState<any>([]);
     const [respondentProfile, setRespondentProfile] = useState<any>([]);
+    const [respondentAudienceData, setRespondentAudienceData] = useState<any>({});
+    const [respondentAudienceGenderData, setRespondentAudienceGenderData] = useState<any>({});
+
+    const [value, setValue] = useState<any>("");
+
+    const [openDataHeroPopup, setOpenDataHeroPopup] = useState<any>(false);
+    const [selectedHero, setSelectedHero] = useState<any>(null);
+
 
     const [filters, setFilters] = useState<any>({
         audienceType: "All",
@@ -65,6 +78,7 @@ export const Dashboard: React.FC = () => {
         locations: [],
         genders: [],
         dayTypes: [],
+        timezones: [],
     });
 
     const [allValues, setAllValues] = useState<any>({
@@ -73,6 +87,7 @@ export const Dashboard: React.FC = () => {
         locations: [],
         genders: [],
         dayTypes: [],
+        timezones: [],
     });
 
     const {
@@ -102,25 +117,54 @@ export const Dashboard: React.FC = () => {
     const hasSetInitialFilters = React.useRef(false);
 
     useEffect(() => {
-        if (audienceData && !hasSetInitialFilters.current) {
-            hasSetInitialFilters.current = true;
+
+        if (value.split("").length > 0) {
+            setIndustry([value]);
+        }
+
+        if (audienceType == -1) {
             setFilters((prev: any) => ({
                 ...prev,
-                cities: Object.keys(audienceData.cityWiseData || []),
-                touchPoints: Object.keys(audienceData.touchPointWiseData || []),
-                locations: Object.keys(audienceData.locationWiseData || []),
-                genders: Object.keys(audienceData.genderWiseData || []),
-                dayTypes: Object.keys(audienceData.dayWiseData || []),
+                audienceType: "All"
             }));
-
-            setAllValues((prev: any) => ({
+        } else {
+            setFilters((prev: any) => ({
                 ...prev,
-                cities: Object.keys(audienceData.cityWiseData || []),
-                touchPoints: Object.keys(audienceData.touchPointWiseData || []),
-                locations: Object.keys(audienceData.locationWiseData || []),
-                genders: Object.keys(audienceData.genderWiseData || []),
-                dayTypes: Object.keys(audienceData.dayWiseData || []),
+                audienceType: ALL_COHORTS[audienceType]
             }));
+        }
+    },[audienceType, value]);
+
+    useEffect(() => {
+        if (audienceData) {
+            if (!hasSetInitialFilters.current) {
+                hasSetInitialFilters.current = true;
+                setFilters((prev: any) => ({
+                    ...prev,
+                    cities: Object.keys(audienceData.cityWiseData || []),
+                    touchPoints: Object.keys(audienceData.touchPointWiseData || []),
+                    locations: Object.keys(audienceData.locationWiseData || []),
+                    genders: Object.keys(audienceData.genderWiseData || []),
+                    dayTypes: Object.keys(audienceData.dayWiseData || []),
+                    timezones: Object.keys(audienceData.timezoneWiseData || []),
+                    impactFactors: Object.keys(audienceData.impactFactorWiseData || []),
+                }));
+    
+                setAllValues((prev: any) => ({
+                    ...prev,
+                    cities: Object.keys(audienceData.cityWiseData || []),
+                    touchPoints: Object.keys(audienceData.touchPointWiseData || []),
+                    locations: Object.keys(audienceData.locationWiseData || []),
+                    genders: Object.keys(audienceData.genderWiseData || []),
+                    dayTypes: Object.keys(audienceData.dayWiseData || []),
+                    timezones: Object.keys(audienceData.timezoneWiseData || []),
+                    impactFactors: Object.keys(audienceData.impactFactorWiseData || []),
+                }));
+            }
+            
+            const { genderWiseData, ...filteredData } = audienceData;
+            setRespondentAudienceData({...filteredData});
+            setRespondentAudienceGenderData(genderWiseData);
         }
     }, [audienceData]);
 
@@ -140,7 +184,6 @@ export const Dashboard: React.FC = () => {
     }, [thirdPartyAudienceCount, respondentCount, respondentProfileData]);
 
     useEffect(() => {
-        console.log(filters)
         dispatch(getRespondentCountIndustryWiseAction());
         dispatch(getThirdPartyAudienceCountSourceWiseAction());
         dispatch(getRespondentProfileIndustryWiseAction({ industry: industry }));
@@ -149,8 +192,6 @@ export const Dashboard: React.FC = () => {
     }, [dispatch, filters, industry]);
 
     const handleClick = ({ type, value, checked }: { type: string; value: string; checked: boolean }) => {
-        console.log(type, value, checked)
-        console.log(filters[type].length)
         if (checked) {
             setFilters((prev: any) => {
                 return {
@@ -162,21 +203,23 @@ export const Dashboard: React.FC = () => {
                 }
             })
         } else {
-            
-                setFilters((prev: any) => {
-                    return {
-                        ...prev,
-                        [type]: prev[type].filter((f: any) => f !== value),
-                    }
-                });
-            
+            setFilters((prev: any) => {
+                return {
+                    ...prev,
+                    [type]: prev[type]?.filter((f: any) => f !== value),
+                }
+            });
         }
     }
-    // message.info("Can't deselect the only remaining filter value...");
-    // return;
-
     return (
         <div className="font-custom bg-gray-100">
+            <DataHeroProfilePopup
+                open={openDataHeroPopup}
+                onClose={() => {
+                    setOpenDataHeroPopup(false);
+                }}
+                heroDetails={selectedHero}
+            />
             <div className="flex px-8 py-4 gap-2 bg-white items-center">
                 <div className="flex items-center justify-center bg-[#3A9868] rounded-[8px] p-2">
                     <i className="fi fi-br-analyse text-[12px] text-white flex items-center justify-center motion-safe:animate-bounce"></i>
@@ -220,9 +263,17 @@ export const Dashboard: React.FC = () => {
                                         />
                                     </div>
                                 )}
-                                <div className="p-4">
-                                    <h1 className="text-[16px] font-semibold">Google Traffic Data</h1>
-                                    <p className="text-[14px] text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                                <div className="p-4 h-48 overflow-y-scroll no-scrollbar">
+                                    {Object.keys(thirdPartyData)?.map((key: any, i: number) => (
+                                        <div key={i}>
+                                            <h1 className="text-[16px] font-semibold">
+                                                {key === "totalCameraData" ? "Camera Data" : key === "totalRoadsterData" ? "Roadster Data" : key === "totalDmfdData" ? "DMFD Data" : key === "totalTrafficData" ? "Traffic Data" : key === "totalMobileDeviceSdkData" ? "Mobile Device SDK" : ""}
+                                            </h1>
+                                            <p className="text-[14px] text-gray-500">
+                                                {thirdPartyData[key].description}
+                                            </p>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         ) : dataSource === 1 ? (
@@ -237,6 +288,7 @@ export const Dashboard: React.FC = () => {
                                             type="Respondent Data"
                                             total={respondentData.length}
                                             data={respondentData}
+                                            setValue={setValue}
                                         />
                                     </div>
                                 )}
@@ -251,7 +303,14 @@ export const Dashboard: React.FC = () => {
                                     <div className="px-4">
                                         <div className="grid grid-cols-3 gap-4 h-40 overflow-y-scroll no-scrollbar">
                                             {respondentProfile?.filter((rspdt: any) => industry.includes(rspdt?.industry))?.map((respondent: any, j: any) => (
-                                                <div key={j} className="col-span-1 w-full h-full py-1">
+                                                <div
+                                                    key={j}
+                                                    className="col-span-1 w-full h-full py-1"
+                                                    onClick={() => {
+                                                        setOpenDataHeroPopup(true);
+                                                        setSelectedHero(respondent);
+                                                    }}
+                                                >
                                                     <div className="h-24 rounded-[8px] bg-white border border-[#D7D7D720]">
                                                         <img className="rounded-[8px] h-full w-full" src={respondent?.avatar} alt={respondent.name} />
                                                     </div>
@@ -286,39 +345,37 @@ export const Dashboard: React.FC = () => {
                         </div>
                         <div className="p-4 flex items-center gap-8">
                             <h1 className="text-[#6F7F8E] text-[14px]">Filters</h1>
-                            <CheckboxInput
-                                label="All"
-                                checked={filters.genders?.length === 0 || filters.genders?.includes("All")}
-                                color="#6F7F8E"
-                                textSize="14px"
-                                onChange={(checked) => handleClick({
-                                    type: "genders",
-                                    value: "All",
-                                    checked: checked
-                                })}
-                            />
-                            <CheckboxInput
-                                label="Male"
-                                checked={filters.genders?.includes("Male") || filters.genders?.includes("All")}
-                                color="#6F7F8E"
-                                textSize="14px"
-                                onChange={(checked) => handleClick({
-                                    type: "genders",
-                                    value: "Male",
-                                    checked: checked
-                                })}
-                            />
-                            <CheckboxInput
-                                label="Female"
-                                checked={filters.genders?.includes("Female") || filters.genders?.includes("All")}
-                                color="#6F7F8E"
-                                textSize="14px"
-                                onChange={(checked) => handleClick({
-                                    type: "genders",
-                                    value: "Female",
-                                    checked: checked
-                                })}
-                            />
+                            {Object.keys(respondentAudienceGenderData)?.map((gender: any, m: any) => (
+                                <div key={m} className="flex items-center">
+                                    <CheckboxInput
+                                        label={`${gender} (${respondentAudienceGenderData[gender].percentage?.toFixed(1)}%)`}
+                                        checked={filters.genders?.length === 0 || filters.genders?.includes("All")}
+                                        color="#6F7F8E"
+                                        textSize="14px"
+                                        onChange={(checked) => handleClick({
+                                            type: "genders",
+                                            value: gender,
+                                            checked: checked
+                                        })}
+                                        disabled={filters.genders?.length <= 2}
+                                    />
+                                </div>
+                            ))}
+                            {allValues?.["genders"]?.filter((a: any) => !Object.keys(respondentAudienceGenderData)?.includes(a))?.map((key: any, p: any) => (
+                                <div key={p} className="flex items-center gap-2">
+                                    <CheckboxInput
+                                        label={key}
+                                        checked={false}
+                                        color="#6F7F8E"
+                                        textSize="14px"
+                                        onChange={(checked) => handleClick({
+                                            type: "genders",
+                                            value: key,
+                                            checked: checked
+                                        })}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <div className="py-2 w-full">
@@ -336,7 +393,7 @@ export const Dashboard: React.FC = () => {
                             </div>
                         ) : (
                             <div className="grid grid-cols-6 gap-2">
-                                {audienceData && Object.keys(audienceData)?.map((data: any, n: any) => (
+                                {audienceData && Object.keys(respondentAudienceData)?.map((data: any, n: any) => (
                                     <div key={n} className="col-span-2 bg-[#FFFFFF] p-4 rounded-[12px] border border-gray-100 shadow-sm">
                                         <div className="border-b">
                                             <SectionHeaderWithSwitch
@@ -344,34 +401,25 @@ export const Dashboard: React.FC = () => {
                                                 title={data}
                                                 bgColor=" bg-[#3A9868]"
                                                 showPercent={true}
-                                                setShowPercent={() => {
-                                                    // setShowPercent(() => {
-                                                    // return {
-                                                    //     1: !showPercent?.[1],
-                                                    //     2: showPercent?.[2],
-                                                    //     3: showPercent?.[3]
-                                                    // }
-                                                    // });
-                                                }}
+                                                setShowPercent={() => {}}
                                                 switchShow={false}
                                             />
                                         </div>
                                         <div className="py-2">
-                                            {Object.keys(audienceData[data])?.map((key: any, i: any) => (
+                                            {Object.keys(respondentAudienceData[data])?.map((key: any, i: any) => (
                                                 <div key={i} className="grid grid-cols-6 flex items-center gap-2 pt-1">
                                                     <div className="col-span-2">
                                                         <CheckboxInput
                                                             disabled={
-                                                                filters[filterHelperTexts?.find((d: any) => d.value === data)?.label  || data]?.filter((f: any) => f !== key)?.length === 1 && filters[filterHelperTexts?.find((d: any) => d.value === data)?.label  || data].filter((f: any) => f !== key)[0] === "All" ? true :
-                                                                    
-                                                                data === "timezoneWiseData"}
+                                                                filters[filterHelperTexts?.find((d: any) => d.value === data)?.label  || data]?.filter((f: any) => f !== key)?.length === 1 && filters[filterHelperTexts?.find((d: any) => d.value === data)?.label  || data].filter((f: any) => f !== key)[0] === "All" ||  filters[filterHelperTexts?.find((d: any) => d.value === data)?.label  || data]?.length === 1 ? true :  
+                                                                data === disabledOption}
                                                             label={key.toUpperCase()}
-                                                            checked={data === "timezoneWiseData" || (filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data]?.includes(key) || false)}
+                                                            checked={data === disabledOption || (filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data]?.includes(key) || false)}
                                                             textSize={"10px"}
                                                             color={"#6F7F8E"}
                                                             onChange={(checked) => {
                                                            
-                                                                if (data !== "timezoneWiseData") {
+                                                                if (data !== disabledOption) {
                                                                     handleClick({
                                                                         type: filterHelperTexts?.find((d: any) => d.value === data)?.label || data,
                                                                         value: key,
@@ -383,8 +431,8 @@ export const Dashboard: React.FC = () => {
                                                     </div>
                                                     <div className="col-span-4 flex items-center w-full gap-2">
                                                         <MultiColorLinearBar2
-                                                            delivered={audienceData[data][key]?.percentage}
-                                                            expected={audienceData[data][key]?.percentage}
+                                                            delivered={respondentAudienceData[data][key]?.percentage}
+                                                            expected={respondentAudienceData[data][key]?.percentage}
                                                             total={100}
                                                             deliveredColor="bg-[#3A9868]"
                                                             expectedColor="bg-[#3A9868]"
@@ -392,27 +440,24 @@ export const Dashboard: React.FC = () => {
                                                             height="h-[5px]"
                                                         />
                                                         <h1 className="text-[10px]">
-                                                            {`${(audienceData[data][key]?.percentage)?.toFixed(0)}%`}
+                                                            {`${(respondentAudienceData[data][key]?.percentage)?.toFixed(0)}%`}
                                                         </h1>
                                                     </div>
                                                 </div>
                                             ))}
                                             
-                                            {allValues[filterHelperTexts?.find((d: any) => d.value === data)?.label  || data]?.filter((a: any) => !Object.keys(audienceData[data])?.includes(a))?.map((key: any, i: any) => (
+                                            {allValues[filterHelperTexts?.find((d: any) => d.value === data)?.label  || data]?.filter((a: any) => !Object.keys(respondentAudienceData[data])?.includes(a))?.map((key: any, i: any) => (
                                                 <div key={i} className="grid grid-cols-6 flex items-center gap-2 pt-1">
                                                     <div className="col-span-2">
                                                         <CheckboxInput
-                                                            disabled={
-                                                                filters[filterHelperTexts?.find((d: any) => d.value === data)?.label  || data]?.filter((f: any) => f !== key)?.length === 1 && filters[filterHelperTexts?.find((d: any) => d.value === data)?.label  || data].filter((f: any) => f !== key)[0] === "All" ? true :
-                                                                    
-                                                                data === "timezoneWiseData"}
+                                                            disabled={filters[filterHelperTexts?.find((d: any) => d.value === data)?.label  || data]?.filter((f: any) => f !== key)?.length === 1 && filters[filterHelperTexts?.find((d: any) => d.value === data)?.label  || data].filter((f: any) => f !== key)[0] === "All" ? true : data === disabledOption}
                                                             label={key.toUpperCase()}
-                                                            checked={data === "timezoneWiseData" || (filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data]?.includes(key) || false)}
+                                                            checked={data === disabledOption || (filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data]?.includes(key) || false)}
                                                             textSize={"10px"}
                                                             color={"#6F7F8E"}
                                                             onChange={(checked) => {
                                                            
-                                                                if (data !== "timezoneWiseData") {
+                                                                if (data !== disabledOption) {
                                                                     handleClick({
                                                                         type: filterHelperTexts?.find((d: any) => d.value === data)?.label || data,
                                                                         value: key,

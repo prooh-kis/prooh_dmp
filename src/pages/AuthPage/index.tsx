@@ -30,7 +30,7 @@ export const AuthPage: React.FC = () => {
 
   useEffect(() => {
     if (success) {
-      navigate("/");
+      navigate("/research");
     }
     if (errorSignIn) {
       message.error(errorSignIn);

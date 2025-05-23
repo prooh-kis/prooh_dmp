@@ -7,7 +7,7 @@ import { ImpactFactorTable } from '../../components/table/ImpactFactorTable';
 import HeaderIcon from '../../assets/icons/header-icon.svg'
 import { AudienceGenderWiseTimezoneWiseData } from '../../components/layouts/AudienceGenderWiseTimezoneWiseData';
 
-const Dashboard: React.FC = () => {
+const InputPage: React.FC = () => {
     const tabs = [
         { label: 'Footfall Data' },
         { label: 'Audience Type Data' },
@@ -133,4 +133,4 @@ const Dashboard: React.FC = () => {
     );
 };
 
-export { Dashboard };
+export { InputPage };

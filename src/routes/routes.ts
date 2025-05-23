@@ -6,5 +6,7 @@ export const UPDATE_PASSWORD = "/update-password";
 export const HOME = "/";
 export const HOMEPAGE = "/homepage"
 export const DASHBOARD = "/dashboard?/:id";
+export const RESEARCH = "/research?/:id";
+
 
 

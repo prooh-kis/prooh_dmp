@@ -142,7 +142,7 @@ const Helper = () => {
   }, [success, error]);
 
   return (
-    <div className="w-full h-full font-custom pt-4">
+    <div className="w-full h-full font-custom bg-[#F6FFFA]">
       <IdentificationFormForDataHeroPopup
         open={open}
         setOpen={setOpen}
