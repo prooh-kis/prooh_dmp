@@ -1,16 +1,9 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Header, HomePageLayout } from "../components";
-
 import {
   AuthPage,
-  DashboardPage,
-  ForgetPassword,
   HomePage,
-  LandingPage,
   PageNotFound,
-  UpdatePassword,
-  VerifyEmail,
   Dashboard,
   DataHeroPage,
   InputPage,
@@ -19,12 +12,9 @@ import {
 import {
   AUTH,
   DASHBOARD,
-  FORGET_PASSWORD,
   HOME,
   HOMEPAGE,
   RESEARCH,
-  UPDATE_PASSWORD,
-  VERIFY_EMAIL,
 } from "./routes";
 import { PublicRoute } from "../layout/PublicRoute";
 import { PrivateRoute } from "../layout/PrivateRoute";
