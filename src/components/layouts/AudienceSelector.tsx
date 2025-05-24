@@ -27,7 +27,7 @@ const AudienceSelector: React.FC<AudienceSelectorProps> = ({ id, audienceCategor
 
     useEffect(() => {
         dispatch(getAudienceTypePercentForGenderWiseTab({ id: id }))
-    }, [])
+    }, [dispatch, id])
 
     useEffect(() => {
         if (audienceTypePercentError) {
@@ -41,10 +41,10 @@ const AudienceSelector: React.FC<AudienceSelectorProps> = ({ id, audienceCategor
             setAudiencePercent(percent)
         }
 
-    }, [audienceTypePercentSuccess, audienceTypePercentError])
+    }, [audienceTypePercentSuccess, audienceTypePercentError, audienceTypePercent, setAudienceCategory, setAudiencePercent])
 
     return (
-        <div className="p-4 w-96">
+        <div className="p-4">
             <h2 className="text-lg font-semibold mb-4">Select Audience Type</h2>
             <div className="flex flex-col relative">
 
@@ -82,7 +82,7 @@ const AudienceSelector: React.FC<AudienceSelectorProps> = ({ id, audienceCategor
                                     setAudiencePercent(percent);
                                 }}
                             >
-                                <span className={`${isSelected ? "text-blue-600 font-medium" : "text-gray-700"} mb-2`}>
+                                <span className={`${isSelected ? "text-blue-600 font-[16px]" : "text-gray-700"} mb-2 truncate`}>
                                     {audienceType}
                                 </span>
                                 <span className="text-gray-700 text-sm">{(percent as number).toFixed(2)}%</span>

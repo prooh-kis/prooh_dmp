@@ -1,8 +1,7 @@
 import { AudienceTableHeader } from "../../components/layouts/AudienceTableHeader";
 import { addImpactFactorData, getImpactFactorDataByMarketSite } from "../../actions/audienceAction";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { message } from "antd";
 import { ADD_IMPACT_FACTOR_DATA_RESET, GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_RESET } from "../../constants/audienceConstant";
 
