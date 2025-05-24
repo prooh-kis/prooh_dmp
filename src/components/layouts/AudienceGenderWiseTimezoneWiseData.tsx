@@ -37,6 +37,7 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
                     step={step}
                     setStep={setStep}
                     id={id}
+                    dataCheckStatus={dataCheckStatus}
                     audienceCategory={audienceCategory}
                     setAudienceCategory={setAudienceCategory}
                     setAudiencePercent={setAudiencePercent}
