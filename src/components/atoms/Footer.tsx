@@ -1,12 +1,14 @@
 import React from 'react';
 
 type FooterProps = {
+    audienceStep: any;
+    setAudienceStep: Function;
     currentStep: number;
     setCurrentStep: Function;
     dataCheckStatus: any;
 };
 
-export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dataCheckStatus }) => {
+export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dataCheckStatus, audienceStep, setAudienceStep }) => {
     const increaseStepVal = () => {
         switch (currentStep) {
             case 1: setCurrentStep(currentStep + 1);
@@ -21,6 +23,10 @@ export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dat
             }
                 break
             case 3: {
+                if (audienceStep <= 9) {
+                    setAudienceStep(audienceStep + 1)
+                    break
+                }
                 var checkStatus = 0
                 for (const genderData of Object.values(dataCheckStatus["Gender Wise Data"])) {
                     if (!genderData) {
@@ -48,18 +54,16 @@ export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dat
     }
 
     return (
-        <div className="relative border-t bg-white py-2">
-            <div className='w-full flex justify-end items-center gap-4'>
-                <div className='mr-4'>
-                    {currentStep === 3 && <button className="border border-blue-500 text-blue-500 p-2 rounded-md">
-                        Reset All
-                    </button>}
-                </div>
-                <div className='mr-8'>
-                    <button className="bg-blue-600 text-white p-2 rounded-md" onClick={() => increaseStepVal()}>
-                        {currentStep === 1 ? "Continue" : "Save And Continue"}
-                    </button>
-                </div>
+        <div className='w-full flex justify-end items-center gap-4'>
+            <div className='mr-4'>
+                {currentStep === 3 && <button className="border border-blue-500 text-blue-500 p-2 rounded-md">
+                    Reset All
+                </button>}
+            </div>
+            <div className='mr-8'>
+                <button className="bg-blue-600 text-white p-2 rounded-md" onClick={() => increaseStepVal()}>
+                    {currentStep === 1 ? "Continue" : "Save And Continue"}
+                </button>
             </div>
         </div>
     );

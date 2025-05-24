@@ -9,16 +9,15 @@ interface AudienceGenderWiseTimezoneWiseDataProps {
     marketSite: String;
     id: string;
     setId: string;
+    step: any;
+    setStep: Function;
     dataCheckStatus: any;
     setDataCheckStatus: Function;
 }
 
 export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTimezoneWiseDataProps> = ({
-    marketSite, id, setId, dataCheckStatus, setDataCheckStatus
+    marketSite, id, setId, dataCheckStatus, setDataCheckStatus, step, setStep
 }) => {
-
-
-    const [step, setStep] = useState<any>(0);
 
     const navigate = useNavigate();
     const [audienceCategory, setAudienceCategory] = useState("Working Professionals-A")
@@ -29,8 +28,8 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
     }, [navigate, id])
 
     return (
-        <div className="grid grid-cols-12 gap-2">
-            <div className="col-span-3 bg-[#ffffff]">
+        <div className="flex-grow grid grid-cols-12 gap-2 overflow-hidden">
+            <div className="col-span-3 bg-[#ffffff] overfow-hidden">
                 {/* <AudienceSelector id={id} audienceCategory={audienceCategory} setAudienceCategory={setAudienceCategory}
                     setAudiencePercent={setAudiencePercent} /> */}
                 <VerticalStepper
@@ -44,13 +43,15 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
                 />
             </div>
 
-            <div className="col-span-9 flex flex-col gap-10">
-                <AudienceGenderWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
-                    audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
-                    setDataCheckStatus={setDataCheckStatus} />
-                {dataCheckStatus["Gender Wise Data"][audienceCategory] && <AudienceTimezoneWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
-                    audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
-                    setDataCheckStatus={setDataCheckStatus} />}
+            <div className="col-span-9 flex flex-col overflow-hidden">
+                <div className="flex-grow overflow-y-auto pr-2">
+                    <AudienceGenderWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
+                        audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
+                        setDataCheckStatus={setDataCheckStatus} />
+                    {dataCheckStatus["Gender Wise Data"][audienceCategory] && <AudienceTimezoneWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
+                        audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
+                        setDataCheckStatus={setDataCheckStatus} />}
+                </div>
             </div>
         </div>
     )

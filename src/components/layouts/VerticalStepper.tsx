@@ -52,16 +52,13 @@ export const VerticalStepper = ({ id, setStep, step, dataCheckStatus, setAudienc
       <div className="flex flex-col items-left relative">
         {/* Steps */}
         {Object.entries(audienceTypes).map(([audienceType, percent], i) => (
-          <div key={i} className="grid grid-cols-6 flex items-center gap-4">
-            <div
-              onClick={() => {
-                setAudienceCategory(audienceType);
-                setAudiencePercent(percent);
-                setStep(i)
-              }}
-              className="col-span-1 relative flex flex-col items-center cursor-pointer z-10"
-            >
-
+          <div key={i} className="grid grid-cols-6 flex items-center cursor-pointer gap-4"
+            onClick={() => {
+              setAudienceCategory(audienceType);
+              setAudiencePercent(percent);
+              setStep(i)
+            }}>
+            <div className="col-span-1 relative flex flex-col items-center z-10">
               {/* Line segment before the circle (if not the first step) */}
               {i > 0 && (
                 <div className={`w-px ${i <= step ? "bg-primaryButton" : "bg-gray-300"}`} style={{ height: "24px" }} />
@@ -74,7 +71,7 @@ export const VerticalStepper = ({ id, setStep, step, dataCheckStatus, setAudienc
                 {(dataCheckStatus["Gender Wise Data"][audienceType] && dataCheckStatus["Timezone Wise Data"][audienceType]) ? (
                   <i className="fi fi-br-check text-white text-[12px]" />
                 ) : (
-                  <span className={`text-[12px]  ${i === step ? 'text-white font-bold' : i < step ? 
+                  <span className={`text-[12px]  ${i === step ? 'text-white font-bold' : i < step ?
                     'text-white font-semibold' : 'text-gray-500 font-semibold'}`}>
                     {i + 1}
                   </span>

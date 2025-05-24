@@ -23,7 +23,7 @@ const InputPage: React.FC = () => {
     })
     const [currentStep, setCurrentStep] = useState(1)
     const [id, setId] = useState("")
-
+    const [audienceCategoryStep, setAudienceCategoryStep] = useState<any>(0);
 
     useEffect(() => {
         const currentUrl = window.location.href;
@@ -86,7 +86,7 @@ const InputPage: React.FC = () => {
     }]
 
     return (
-        <div className="bg-gray-100">
+        <div className="flex flex-col min-h-[calc(100vh-4rem)]">
             <div className='bg-[#ffffff] px-6 pt-2'>
                 <div className='flex flex-row gap-2 mt-2 pb-2'>
                     <h2 className="text-[20px] font-medium">DLF CyberHub Gurugram, Haryana</h2>
@@ -118,17 +118,22 @@ const InputPage: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className='p-4'>
+            <div className='flex-grow p-4'>
                 <StepComponent
                     marketSite={"CyberCity Gurgaon"}
                     id={id}
                     setId={setId}
+                    step={audienceCategoryStep}
+                    setStep={setAudienceCategoryStep}
                     dataCheckStatus={dataCheckStatus}
                     setDataCheckStatus={setDataCheckStatus}
                 />
             </div>
 
-            <Footer currentStep={currentStep} setCurrentStep={setCurrentStep} dataCheckStatus={dataCheckStatus} />
+            <div className="border-t bg-white py-2">
+                <Footer currentStep={currentStep} setCurrentStep={setCurrentStep} dataCheckStatus={dataCheckStatus}
+                    audienceStep={audienceCategoryStep} setAudienceStep={setAudienceCategoryStep} />
+            </div>
         </div>
     );
 };
