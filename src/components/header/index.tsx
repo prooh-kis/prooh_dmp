@@ -42,7 +42,7 @@ export const Header: React.FC = () => {
         navigate("/auth");
       }
       if (userInfo?._id) {
-        navigate(`/homepage?userId=${userInfo?._id}`);
+        navigate(RESEARCH);
       }
     } else {
       navigate(tabs[index].path);
