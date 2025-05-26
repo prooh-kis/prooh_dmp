@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AUTH } from "../../routes/routes";
+import { AUTH, RESEARCH } from "../../routes/routes";
 import { message } from "antd";
 
 export const Header: React.FC = () => {
@@ -26,7 +26,7 @@ export const Header: React.FC = () => {
     },
     {
       label: "Research",
-      path: `/homepage?userId=${userInfo ? userInfo?._id : ""}`,
+      path: RESEARCH,
     },
     {
       label: "Dashboard",
