@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, Upload, Button, InputNumber, message } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  Upload,
+  Button,
+  InputNumber,
+  message,
+  Select,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import type { UploadFile } from "antd/es/upload/interface";
 import { getAWSUrlToUploadFile, saveFileOnAWS } from "../../utils/awsUtils";
@@ -245,6 +254,15 @@ export const IdentificationFormForDataHeroPopup: React.FC<
               ]}
             >
               <InputNumber min={0} max={50} className="w-full" />
+            </Form.Item>
+            <Form.Item
+              name="industry"
+              label="Industry"
+              rules={[
+                { required: true, message: "Please input your industry" },
+              ]}
+            >
+              <Input placeholder="e.g., Software" className="w-full" />
             </Form.Item>
 
             <Form.Item
