@@ -88,15 +88,13 @@ export const createUser = (reqBody) => async (dispatch, getState) => {
   }
 };
 
-export const signin = (email) => async (dispatch) => {
+export const signin = (input) => async (dispatch) => {
   dispatch({
     type: USER_SIGNIN_REQUEST,
-    payload: { email },
+    payload: input,
   });
   try {
-    const { data } = await Axios.post(`${HERO_DATA_URL}/signIn`, {
-      email,
-    });
+    const { data } = await Axios.post(`${USER_URL}/signin`, input);
 
     dispatch({
       type: USER_SIGNIN_SUCCESS,
@@ -107,7 +105,6 @@ export const signin = (email) => async (dispatch) => {
       userInfo: data,
       loginTime,
     };
-    localStorage.setItem("user", JSON.stringify(loginData));
     store.dispatch(login(loginData));
   } catch (error) {
     dispatch({

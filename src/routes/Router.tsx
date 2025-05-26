@@ -1,23 +1,30 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
-  AuthPage,
   HomePage,
   PageNotFound,
   Dashboard,
   DataHeroPage,
   InputPage,
+  VerifyEmail,
+  UpdatePassword,
 } from "../pages";
 
 import {
   AUTH,
   DASHBOARD,
+  FORGET_PASSWORD,
   HOME,
   HOMEPAGE,
   RESEARCH,
+  SIGN_UP,
+  UPDATE_PASSWORD,
+  VERIFY_EMAIL,
 } from "./routes";
 import { PublicRoute } from "../layout/PublicRoute";
 import { PrivateRoute } from "../layout/PrivateRoute";
+import { SignIn } from "../pages/AuthPage/SignIn";
+import { ForgetPassword } from "../pages/AuthPage/ForgetPassword";
 
 const Routers: React.FC = () => {
   return (
@@ -27,7 +34,41 @@ const Routers: React.FC = () => {
           path={AUTH}
           element={
             <PublicRoute>
-              <AuthPage />
+              <SignIn />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path={SIGN_UP}
+          element={
+            <PublicRoute>
+              <SignIn />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path={VERIFY_EMAIL}
+          element={
+            <PublicRoute>
+              <VerifyEmail/>
+            </PublicRoute>
+          }
+        />
+        <Route
+          path={FORGET_PASSWORD}
+          element={
+            <PublicRoute>
+              <ForgetPassword />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path={UPDATE_PASSWORD}
+          element={
+            <PublicRoute>
+              <UpdatePassword />
             </PublicRoute>
           }
         />

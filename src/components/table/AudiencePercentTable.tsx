@@ -8,6 +8,7 @@ import {
   ADD_AUDIENCE_TYPE_PERCENT_DATA_RESET,
   GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_RESET
 } from "../../constants/audienceConstant";
+import { useNavigate } from "react-router-dom";
 
 interface AudiencePercentData {
   category: string;
@@ -32,6 +33,13 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
   const [lockStatus, setLockStatus] = useState<any>(dataCheckStatus["Audience Type Data"]);
   const [audienceTypeWiseData, setAudienceTypeWiseData] = useState<AudiencePercentData[]>([]);
   const inputRefs = useRef<HTMLInputElement[]>([]);
+
+  const userSignin = useSelector((state: any) => state.userSignin);
+  const {
+    error: errorSignIn,
+    success: successSignin,
+    userInfo: userInfo,
+  } = userSignin;
 
   const getAvgAudienceDataByMarketSiteData = useSelector(
     (state: any) => state.getAvgAudienceDataByMarketSite
@@ -111,11 +119,11 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
 
       dispatch(addAudienceTypePercentData({
         id: id === "research" ? null : id,
-        marketSite: "CyberCity Gurgaon",
-        market: "Delhi NCR",
-        touchPoints: [],
-        dataHeroUserId: "674cf966c5991c8fd79e575a",
-        dataHeroUserEmail: "kishan@prooh.ai",
+        marketSite: userInfo?.touchPoints?.[0]?.marketSites?.[0],
+        market: userInfo.market,
+        touchPoints: userInfo.touchPoints,
+        dataHeroUserId: userInfo._id,
+        dataHeroUserEmail: userInfo.email,
         geoCoordinates: [],
         data: data,
       }))
@@ -133,7 +141,7 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
   }
 
   const resetButtonFunction = () => {
-    dispatch(getAvgAudienceDataByMarketSite({ marketSite: marketSite }))
+    dispatch(getAvgAudienceDataByMarketSite({ id: id, marketSite: marketSite }))
   }
 
   useEffect(() => {

@@ -20,7 +20,7 @@ export const RegisterHeroDataForm = () => {
   const onFinish = (values: any) => {
     console.log("values", values);
     dispatch(
-      registerHeroData({ ...values, email: values.email.toLowerCase() })
+      registerHeroData({ ...values, email: values.email.toLowerCase() , password : "12345678" })
     );
     setSelectedLocations([]);
   };

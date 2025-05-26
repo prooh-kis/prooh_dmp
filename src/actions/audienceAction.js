@@ -17,9 +17,9 @@ import {
     GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_SUCCESS,
     GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_FAIL,
     GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_REQUEST,
-    GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_SUCCESS, 
+    GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_SUCCESS,
     GET_AVG_FOOTFALL_DATA_BY_MARKET_SITE_FAIL,
-    GET_AVG_FOOTFALL_DATA_BY_MARKET_SITE_REQUEST, 
+    GET_AVG_FOOTFALL_DATA_BY_MARKET_SITE_REQUEST,
     GET_AVG_FOOTFALL_DATA_BY_MARKET_SITE_SUCCESS,
     GET_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_FAIL,
     GET_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_REQUEST,
@@ -33,13 +33,18 @@ import {
 } from "../constants/audienceConstant";
 import { AUDIENCE_URL } from "../constants/urlConstant";
 
-export const getAvgFootfallDataByMarketSite = (input) => async (dispatch , getState) => {
+export const getAvgFootfallDataByMarketSite = (input) => async (dispatch, getState) => {
     dispatch({
         type: GET_AVG_FOOTFALL_DATA_BY_MARKET_SITE_REQUEST,
         payload: input,
     });
     try {
-        const { data } = await axios.post(`${AUDIENCE_URL}/getAvgFootfallDataByMarketSite`, input);
+        const {
+            auth: { userInfo },
+        } = getState();
+        const { data } = await axios.post(`${AUDIENCE_URL}/getAvgFootfallDataByMarketSite`, input, {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+        });
         dispatch({
             type: GET_AVG_FOOTFALL_DATA_BY_MARKET_SITE_SUCCESS,
             payload: data,
@@ -56,7 +61,7 @@ export const getAvgFootfallDataByMarketSite = (input) => async (dispatch , getSt
 };
 
 
-export const getAvgAudienceDataByMarketSite = (input) => async (dispatch , getState) => {
+export const getAvgAudienceDataByMarketSite = (input) => async (dispatch, getState) => {
     dispatch({
         type: GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_REQUEST,
         payload: input,
@@ -78,7 +83,7 @@ export const getAvgAudienceDataByMarketSite = (input) => async (dispatch , getSt
     }
 };
 
-export const getGenderWiseDataByAudienceTypeMarketSite = (input) => async (dispatch , getState) => {
+export const getGenderWiseDataByAudienceTypeMarketSite = (input) => async (dispatch, getState) => {
     dispatch({
         type: GET_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_REQUEST,
         payload: input,
@@ -100,7 +105,7 @@ export const getGenderWiseDataByAudienceTypeMarketSite = (input) => async (dispa
     }
 };
 
-export const getTimezoneWiseDataByAudienceTypeMarketSite = (input) => async (dispatch , getState) => {
+export const getTimezoneWiseDataByAudienceTypeMarketSite = (input) => async (dispatch, getState) => {
     dispatch({
         type: GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_REQUEST,
         payload: input,
@@ -122,7 +127,7 @@ export const getTimezoneWiseDataByAudienceTypeMarketSite = (input) => async (dis
     }
 };
 
-export const getAudienceTypePercentForGenderWiseTab = (input) => async (dispatch , getState) => {
+export const getAudienceTypePercentForGenderWiseTab = (input) => async (dispatch, getState) => {
     dispatch({
         type: GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_REQUEST,
         payload: input,
@@ -145,7 +150,7 @@ export const getAudienceTypePercentForGenderWiseTab = (input) => async (dispatch
 };
 
 
-export const getImpactFactorDataByMarketSite = (input) => async (dispatch , getState) => {
+export const getImpactFactorDataByMarketSite = (input) => async (dispatch, getState) => {
     dispatch({
         type: GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_REQUEST,
         payload: input,
@@ -167,7 +172,7 @@ export const getImpactFactorDataByMarketSite = (input) => async (dispatch , getS
     }
 };
 
-export const addAudienceTypePercentData = (input) => async (dispatch , getState) => {
+export const addAudienceTypePercentData = (input) => async (dispatch, getState) => {
     dispatch({
         type: ADD_AUDIENCE_TYPE_PERCENT_DATA_REQUEST,
         payload: input,
@@ -190,7 +195,7 @@ export const addAudienceTypePercentData = (input) => async (dispatch , getState)
 };
 
 
-export const addGenderWiseDataByAudienceType = (input) => async (dispatch , getState) => {
+export const addGenderWiseDataByAudienceType = (input) => async (dispatch, getState) => {
     dispatch({
         type: ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_REQUEST,
         payload: input,
@@ -212,7 +217,7 @@ export const addGenderWiseDataByAudienceType = (input) => async (dispatch , getS
     }
 };
 
-export const addTimezoneWiseDataByAudienceType = (input) => async (dispatch , getState) => {
+export const addTimezoneWiseDataByAudienceType = (input) => async (dispatch, getState) => {
     dispatch({
         type: ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_REQUEST,
         payload: input,
@@ -235,7 +240,7 @@ export const addTimezoneWiseDataByAudienceType = (input) => async (dispatch , ge
 };
 
 
-export const addImpactFactorData = (input) => async (dispatch , getState) => {
+export const addImpactFactorData = (input) => async (dispatch, getState) => {
     dispatch({
         type: ADD_IMPACT_FACTOR_DATA_REQUEST,
         payload: input,

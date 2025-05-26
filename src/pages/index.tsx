@@ -1,7 +1,6 @@
 export { PageNotFound } from "./PageNotFound";
 
 export {
-  AuthPage,
   VerifyEmail,
   UpdatePassword,
   ForgetPassword,

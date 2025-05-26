@@ -18,15 +18,16 @@ import {
 
 const URL = `${process.env.REACT_APP_PROOH_SERVER}/api/v2/heroData`;
 const URL2 = `${process.env.REACT_APP_PROOH_SERVER}/api/v2/audiences`;
+const USER_URL = `${process.env.REACT_APP_PROOH_SERVER}/api/v1/users`;
 
 
-export const registerHeroData = (reqBody) => async (dispatch) => {
+export const registerHeroData = (input) => async (dispatch) => {
   dispatch({
     type: USER_SIGNUP_REQUEST,
-    payload: reqBody,
+    payload: input,
   });
   try {
-    const { data } = await Axios.post(`${URL}/register`, reqBody);
+    const { data } = await Axios.post(`${USER_URL}/addNewDataHeroUser`, input);
     dispatch({
       type: USER_SIGNUP_SUCCESS,
       payload: data,

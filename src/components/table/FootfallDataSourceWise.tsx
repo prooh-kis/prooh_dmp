@@ -3,6 +3,8 @@ import { DataCard } from "../../components/atoms/DataCard"
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getAvgFootfallDataByMarketSite } from "../../actions/audienceAction";
+import { AUDIENCE_GET_FOOTFALL_DATA_BY_MARKET_SITE } from "../../constants/userConstants";
+import { useNavigate } from "react-router-dom";
 
 
 interface FootfallDataSourceWiseProps {
@@ -13,9 +15,10 @@ interface FootfallDataSourceWiseProps {
     setDataCheckStatus: Function;
 }
 
-export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ marketSite }) => {
+export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ marketSite, id, setId }) => {
 
     const dispatch = useDispatch<any>();
+    const navigate = useNavigate();
     const [totalCount, setTotalCount] = useState(0);
     const [audienceCount, setAudienceCount] = useState({
         "totalCameraData": 0,
@@ -24,6 +27,13 @@ export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ 
         "totalRoadsterData": 0,
         "totalMobileDeviceSdkData": 0
     });
+
+    const userSignin = useSelector((state: any) => state.userSignin);
+    const {
+        error: errorSignIn,
+        success: successSignin,
+        userInfo: userInfo,
+    } = userSignin;
 
     const getAvgFootfallDataByMarketSiteData = useSelector(
         (state: any) => state.getAvgFootfallDataByMarketSite
@@ -35,9 +45,18 @@ export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ 
         error: audienceCountByMarketSiteError
     } = getAvgFootfallDataByMarketSiteData;
 
+    useEffect(() => {
+        console.log(id)
+        if (id !== "research") {
+            navigate(`/research/${id}`)
+        }
+    }, [navigate, id])
 
     useEffect(() => {
-        dispatch(getAvgFootfallDataByMarketSite({ marketSite: marketSite }))
+        dispatch(getAvgFootfallDataByMarketSite({
+            marketSite: userInfo?.touchPoints?.[0]?.marketSites?.[0],
+            event: AUDIENCE_GET_FOOTFALL_DATA_BY_MARKET_SITE
+        }))
     }, [])
 
     useEffect(() => {
@@ -48,6 +67,9 @@ export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ 
         if (audienceCountByMarketSiteSuccess) {
             setAudienceCount(audienceCountByMarketSite?.response)
             setTotalCount(audienceCountByMarketSite?.totalAvgCount)
+            if (audienceCountByMarketSite.audienceData != null) {
+                setId(audienceCountByMarketSite.audienceData._id.toString())
+            }
         }
 
     }, [audienceCountByMarketSiteSuccess, audienceCountByMarketSiteError])

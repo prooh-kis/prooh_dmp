@@ -94,17 +94,13 @@ const Helper = () => {
     setLocationOpen(true);
   };
   const handleSave2 = (values: any) => {
-    console.log("dfgrttrrrrrrr  : ", {
-      ...data,
-      email: data.email.toLowerCase(),
-      ...values,
-    });
 
     dispatch(
       registerHeroData({
         ...data,
         email: data.email.toLowerCase(),
         ...values,
+        password : "12345678"
       })
     );
     setLocationOpen(false);
