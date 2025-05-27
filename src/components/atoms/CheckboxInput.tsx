@@ -10,11 +10,8 @@ interface CheckboxProps {
 }
 
 export const CheckboxInput: React.FC<CheckboxProps> = ({ disabled, color, textSize, label, checked, onChange }) => {
-  const [isChecked, setIsChecked] = useState(checked);
-
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
-    setIsChecked(checked);
     if (onChange) {
       onChange(checked);
     }
@@ -25,7 +22,7 @@ export const CheckboxInput: React.FC<CheckboxProps> = ({ disabled, color, textSi
       <input
         type="checkbox"
         className={`col-span-1 form-checkbox h-4 w-4 ${disabled ? 'accent-[#3A9868]' : 'accent-[#3A9868]'}`}
-        checked={isChecked !== undefined ? isChecked : false}
+        checked={checked !== undefined ? checked : false}
         disabled={disabled}
         onChange={handleCheckboxChange}
       />

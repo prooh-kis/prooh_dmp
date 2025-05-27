@@ -51,3 +51,8 @@ code {
 }
 
 
+
+
+.custom-error-text .ant-form-item-explain-error {
+  font-size: 10px; /* or use text-xs if you're using Tailwind base styles */
+}

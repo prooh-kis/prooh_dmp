@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, Upload, Button, InputNumber, message } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  Upload,
+  Button,
+  InputNumber,
+  message,
+  Select,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import type { UploadFile } from "antd/es/upload/interface";
 import { getAWSUrlToUploadFile, saveFileOnAWS } from "../../utils/awsUtils";
@@ -136,6 +145,7 @@ export const IdentificationFormForDataHeroPopup: React.FC<
               label="Profile Picture"
               valuePropName="fileList"
               getValueFromEvent={normFile}
+              className="custom-error-text"
               rules={[
                 {
                   required: true,
@@ -152,15 +162,7 @@ export const IdentificationFormForDataHeroPopup: React.FC<
                 maxCount={1}
                 className="avatar-uploader"
               >
-                {profilePicList.length > 0 ? (
-                  <img
-                    src={URL.createObjectURL(
-                      profilePicList[0].originFileObj as Blob
-                    )}
-                    alt="profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
+                {profilePicList.length === 0 && (
                   <div className="flex flex-col items-center justify-center">
                     <UploadOutlined className="text-2xl text-gray-500" />
                     <span className="mt-2 text-sm text-gray-500">
@@ -176,7 +178,8 @@ export const IdentificationFormForDataHeroPopup: React.FC<
               label="Upload Resume"
               valuePropName="fileList"
               getValueFromEvent={normFile}
-              rules={[{ required: true, message: "Please upload your resume" }]}
+              className="custom-error-text"
+              rules={[{ required: true, message: <span style={{ fontSize: "8px" }}>Please upload your resume</span> }]}
             >
               <Upload
                 listType="picture-card"
@@ -186,11 +189,7 @@ export const IdentificationFormForDataHeroPopup: React.FC<
                 accept=".pdf,.doc,.docx"
                 maxCount={1}
               >
-                {resumeList.length > 0 ? (
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm">{resumeList[0].name}</span>
-                  </div>
-                ) : (
+                {resumeList.length === 0 && (
                   <div className="flex flex-col items-center justify-center">
                     <UploadOutlined className="text-2xl text-gray-500" />
                     <span className="mt-2 text-sm text-gray-500">
@@ -245,6 +244,15 @@ export const IdentificationFormForDataHeroPopup: React.FC<
               ]}
             >
               <InputNumber min={0} max={50} className="w-full" />
+            </Form.Item>
+            <Form.Item
+              name="industry"
+              label="Industry"
+              rules={[
+                { required: true, message: "Please input your industry" },
+              ]}
+            >
+              <Input placeholder="e.g., Software" className="w-full" />
             </Form.Item>
 
             <Form.Item

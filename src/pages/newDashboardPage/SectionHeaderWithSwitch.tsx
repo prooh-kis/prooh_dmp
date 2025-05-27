@@ -21,7 +21,7 @@ export const SectionHeaderWithSwitch: React.FC<SectionHeaderWithSwitchProps> = (
 }) => (
   <div className="flex items-center justify-between gap-2 pb-2">
     <div className="flex items-center gap-1 truncate">
-      <div className={`rounded-full p-2 ${bgColor}`}>
+      <div className={`rounded-full p-1 ${bgColor}`}>
         <i
           className={`fi ${iconClass} text-[12px] text-white flex items-center justify-center`}
         ></i>

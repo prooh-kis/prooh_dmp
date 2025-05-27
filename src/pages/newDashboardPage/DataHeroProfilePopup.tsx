@@ -115,7 +115,7 @@ export const DataHeroProfilePopup = (props: any) => {
                   <h1 className="text-[14px] font-semibold">Experience</h1>
                 </div>
                 <div className="col-span-3">
-                  <p className="text-[14px]">{heroDetails?.experience}</p>
+                  <p className="text-[14px]">{heroDetails?.experience} year{heroDetails?.experience > 1 && "s"}</p>
                 </div>
               </div>
             </div>
