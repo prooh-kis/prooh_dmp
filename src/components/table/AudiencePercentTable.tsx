@@ -8,7 +8,6 @@ import {
   ADD_AUDIENCE_TYPE_PERCENT_DATA_RESET,
   GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_RESET
 } from "../../constants/audienceConstant";
-import { useNavigate } from "react-router-dom";
 
 interface AudiencePercentData {
   category: string;
@@ -22,10 +21,11 @@ interface AudiencePercentTableProps {
   setId: Function;
   dataCheckStatus: any;
   setDataCheckStatus: Function;
+  avgDataBool: Boolean;
 }
 
 export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
-  marketSite, id, setId, dataCheckStatus, setDataCheckStatus
+  marketSite, id, setId, dataCheckStatus, setDataCheckStatus, avgDataBool
 }) => {
 
   const dispatch = useDispatch<any>();
@@ -141,12 +141,12 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
   }
 
   const resetButtonFunction = () => {
-    dispatch(getAvgAudienceDataByMarketSite({ id: id, marketSite: marketSite }))
+    dispatch(getAvgAudienceDataByMarketSite({ id: id, marketSite: marketSite, avgDataBool: avgDataBool }))
   }
 
   useEffect(() => {
-    dispatch(getAvgAudienceDataByMarketSite({ marketSite: marketSite }))
-  }, [])
+    dispatch(getAvgAudienceDataByMarketSite({ id: id, marketSite: marketSite, avgDataBool: avgDataBool }))
+  }, [avgDataBool])
 
   useEffect(() => {
     if (audienceDataByMarketSiteError) {

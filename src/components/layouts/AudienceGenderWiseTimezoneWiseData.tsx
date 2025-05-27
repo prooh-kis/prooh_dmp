@@ -13,10 +13,11 @@ interface AudienceGenderWiseTimezoneWiseDataProps {
     setStep: Function;
     dataCheckStatus: any;
     setDataCheckStatus: Function;
+    avgDataBool: Boolean;
 }
 
 export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTimezoneWiseDataProps> = ({
-    marketSite, id, setId, dataCheckStatus, setDataCheckStatus, step, setStep
+    marketSite, id, setId, dataCheckStatus, setDataCheckStatus, step, setStep , avgDataBool
 }) => {
 
     const navigate = useNavigate();
@@ -32,8 +33,6 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
     return (
         <div className="flex-grow grid grid-cols-12 gap-2 overflow-hidden">
             <div className="col-span-3 bg-[#ffffff] overfow-hidden">
-                {/* <AudienceSelector id={id} audienceCategory={audienceCategory} setAudienceCategory={setAudienceCategory}
-                    setAudiencePercent={setAudiencePercent} /> */}
                 <VerticalStepper
                     step={step}
                     setStep={setStep}
@@ -49,10 +48,10 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
                 <div className="flex-grow overflow-y-auto pr-2">
                     <AudienceGenderWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
                         audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
-                        setDataCheckStatus={setDataCheckStatus} />
+                        setDataCheckStatus={setDataCheckStatus} avgDataBool={avgDataBool} />
                     {dataCheckStatus["Gender Wise Data"][audienceCategory] && <AudienceTimezoneWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
                         audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
-                        setDataCheckStatus={setDataCheckStatus} />}
+                        setDataCheckStatus={setDataCheckStatus} avgDataBool={avgDataBool} />}
                 </div>
             </div>
         </div>

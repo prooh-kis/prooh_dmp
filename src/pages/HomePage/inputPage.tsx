@@ -6,6 +6,8 @@ import { AudiencePercentTable } from '../../components/table';
 import { ImpactFactorTable } from '../../components/table/ImpactFactorTable';
 import HeaderIcon from '../../assets/icons/header-icon.svg'
 import { AudienceGenderWiseTimezoneWiseData } from '../../components/layouts/AudienceGenderWiseTimezoneWiseData';
+import { SwitchInputCenter } from '../../components/atoms/SwitchInput';
+import { Tooltip } from 'antd';
 
 const InputPage: React.FC = () => {
     const tabs = [
@@ -24,6 +26,8 @@ const InputPage: React.FC = () => {
     const [currentStep, setCurrentStep] = useState(1)
     const [id, setId] = useState("")
     const [audienceCategoryStep, setAudienceCategoryStep] = useState<any>(0);
+    const [avgDataBool, setAvgDataBool] = useState(true);
+    const [toggleVisible, setToggleVisible] = useState(false);
 
     useEffect(() => {
         const currentUrl = window.location.href;
@@ -92,6 +96,16 @@ const InputPage: React.FC = () => {
                     <h2 className="text-[20px] font-medium">DLF CyberHub Gurugram, Haryana</h2>
                     <img src={HeaderIcon} alt="" />
                     <h3 className="text-[12px] font-medium text-[#6F7F8E] flex items-center justify-center cursor-pointer">View Images</h3>
+
+                    {toggleVisible && <div className="ml-auto mr-4">
+                        <Tooltip title={`${avgDataBool ? "Switch To View Your Last Input" : "Switch To View Avg Data"}`}>
+                            <SwitchInputCenter
+                                isEnabled={avgDataBool}
+                                onToggle={setAvgDataBool}
+                                onColor="bg-[#348730]"
+                                offColor="bg-red-500" />
+                        </Tooltip>
+                    </div>}
                 </div>
 
                 <div className='flex flex-row justify-between items-center'>
@@ -127,6 +141,9 @@ const InputPage: React.FC = () => {
                     setStep={setAudienceCategoryStep}
                     dataCheckStatus={dataCheckStatus}
                     setDataCheckStatus={setDataCheckStatus}
+                    setToggleVisible={setToggleVisible}
+                    avgDataBool={avgDataBool}
+                    setAvgDataBool={setAvgDataBool}
                 />
             </div>
 

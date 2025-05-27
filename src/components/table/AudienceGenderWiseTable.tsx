@@ -17,6 +17,7 @@ interface AudienceGenderWiseTableProps {
   setId: string;
   dataCheckStatus: {};
   setDataCheckStatus: Function;
+  avgDataBool: Boolean;
 }
 
 export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = ({
@@ -26,7 +27,8 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   id,
   setId,
   dataCheckStatus,
-  setDataCheckStatus
+  setDataCheckStatus,
+  avgDataBool
 }: any) => {
 
   const dispatch = useDispatch<any>();
@@ -68,9 +70,12 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   const [genderDataByMarketSite, setGenderDataByMarketSite] = useState<any>({})
 
   useEffect(() => {
-    dispatch(getGenderWiseDataByAudienceTypeMarketSite({ marketSite: marketSite, categoryType: audienceCategory }))
+    dispatch(getGenderWiseDataByAudienceTypeMarketSite({
+      id: id, marketSite: marketSite, categoryType: audienceCategory,
+      avgDataBool: avgDataBool
+    }))
     setLockStatus(dataCheckStatus["Gender Wise Data"][audienceCategory])
-  }, [audienceCategory])
+  }, [audienceCategory , avgDataBool])
 
   useEffect(() => {
     if (genderWiseDataByMarketSiteError) {
@@ -215,7 +220,10 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   }
 
   const resetButtonFunction = () => {
-    dispatch(getGenderWiseDataByAudienceTypeMarketSite({ marketSite: marketSite, categoryType: audienceCategory }))
+    dispatch(getGenderWiseDataByAudienceTypeMarketSite({
+      id: id, marketSite: marketSite, categoryType: audienceCategory,
+      avgDataBool: avgDataBool
+    }))
   }
 
   return (
@@ -650,7 +658,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
             </td>
             <td className="col-span-1 border text-[#FFFFFF] bg-[#000000]">
               <div className="flex items-center justify-center h-full">
-                  <p className="truncate">{genderDataByMarketSite["Male"]?.percent + genderDataByMarketSite["Female"]?.percent}%</p>
+                <p className="truncate">{genderDataByMarketSite["Male"]?.percent + genderDataByMarketSite["Female"]?.percent}%</p>
               </div>
             </td>
             <td className="col-span-10 border text-[#474747] bg-[#F7F7F7]" />

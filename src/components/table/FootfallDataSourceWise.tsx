@@ -13,9 +13,10 @@ interface FootfallDataSourceWiseProps {
     setId: Function;
     dataCheckStatus: {};
     setDataCheckStatus: Function;
+    setToggleVisible: Function;
 }
 
-export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ marketSite, id, setId }) => {
+export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ marketSite, id, setId , setToggleVisible }) => {
 
     const dispatch = useDispatch<any>();
     const navigate = useNavigate();
@@ -69,6 +70,7 @@ export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ 
             setTotalCount(audienceCountByMarketSite?.totalAvgCount)
             if (audienceCountByMarketSite.audienceData != null) {
                 setId(audienceCountByMarketSite.audienceData._id.toString())
+                setToggleVisible(audienceCountByMarketSite.audienceData.certified)
             }
         }
 

@@ -11,9 +11,11 @@ interface ImpactFactorTableProps {
   setId: string;
   dataCheckStatus: any;
   setDataCheckStatus: Function;
+  avgBoolData: Boolean;
 }
 
-export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite, id , setDataCheckStatus , dataCheckStatus }) => {
+export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite, id, setDataCheckStatus,
+  dataCheckStatus, avgBoolData }) => {
 
   const dispatch = useDispatch<any>();
   const getImpactFactorDataByMarketSiteData = useSelector(
@@ -84,7 +86,7 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
   };
 
   useEffect(() => {
-    dispatch(getImpactFactorDataByMarketSite({ marketSite: marketSite }))
+    dispatch(getImpactFactorDataByMarketSite({ marketSite: marketSite, id: id, avgBoolData: avgBoolData }))
   }, [])
 
   useEffect(() => {
@@ -155,7 +157,7 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
   }
 
   const resetButtonFunction = () => {
-    dispatch(getImpactFactorDataByMarketSite({ marketSite: marketSite }))
+    dispatch(getImpactFactorDataByMarketSite({ marketSite: marketSite, id: id, avgBoolData: avgBoolData }))
   }
 
   return (

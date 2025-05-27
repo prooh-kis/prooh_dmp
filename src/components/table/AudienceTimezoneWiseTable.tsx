@@ -18,16 +18,16 @@ interface AudienceTimezoneWiseTableProps {
   setId: string;
   dataCheckStatus: {};
   setDataCheckStatus: Function;
+  avgDataBool: Boolean;
 }
 
 export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps> = ({
   marketSite,
   audienceCategory,
-  audiencePercent,
   id,
-  setId,
   dataCheckStatus,
-  setDataCheckStatus
+  setDataCheckStatus,
+  avgDataBool
 }: any) => {
 
   const dispatch = useDispatch<any>();
@@ -80,12 +80,12 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
 
   useEffect(() => {
     dispatch(getTimezoneWiseDataByAudienceTypeMarketSite({
-      marketSite: marketSite, categoryType: audienceCategory, id: id
+      marketSite: marketSite, categoryType: audienceCategory, id: id, avgDataBool: avgDataBool
     }))
     setLockStatus(dataCheckStatus["Timezone Wise Data"][audienceCategory])
     setGenderType(genderType)
     setData({})
-  }, [audienceCategory, dataCheckStatus])
+  }, [audienceCategory, dataCheckStatus, avgDataBool])
 
   useEffect(() => {
     if (timezoneWiseDataByMarketSiteError) {
@@ -209,7 +209,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
 
   const resetButtonFunction = () => {
     dispatch(getTimezoneWiseDataByAudienceTypeMarketSite({
-      marketSite: marketSite, categoryType: audienceCategory, gender: genderType, id: id
+      marketSite: marketSite, categoryType: audienceCategory, gender: genderType, id: id, avgDataBool: avgDataBool
     }))
   }
 
