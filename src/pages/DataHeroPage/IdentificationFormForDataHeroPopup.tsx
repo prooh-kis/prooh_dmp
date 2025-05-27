@@ -145,6 +145,7 @@ export const IdentificationFormForDataHeroPopup: React.FC<
               label="Profile Picture"
               valuePropName="fileList"
               getValueFromEvent={normFile}
+              className="custom-error-text"
               rules={[
                 {
                   required: true,
@@ -161,15 +162,7 @@ export const IdentificationFormForDataHeroPopup: React.FC<
                 maxCount={1}
                 className="avatar-uploader"
               >
-                {profilePicList.length > 0 ? (
-                  <img
-                    src={URL.createObjectURL(
-                      profilePicList[0].originFileObj as Blob
-                    )}
-                    alt="profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
+                {profilePicList.length === 0 && (
                   <div className="flex flex-col items-center justify-center">
                     <UploadOutlined className="text-2xl text-gray-500" />
                     <span className="mt-2 text-sm text-gray-500">
@@ -185,7 +178,8 @@ export const IdentificationFormForDataHeroPopup: React.FC<
               label="Upload Resume"
               valuePropName="fileList"
               getValueFromEvent={normFile}
-              rules={[{ required: true, message: "Please upload your resume" }]}
+              className="custom-error-text"
+              rules={[{ required: true, message: <span style={{ fontSize: "8px" }}>Please upload your resume</span> }]}
             >
               <Upload
                 listType="picture-card"
@@ -195,11 +189,7 @@ export const IdentificationFormForDataHeroPopup: React.FC<
                 accept=".pdf,.doc,.docx"
                 maxCount={1}
               >
-                {resumeList.length > 0 ? (
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm">{resumeList[0].name}</span>
-                  </div>
-                ) : (
+                {resumeList.length === 0 && (
                   <div className="flex flex-col items-center justify-center">
                     <UploadOutlined className="text-2xl text-gray-500" />
                     <span className="mt-2 text-sm text-gray-500">
