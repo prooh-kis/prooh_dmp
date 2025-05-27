@@ -235,7 +235,6 @@ export const IdentificationFormForDataHeroPopup: React.FC<
             >
               <AutoComplete
                 options={ALL_WHO_AM_I?.map((v: any) => {return {value: v.toUpperCase()}})}
-                onSearch={() => {}}
                 placeholder="e.g., Software Developer"
                 filterOption={(inputValue, option) =>
                   option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
@@ -272,7 +271,6 @@ export const IdentificationFormForDataHeroPopup: React.FC<
             >
               <AutoComplete
                 options={ALL_INDUSTRY?.map((v: any) => {return {value: v.toUpperCase()}})}
-                onSearch={() => {}}
                 placeholder="e.g., Industry"
                 filterOption={(inputValue, option) =>
                   option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
