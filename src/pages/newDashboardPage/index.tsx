@@ -76,7 +76,29 @@ const filterHelperTexts = [{
     header: "Impact Factors",
     icon: "fi-br-arrow-trend-up",
     tooltip: ""
+}];
+
+const impactFactorHelper = [{
+    label: "Government Holidays",
+    value: "govtHolidays",
+},{
+    label: "Long Weekend Holidays",
+    value: "longWeekendHolidays",
+},{
+    label: "Festivals",
+    value: "festivals",
+},{
+    label: "Peak Winters",
+    value: "peakWinters",
+},{
+    label: "Peak Summers",
+    value: "peakSummers",
+},{
+    label: "Summer Holidays School",
+    value: "summerHolidaysSchool",
 }]
+
+
 
 export const Dashboard: React.FC = () => {
     const dispatch = useDispatch<any>();
@@ -195,7 +217,6 @@ export const Dashboard: React.FC = () => {
             setRespondentAudienceGenderData(genderWiseData);
         }
     }, [audienceData]);
-console.log(allValues)
     useEffect(() => {
         if (thirdPartyAudienceCount) {
             setThirdPartyData((thirdPartyAudienceCount.response));
@@ -297,7 +318,7 @@ console.log(allValues)
                         {dataSource === 0 ? (
                             <div className="row-span-1 grid grid-rows-12">
                                 <div className="row-span-6 flex items-center border-b">
-                                    {loadingAudienceData ? (
+                                    {!thirdPartyAudienceCount && loadingThirdPartyAudienceCount ? (
                                         <div className="rounded-[8px] bg-white animate-pulse h-20 p-1">
                                             <div className="bg-gray-200 h-full" />
                                         </div>
@@ -327,7 +348,7 @@ console.log(allValues)
                         ) : dataSource === 1 ? (
                             <div className="row-span-1 grid grid-rows-12">
                                 <div className="row-span-6 flex items-center justify-center border-b">
-                                    {loadingRespondentCount ? (
+                                    {!respondentCount &&loadingRespondentCount ? (
                                         <div className="rounded-[8px] bg-white animate-pulse h-20 p-1">
                                             <div className="bg-gray-200 h-full" />
                                         </div>
@@ -517,9 +538,9 @@ console.log(allValues)
                                                         <div key={i} className="grid grid-cols-6 flex items-center gap-2 pt-1">
                                                             <div className="col-span-2 cursor-pointer">
                                                                     {data === "impactFactorData" ? (
-                                                                        <Tooltip title={key.toUpperCase()}>
+                                                                        <Tooltip title={impactFactorHelper?.find((d: any) => d.value === key)?.label || key.toUpperCase()}>
                                                                             <h1 className="text-[10px] text-[#6F7F8E] truncate">
-                                                                                {key.toUpperCase()}
+                                                                                {impactFactorHelper?.find((d: any) => d.value === key)?.label || key.toUpperCase()} 
                                                                             </h1>
                                                                         </Tooltip>
                                                                     ) : (
@@ -529,7 +550,7 @@ console.log(allValues)
                                                                                 Object.keys(filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data] || []).length === 1 && (data === disabledOption || (filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data]?.includes(key))) ||
                                                                                 Object.keys(filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data] || []).length === 2 && filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data]?.includes("All")
                                                                             }
-                                                                            label={key.toUpperCase()}
+                                                                            label={key}
                                                                             checked={data === disabledOption || (filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data]?.includes(key) || false)}
                                                                             textSize="10px"
                                                                             color="#6F7F8E"

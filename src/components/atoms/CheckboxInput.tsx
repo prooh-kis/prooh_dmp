@@ -28,9 +28,9 @@ export const CheckboxInput: React.FC<CheckboxProps> = ({ disabled, color, textSi
         onChange={handleCheckboxChange}
       />
       <Tooltip title={label}>
-        <span className={`col-span-3 text-[${color ? color : "#21394F"}] text-[${textSize ? textSize : "14px"}] truncate`}>
+        <p className={`col-span-3 text-[${color ? color : "#21394F"}] text-[${textSize ? textSize : "14px"}] capitalize truncate`}>
           {label}
-        </span>
+        </p>
       </Tooltip>
     </label>
   );

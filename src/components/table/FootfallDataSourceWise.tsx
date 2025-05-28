@@ -75,14 +75,14 @@ export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ 
     return (
         <div>
             {/* Footfall Data */}
-            <div className="mb-4 bg-[#ffffff] p-4">
+            <div className="mb-4 bg-[#ffffff] rounded-[8px] shadow-sm p-4">
                 <h3 className="font-bold text-lg mb-2">Footfall Data</h3>
                 <p className="text-sm text-gray-500 mb-4">
                     Approval Shall Be Granted In Hours Post Application And The Research Paper Shall Be Completed In 48
                 </p>
 
                 <div className="grid grid-cols-5 gap-2 flex-wrap">
-                    <DataCard title="As per property management" source="Drmdb" value={audienceCount?.totalDmfdData} icon={"fi fi-rs-apartment"} />
+                    <DataCard title="As per property management" source="DFMD" value={audienceCount?.totalDmfdData} icon={"fi fi-rs-apartment"} />
                     <DataCard title="Camera Data" source="Quividi" value={audienceCount?.totalCameraData} icon={"fi fi-ss-camera-cctv"} />
                     <DataCard title="Google traffic and RTO data" source="Google" value={audienceCount?.totalTrafficData} icon={"fi fi-rs-cars"} />
                     <DataCard title="Roadster Data" source="" value={audienceCount?.totalRoadsterData} icon={"fi fi-ss-road"} />
@@ -90,7 +90,7 @@ export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ 
                 </div>
 
                 <div className="mt-4 text-base">
-                    Total Average Footfall - <span className="font-semibold">{totalCount}</span> Data From Sources
+                    Total Average Footfall - <span className="font-semibold text-[#3A9868]">{totalCount}</span> Data From Sources
                 </div>
             </div>
         </div>

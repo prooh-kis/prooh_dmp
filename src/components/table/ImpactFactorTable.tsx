@@ -161,67 +161,70 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
   }
 
   return (
-    <div className="flex flex-col">
-      <AudienceTableHeader tableHeader={"Impact of Other Factors on Visit"}
-        tableSubHeader={"Approval shall be granted in  hours post application and the research paper shall be completed in 48"}
-        tableType={""} resetButton={() => resetButtonFunction()} lockButton={() => lockButtonFunction()} lockStatus={lockStatus} />
-      <table className="border-collapse w-full text-sm">
-        <thead>
-          <tr className="bg-blue-500 text-white">
-            <th className="border p-2 bg-[#F7F7F7] text-[#6F7F8E]">Gender Type</th>
-            <th className="border p-2 bg-[#F7F7F7] text-[#6F7F8E]">Distribution of Month</th>
-            {Object.values(impactFactorLabels).map((label) => (
-              <th key={label} className="border p-2 text-[#ffffff] bg-[#FF5050]">
-                {label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(impactFactorData).map(([dayType, factors], index) => (
-            <tr key={dayType} className="text-center">
-              {index === 0 && (
-                <td
-                  className="border p-2 font-bold bg-[#F5FFFA] text-[#3A9868]"
-                  rowSpan={Object.keys(impactFactorData).length}
-                >
-                  {"Male & Female"}
-                </td>
-              )}
-              <td className="border-b p-2 font-semibold border-r-[#FF5050]">{capitalizeFirst(dayType)}</td>
-              {Object.keys(impactFactorLabels).map((factorKey) => (
-                <td key={factorKey} className="border border-[#FF5050] p-2 text-[#FF5050]"
-                  onMouseEnter={() =>
-                    setEditableCell({ dayType, factorKey })
-                  }
-                  onClick={() =>
-                    setEditableCell({ dayType, factorKey })
-                  }>
-                  {editableCell?.dayType === dayType &&
-                    editableCell.factorKey === factorKey ? (
-                    <input
-                      type="number"
-                      value={((factors as any)[factorKey])}
-                      onBlur={handleBlur}
-                      onWheel={(e) => e.currentTarget.blur()}
-                      onChange={(e) => handleChange(e, dayType, factorKey)}
-                      className="w-full h-full text-center cursor-pointer focus:outline-none bg-[#F7F7F7]"
-                      aria-label="Edit percentage"
-                      title="Edit percentage"
-                      disabled={lockStatus}
-                      onKeyDown={(e) => handleKeyDown(e, index)}
-                      ref={(el: any) => (inputRefs.current[index] = el)}
-                      autoFocus={index == 0}
-                    />
-                  ) : (
-                    `${(factors as any)[factorKey]}%`
-                  )}
-                </td>
+    <div className="flex flex-col rounded-[8px] shadow-sm bg-white pr-2">
+      <div className="p-4">
+        <AudienceTableHeader tableHeader={"Impact of Other Factors on Visit"}
+          tableSubHeader={"Approval shall be granted in  hours post application and the research paper shall be completed in 48"}
+          tableType={""} resetButton={() => resetButtonFunction()} lockButton={() => lockButtonFunction()} lockStatus={lockStatus} />
+        <table className="border-collapse w-full text-[12px]">
+          <thead>
+            <tr className="bg-blue-500 text-white">
+              <th className="border p-2 bg-[#F7F7F7] text-[#6F7F8E]">Gender Type</th>
+              <th className="border p-2 bg-[#F7F7F7] text-[#6F7F8E]">Distribution of Month</th>
+              {Object.values(impactFactorLabels).map((label) => (
+                <th key={label} className="border p-2 text-[#ffffff] bg-[#FF5050]">
+                  {label}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {Object.entries(impactFactorData).map(([dayType, factors], index) => (
+              <tr key={dayType} className="text-center">
+                {index === 0 && (
+                  <td
+                    className="border p-2 font-bold bg-[#F5FFFA] text-[#3A9868]"
+                    rowSpan={Object.keys(impactFactorData).length}
+                  >
+                    {"Male & Female"}
+                  </td>
+                )}
+                <td className="border-b p-2 font-semibold border-r-[#FF5050]">{capitalizeFirst(dayType)}</td>
+                {Object.keys(impactFactorLabels).map((factorKey) => (
+                  <td key={factorKey} className="border border-[#FF5050] p-2 text-[#FF5050] cursor-pointer"
+                    // onMouseEnter={() =>
+                    //   setEditableCell({ dayType, factorKey })
+                    // }
+                    onClick={() =>
+                      setEditableCell({ dayType, factorKey })
+                    }>
+                    {editableCell?.dayType === dayType &&
+                      editableCell.factorKey === factorKey ? (
+                      <input
+                        type="number"
+                        value={((factors as any)[factorKey])}
+                        onBlur={handleBlur}
+                        onWheel={(e) => e.currentTarget.blur()}
+                        onChange={(e) => handleChange(e, dayType, factorKey)}
+                        className="w-full h-full text-center cursor-pointer focus:outline-none bg-[#F7F7F7]"
+                        aria-label="Edit percentage"
+                        title="Edit percentage"
+                        disabled={lockStatus}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        ref={(el: any) => (inputRefs.current[index] = el)}
+                        autoFocus={index == 0}
+                      />
+                    ) : (
+                      `${(factors as any)[factorKey]}%`
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      
     </div>
   );
 };

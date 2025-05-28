@@ -54,18 +54,23 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, curre
     }
 
     const showTick = checkTickStatus();
-
     return (
         <div
-            className={`flex items-center border px-2 py-1 mr-2 rounded-t-lg cursor-pointer ${!isActive ? 'bg-white border-b-white' : 'bg-gray-100'}`}
+            className={`flex gap-4 items-center p-2 cursor-pointer ${label === "Footfall Data" && isActive ? "border-b-2 border-black font-bold" : index < currentIndex && !showTick ? "border-b-2 border-gray-200" : showTick ? "border-b-2 border-[#129BFF50]" : !isActive ? 'border-b-2 border-red-100 font-normal' : 'border-b-2 border-red-500 text-red-500 font-bold'}`}
             onClick={onClick}
         >
-            <span className="mr-2 text-sm font-medium">{label}</span>
-            {label !== "Footfall Data" && <div>
-                {showTick ?
-                    <span className="text-green-600 text-sm">✔</span>
-                    : <span className="text-red-500 text-sm">✕</span>}
-            </div>}
+            <span className="text-sm">{label}</span>
+            <div className="flex items-center">
+                {/* {label == "Footfall Data" || showTick ?
+                    <span className={`${label == "Footfall Data" ? "text-gray-500": "text-[#129BFF]"} text-sm font-bold`}>✔</span>
+                    : <span className="text-red-500 text-sm font-black">✕</span>} */}
+                {label == "Footfall Data" || showTick ?
+                    <i className={`fi fi-br-check ${label == "Footfall Data" ? "text-gray-500": "text-[#129BFF]"} flex items-center text-[12px] font-bold`}></i>
+                    : <i className={`fi fi-br-cross-small text-red-500 flex items-center text-[16px] font-bold`}></i>
+                }
+
+
+            </div>
         </div>
     );
 };

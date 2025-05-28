@@ -18,8 +18,8 @@ export const GenderSelector: React.FC<GenderSelectorProps> = ({
                         className={`relative flex items-center px-3 py-2 border ${(genderType === gender) ? 'bg-green-600 text-white border-blue-500' : 'bg-white text-gray-700 border-gray-200'}
                         ${index === 0 ? 'rounded-l-md' : 'rounded-r-md'} cursor-pointer transition`}
                         onClick={() => genderTabClick(gender)}>
-                        <span className="font-medium">{gender}</span>
-                        <span className="ml-2 text-sm">{(percent as number).toFixed(0)}%</span>
+                        <span className="font-medium text-[14px]">{gender}</span>
+                        <span className="ml-2 text-[12px]">{(percent as number).toFixed(0)}%</span>
                     </div>
                 );
             })}

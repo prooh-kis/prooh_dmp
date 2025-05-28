@@ -1,8 +1,7 @@
 import { AudienceTableHeader } from "../../components/layouts/AudienceTableHeader";
 import { addGenderWiseDataByAudienceType, getGenderWiseDataByAudienceTypeMarketSite } from "../../actions/audienceAction";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_RESET,
   GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_RESET
@@ -227,93 +226,109 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   }
 
   return (
-    <div className="flex flex-col bg-[#ffffff] p-4">
+    <div className="flex flex-col p-4">
       <AudienceTableHeader tableHeader={"Gender Wise Data"}
         tableSubHeader={"(" + audienceCategory + ")"} tableType={"horizontal"} resetButton={() => resetButtonFunction()}
         lockButton={() => lockButtonFunction()} lockStatus={lockStatus} />
-      <table className="border-collapse w-full text-[14px] font-medium border border-[#E7E7E7]">
-        <thead>
+      <table className="border-collapse w-full text-[12px] font-medium">
+        <thead className="border">
           <tr className="grid grid-cols-12">
-            <th className="col-span-1 border p-4 text-[#474747] bg-[#F7F7F7]">
-              <div className="flex items-center justify-center h-full">
+            <th className="col-span-1 text-[#474747] bg-[#F7F7F7]">
+              <div className="p-2 flex items-center justify-center h-full">
                 <Tooltip title="Gender">
                   <p >Gender</p>
                 </Tooltip>
               </div>
             </th>
-            <th className="col-span-1 border text-[#ffffff] bg-[#FF5050]">
-              <div className="flex items-center justify-center h-full">
-                <Tooltip title="Gender Wise Audience Percentage">
-                  <p>%</p>
-                </Tooltip>
+            <th className="col-span-1 text-[#ffffff] bg-[#FF5050]">
+              <div className="grid grid-cols-5 h-full">
+                <div className="col-span-1"/>
+                <div className="col-span-3 flex items-center justify-center">
+                  <Tooltip title="Gender Wise Audience Percentage">
+                    <p>%</p>
+                  </Tooltip>
+                </div>
+                <div className="col-span-1 flex justify-center items-enter pr-2">
+                  <i className="fi fi-sr-pencil text-[10px] flex items-center"></i>
+                </div>
               </div>
             </th>
-            <th className="col-span-2 border text-[#474747] bg-[#F7F7F7]">
-              <div className="flex items-center justify-center h-full">
+            <th className="col-span-2 text-[#474747] bg-[#F7F7F7]">
+              <div className="p-2 flex items-center justify-center h-full">
                 <Tooltip title="Gender Wise Audience Monthly Count">
                   <p className="truncate">Monthly Count</p>
                 </Tooltip>
               </div>
             </th>
-            <th className="col-span-2 border text-[#474747] bg-[#F7F7F7]">
-              <div className="flex items-center justify-center h-full">
+            <th className="col-span-2 border-x text-[#474747] bg-[#F7F7F7]">
+              <div className="p-2 flex items-center justify-center h-full">
                 <Tooltip title="Monthly Distribution">
                   <p className="truncate">Monthly Distribution</p>
                 </Tooltip>
               </div>
             </th>
-            <th className="col-span-1 border text-[#474747] bg-[#F7F7F7]">
-              <div className="flex items-center justify-center h-full">
+            <th className="col-span-1 text-[#474747] bg-[#F7F7F7]">
+              <div className="p-2 flex items-center justify-center h-full">
                 <Tooltip title="Total Days">
                   <p className="truncate">Total Days</p>
                 </Tooltip>
               </div>
             </th>
-            <th className="col-span-1 border text-[#ffffff] bg-[#FF5050]">
-              <div className="flex items-center justify-center h-full">
-                <Tooltip title="Monthly (%)">
-                  <p className="truncate">Monthly (%)</p>
-                </Tooltip>
+            <th className="col-span-1 text-[#ffffff] bg-[#FF5050]">
+              <div className="grid grid-cols-5 h-full">
+                <div className="col-span-4 flex items-center justify-center pl-2">
+                  <Tooltip title="Monthly (%)">
+                    <p className="truncate">Monthly (%)</p>
+                  </Tooltip>
+                </div>
+                <div className="col-span-1 flex justify-center items-enter pr-2">
+                  <i className="fi fi-sr-pencil text-[10px] flex items-center"></i>
+                </div>
               </div>
             </th>
-            <th className="col-span-1 border text-[#474747] bg-[#F7F7F7]">
-              <div className="flex items-center justify-center h-full">
+            <th className="col-span-1 border-r text-[#474747] bg-[#F7F7F7]">
+              <div className="p-2 flex items-center justify-center h-full">
                 <Tooltip title="Daily (%)">
                   <p className="truncate">Daily (%)</p>
                 </Tooltip>
               </div>
             </th>
-            <th className="col-span-1 border text-[#474747] bg-[#F7F7F7]">
-              <div className="flex items-center justify-center h-full">
+            <th className="col-span-1 text-[#474747] bg-[#F7F7F7]">
+              <div className="p-2 flex items-center justify-center h-full">
                 <Tooltip title="Daily Count">
                   <p className="truncate">Daily Count</p>
                 </Tooltip>
               </div>
             </th>
-            <th className="col-span-2 border text-[#ffffff] bg-[#FF5050]">
-              <div className="flex items-center justify-center h-full">
-                <Tooltip title="Unique Impression/Month">
-                  <p className="truncate">Unique Impression/Month</p>
-                </Tooltip>
+            <th className="col-span-2 text-[#ffffff] bg-[#FF5050]">
+              <div className="grid grid-cols-6 h-full">
+                <div className="col-span-5 flex items-center justify-center pl-2">
+                  <Tooltip title="Unique Impression/Month">
+                    <p className="truncate">Unique Impression/Month</p>
+                  </Tooltip>
+                </div>
+                <div className="col-span-1 flex justify-center items-enter pr-2">
+                  <i className="fi fi-sr-pencil text-[10px] flex items-center"></i>
+                </div>
               </div>
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="">
           {Object.entries(genderDataByMarketSite)?.filter(([gender]) => gender === 'Male')?.map(([gender, genderData]: [any, any], i: any) => (
-            <tr key={0} className="grid grid-cols-12 font-[14px]">
-              <td className="col-span-1 border flex flex-col justify-center items-between">
+            <tr key={0} className="grid grid-cols-12 text-[12px]">
+              <td className="col-span-1 border-l flex flex-col justify-center items-between">
                 <div className="h-full flex justify-center items-center text-[#129BFF] bg-[#EFF8FF]">
                   <h1 className="font-bold">
                     {gender}
                   </h1>
                 </div>
               </td>
-              <td className="col-span-1 border border-[#FF5050] flex flex-col justify-center items-between">
+              <td className="col-span-1 border-x border-red-500 flex flex-col justify-center items-between">
                 <div
-                  onMouseEnter={() => {
-                    setEditableCell({ index: 0, column: "percentage" })
-                  }}
+                  // onMouseEnter={() => {
+                  //   setEditableCell({ index: 0, column: "percentage" })
+                  // }}
                   onClick={() =>
                     setEditableCell({ index: 0, column: "percentage" })
                   }
@@ -339,21 +354,21 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                   )}
                 </div>
               </td>
-              <td className="col-span-2 border flex flex-col justify-center items-between">
+              <td className="col-span-2 flex flex-col justify-center items-between">
                 <div className="flex justify-center items-center">
                   {
                     Number(genderData?.count).toFixed(decimal) ?? 0
                   }
                 </div>
               </td>
-              <td className="col-span-2 border">
+              <td className="col-span-2 border-x">
                 {Object.keys(genderData?.dayWiseData)?.map((m: any, i: any) => (
                   <div className={`${i + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={i}>
                     {capitalizeFirst(m)}
                   </div>
                 ))}
               </td>
-              <td className="col-span-1 border">
+              <td className="col-span-1   ">
                 {Object.values(genderData?.dayWiseData)?.map((m: any, j: any) => (
                   <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
                     {m?.days}
@@ -361,16 +376,16 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                 ))}
               </td>
 
-              <td className="col-span-1 border border-[#FF5050]">
+              <td className="col-span-1 border-x border-red-500">
                 {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
                   <div
-                    onMouseEnter={() => {
-                      setEditableCell1({ gender: gender, index: j, column: "percentage" })
-                    }}
+                    // onMouseEnter={() => {
+                    //   setEditableCell1({ gender: gender, index: j, column: "percentage" })
+                    // }}
                     onClick={() =>
-                      setEditableCell({ index: j, column: "percentage" })
+                      setEditableCell1({ gender: gender, index: j, column: "percentage" })
                     }
-                    className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`} key={j}
+                    className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-red-500 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`} key={j}
                   >
                     {editableCell1?.index === j &&
                       editableCell1?.gender === gender &&
@@ -394,7 +409,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                   </div>
                 ))}
               </td>
-              <td className="col-span-1 border">
+              <td className="col-span-1 border-r">
                 {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
                   <div key={j} className="col-span-1">
                     <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
@@ -404,11 +419,9 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                 ))}
               </td>
 
-              <td className="col-span-1 border">
+              <td className="col-span-1">
                 {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
-                  <div key={j} className="col-span-1"
-                    onClick={() => { }}
-                  >
+                  <div key={j} className="col-span-1">
                     <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
                       {Number(dayWiseData?.count).toFixed(decimal) || 0}
                     </div>
@@ -416,18 +429,18 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                 ))}
               </td>
 
-              <td className="col-span-2 border border-[#FF5050]">
+              <td className="col-span-2 border-x border-red-500">
                 {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
                   <div key={j} className="col-span-1">
                     <div
-                      onMouseEnter={() => {
+                      // onMouseEnter={() => {
+                      //   setEditableCell2({ gender: gender, index: j, column: "unique" })
+                      // }}
+                      onClick={() => {
                         setEditableCell2({ gender: gender, index: j, column: "unique" })
                       }}
-                      onClick={() =>
-                        setEditableCell({ index: j, column: "percentage" })
-                      }
                       // onMouseLeave={handleBlur}
-                      className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`}
+                      className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-red-500 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`}
                       key={j}
                     >
                       {editableCell2?.index === j &&
@@ -457,37 +470,37 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
             </tr>
           ))}
 
-          <tr className="grid grid-cols-12 pb-4">
-            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+          <tr className="grid grid-cols-12 mb-4 border">
+            <td className="col-span-1 text-[#474747] bg-[#F7F7F7] p-2">
               <div className="flex items-center justify-center h-full">
                 <Tooltip title="Monthly Distribution Total Percent">
                   <p className="truncate">Total</p>
                 </Tooltip>
               </div>
             </td>
-            <td className="col-span-6 border text-[#474747] bg-[#F7F7F7]" />
-            <td className="col-span-1 border text-[#FFFFFF] bg-[#000000]">
+            <td className="col-span-6 text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-1 text-[#FFFFFF] bg-[#000000]">
               <div className="flex items-center justify-center h-full">
                 <p className="truncate">{getTotalMonthlyDistributionPercent("Male")}%</p>
               </div>
             </td>
-            <td className="col-span-4 border text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-4 text-[#474747] bg-[#F7F7F7]" />
           </tr>
 
           {Object.entries(genderDataByMarketSite)?.filter(([gender]) => gender === 'Female')?.map(([gender, genderData]: [any, any], i: any) => (
-            <tr key={1} className="grid grid-cols-12 font-[14px]">
-              <td className="col-span-1 border flex flex-col justify-center items-between">
+            <tr key={1} className="grid grid-cols-12 text-[12px]">
+              <td className="col-span-1 border-l border-t flex flex-col justify-center items-between">
                 <div className="h-full flex justify-center items-center text-[#61326D] bg-[#FDF5FF]">
                   <h1 className="font-bold">
                     {gender}
                   </h1>
                 </div>
               </td>
-              <td className="col-span-1 border border-[#FF5050] flex flex-col justify-center items-between">
+              <td className="col-span-1 border-x border-t border-[#FF5050] flex flex-col justify-center items-between">
                 <div
-                  onMouseEnter={() => {
-                    setEditableCell({ index: 1, column: "percentage" })
-                  }}
+                  // onMouseEnter={() => {
+                  //   setEditableCell({ index: 1, column: "percentage" })
+                  // }}
                   onClick={() =>
                     setEditableCell({ index: 1, column: "percentage" })
                   }
@@ -513,21 +526,21 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                   )}
                 </div>
               </td>
-              <td className="col-span-2 border flex flex-col justify-center items-between">
+              <td className="col-span-2 border-t flex flex-col justify-center items-between">
                 <div className="flex justify-center items-center">
                   {
                     Number(genderData?.count).toFixed(decimal) ?? 0
                   }
                 </div>
               </td>
-              <td className="col-span-2 border">
+              <td className="col-span-2 border-x border-t">
                 {Object.keys(genderData?.dayWiseData)?.map((m: any, i: any) => (
                   <div className={`${i + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={i}>
                     {capitalizeFirst(m)}
                   </div>
                 ))}
               </td>
-              <td className="col-span-1 border">
+              <td className="col-span-1 border-t">
                 {Object.values(genderData?.dayWiseData)?.map((m: any, j: any) => (
                   <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
                     {m?.days}
@@ -535,16 +548,16 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                 ))}
               </td>
 
-              <td className="col-span-1 border border-[#FF5050]">
+              <td className="col-span-1 border-x border-t border-[#FF5050]">
                 {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
                   <div
-                    onMouseEnter={() => {
-                      setEditableCell1({ gender: gender, index: j, column: "percentage" })
-                    }}
+                    // onMouseEnter={() => {
+                    //   setEditableCell1({ gender: gender, index: j, column: "percentage" })
+                    // }}
                     onClick={() =>
-                      setEditableCell({ index: j, column: "percentage" })
+                      setEditableCell1({ gender: gender, index: j, column: "percentage" })
                     }
-                    className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`} key={j}
+                    className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-red-500 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`} key={j}
                   >
                     {editableCell1?.index === j &&
                       editableCell1?.gender === gender &&
@@ -568,7 +581,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                   </div>
                 ))}
               </td>
-              <td className="col-span-1 border">
+              <td className="col-span-1 border-r border-t">
                 {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
                   <div key={j} className="col-span-1">
                     <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
@@ -578,11 +591,9 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                 ))}
               </td>
 
-              <td className="col-span-1 border">
+              <td className="col-span-1 border-t">
                 {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
-                  <div key={j} className="col-span-1"
-                    onClick={() => { }}
-                  >
+                  <div key={j} className="col-span-1">
                     <div className={`${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b"} p-2 flex justify-center items-center`} key={j}>
                       {Number(dayWiseData?.count).toFixed(decimal) || 0}
                     </div>
@@ -590,18 +601,18 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                 ))}
               </td>
 
-              <td className="col-span-2 border border-[#FF5050]">
+              <td className="col-span-2 border-x border-t border-red-500">
                 {Object.entries(genderData?.dayWiseData)?.map(([day, dayWiseData]: any, j: any) => (
                   <div key={j} className="col-span-1">
                     <div
-                      onMouseEnter={() => {
+                      // onMouseEnter={() => {
+                      //   setEditableCell2({ gender: gender, index: j, column: "unique" })
+                      // }}
+                      onClick={() => {
                         setEditableCell2({ gender: gender, index: j, column: "unique" })
                       }}
-                      onClick={() =>
-                        setEditableCell({ index: j, column: "percentage" })
-                      }
                       // onMouseLeave={handleBlur}
-                      className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`}
+                      className={`col-span-1 ${j + 1 === Object.keys(genderData?.dayWiseData)?.length ? "" : "border-b border-[#FF5050]"} border-red-500 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center`}
                       key={j}
                     >
                       {editableCell2?.index === j &&
@@ -631,37 +642,37 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
             </tr>
           ))}
 
-          <tr className="grid grid-cols-12 pb-4">
-            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+          <tr className="grid grid-cols-12 mb-4 border">
+            <td className="col-span-1 text-[#474747] bg-[#F7F7F7] p-2">
               <div className="flex items-center justify-center h-full">
                 <Tooltip title="Monthly Distribution Total Percent">
                   <p className="truncate">Total</p>
                 </Tooltip>
               </div>
             </td>
-            <td className="col-span-6 border text-[#474747] bg-[#F7F7F7]" />
-            <td className="col-span-1 border text-[#FFFFFF] bg-[#000000]">
+            <td className="col-span-6 text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-1 text-[#FFFFFF] bg-[#000000]">
               <div className="flex items-center justify-center h-full">
                 <p className="truncate">{getTotalMonthlyDistributionPercent("Female")}%</p>
               </div>
             </td>
-            <td className="col-span-4 border text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-4 text-[#474747] bg-[#F7F7F7]" />
           </tr>
 
-          <tr className="grid grid-cols-12">
-            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+          <tr className="grid grid-cols-12 border">
+            <td className="col-span-1 text-[#474747] bg-[#F7F7F7] p-2">
               <div className="flex items-center justify-center h-full">
                 <Tooltip title="Gender Distribution Total Percent">
                   <p className="truncate">Total</p>
                 </Tooltip>
               </div>
             </td>
-            <td className="col-span-1 border text-[#FFFFFF] bg-[#000000]">
+            <td className="col-span-1 text-[#FFFFFF] bg-[#000000]">
               <div className="flex items-center justify-center h-full">
                 <p className="truncate">{genderDataByMarketSite["Male"]?.percent + genderDataByMarketSite["Female"]?.percent}%</p>
               </div>
             </td>
-            <td className="col-span-10 border text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-10 text-[#474747] bg-[#F7F7F7]" />
           </tr>
 
         </tbody>

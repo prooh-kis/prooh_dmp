@@ -222,75 +222,135 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
     str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
   return (
-    <div className='flex flex-col bg-[#ffffff] p-4'>
+    <div className='flex flex-col p-4'>
       <AudienceTableHeader tableHeader={"Timezone Wise Data"} tableSubHeader={"(" + audienceCategory + ")"} tableType={"horizontal"}
         resetButton={() => resetButtonFunction()} lockButton={() => lockButtonFunction()} lockStatus={lockStatus} />
       <GenderSelector genderData={genders} genderType={genderType} genderTabClick={genderTabClick} />
-      <table className="border-collapse w-full text-[14px]">
+      <table className="border-collapse w-full text-[12px]">
         <thead>
           <tr className="grid grid-cols-12 text-[#474747] bg-[#F9F9F9] border border-[#E7E7E7]">
-            <th className="col-span-1 border border-slate-300 py-2 flex items-center justify-center">
-              Monthly Distribution
+            <th className="col-span-1 py-2">
+              <div className="p-2 flex items-center justify-center h-full">
+                <Tooltip title="Monthly Distribution">
+                  <p className="truncate">
+                    Monthly Distribution
+                  </p>
+                </Tooltip>
+              </div>
             </th>
-            <th className="col-span-1  border border-slate-300 py-2 flex items-center justify-center">
-              Audience Weighage / Day
+            <th className="col-span-1 py-2">
+              <div className="p-2 flex items-center justify-center h-full">
+                <Tooltip title="Audience Weighage / Day">
+                  <p className="truncate">
+                    Audience Weighage / Day
+                  </p>
+                </Tooltip>
+              </div>
             </th>
-            <th className="col-span-1  border border-slate-300 py-2 flex items-center justify-center">
-              Audience count / Day
+            <th className="col-span-1 py-2">
+              <div className="p-2 flex items-center justify-center h-full">
+                <Tooltip title="Audience count / Day">
+                  <p className="truncate">
+                    Audience count / Day
+                  </p>
+                </Tooltip>
+              </div>
             </th>
-            <th className="col-span-2 border border-slate-300 py-2 flex items-center justify-center">Time Zones</th>
-            <th className="col-span-2 border border-slate-300 py-2 text-[#ffffff] bg-[#FF5050] flex items-center justify-center" onClick={() => {
+            <th className="col-span-2 py-2">
+            <div className="p-2 flex items-center justify-center h-full">
+                <Tooltip title="Time Zones">
+                  <p className="truncate">
+                    Time Zones
+                  </p>
+                </Tooltip>
+              </div>
+            </th>
+            <th className="col-span-2 py-2 text-[#ffffff] bg-[#FF5050]" onClick={() => {
               if (decimal == 1) {
                 setDecimal(0)
               } else {
                 setDecimal(1)
               }
-            }}>% share of visits</th>
-            <th className="col-span-1 border border-slate-300 py-2 flex items-center justify-center">Audience %</th>
-            <th className="col-span-2 border border-slate-300 py-2 flex items-center justify-center">
-              Audience Count / Timezone
+            }}>
+              <div className="grid grid-cols-5 h-full">
+                <div className="col-span-4 flex items-center justify-center pl-2">
+                  <Tooltip title="% share of visits">
+                    <p className="truncate">
+                      % share of visits
+                    </p>
+                  </Tooltip>
+                </div>
+                <div className="col-span-1 flex justify-center items-enter pr-2">
+                  <i className="fi fi-sr-pencil text-[10px] flex items-center"></i>
+                </div>
+              </div>
+              
             </th>
-            <th className="col-span-2 border border-slate-300 py-2 flex items-center justify-center">
-              Unique Audience Count / Timezone
+            <th className="col-span-1 py-2">
+              <div className="p-2 flex items-center justify-center h-full">
+                <Tooltip title="Audience %">
+                  <p className="truncate">
+                    Audience %
+                  </p>
+                </Tooltip>
+              </div>
+            </th>
+            <th className="col-span-2 py-2">
+            <div className="p-2 flex items-center justify-center h-full">
+                <Tooltip title="Audience Count / Timezone">
+                  <p className="truncate">
+                    Audience Count / Timezone
+                  </p>
+                </Tooltip>
+              </div>
+            </th>
+            <th className="col-span-2 py-2">
+            <div className="p-2 flex items-center justify-center h-full">
+                <Tooltip title="Unique Audience Count / Timezone">
+                  <p className="truncate">
+                    Unique Audience Count / Timezone
+                  </p>
+                </Tooltip>
+              </div>
             </th>
           </tr>
         </thead>
-        <tbody className="w-full border border-1">
+        <tbody className="w-full">
+
           {Object.entries(timezoneDataByMarketSite?.[genderType] || {})?.filter(([dayType]) => dayType === 'weekdays')?.map(([dayType, dayTypeData]: [any, any], i: any) => (
             <tr key={0} className='grid grid-cols-12'>
-              <td className="col-span-1 border h-full font-semibold">
+              <td className="col-span-1 border-x h-full font-semibold">
                 <div className="h-full flex justify-center items-center">
                   <h1 className="">
                     {capitalizeFirst(dayType)}
                   </h1>
                 </div>
               </td>
-              <td className="col-span-1 border h-full">
+              <td className="col-span-1 h-full">
                 <div className={`h-[20vh] p-1 flex justify-center items-center`}>
                   {dayTypeData?.percent.toFixed(2)} %
                 </div>
               </td>
-              <td className="col-span-1 border h-full">
+              <td className="col-span-1 border-x h-full">
                 <div className={`h-[20vh] p-1 flex justify-center items-center`}>
                   {dayTypeData?.count.toFixed(2)}
                 </div>
               </td>
-              <td className="col-span-2 border h-full">
+              <td className="col-span-2 h-full">
                 {Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((timezoneKey: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
                     <h1>{capitalizeFirst(timezoneKey)}</h1>
                   </div>
                 ))}
               </td>
-              <td className="col-span-2 border border-[#FF5050]">
+              <td className="col-span-2 border-x border-red-500">
                 {Object.entries(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map(([timezone, m]: any, k: any) => (
                   <div key={k}
-                    onMouseEnter={() => {
+                    onClick={() => {
                       setEditableCell({ gender: "gender", day: dayType, index: k, column: "percentage" })
-                    }
-                    }
-                    onMouseLeave={handleBlur}
-                    className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center w-full font-semibold`}
+                    }}
+                    // onMouseLeave={handleBlur}
+                    className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b border-[#FF5050]"} border-red-500 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center w-full font-semibold`}
                   >
                     {editableCell?.index === k &&
                       editableCell?.gender === "gender" &&
@@ -316,21 +376,21 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
                   </div>
                 ))}
               </td>
-              <td className="col-span-1 border">
+              <td className="col-span-1">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((m: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-1 flex justify-center items-center w-full`}>
                     <h1>{m?.audiencePercent?.toFixed(2)} %</h1>
                   </div>
                 ))}
               </td>
-              <td className="col-span-2 border">
+              <td className="col-span-2 border-x">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
                     <h1>{n?.count?.toFixed(decimal)}</h1>
                   </div>
                 ))}
               </td>
-              <td className="col-span-2 border">
+              <td className="col-span-2 border-r">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
                     <h1>{n?.unique?.toFixed(2)}</h1>
@@ -340,58 +400,57 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
             </tr>
           ))}
 
-          <tr className="grid grid-cols-12 pb-4">
-            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+          <tr className="grid grid-cols-12 mb-4 border">
+            <td className="col-span-1 text-[#474747] bg-[#F7F7F7] p-2">
               <div className="flex items-center justify-center h-full">
                 <Tooltip title="Monthly Distribution Total Percent">
                   <p className="truncate">Total</p>
                 </Tooltip>
               </div>
             </td>
-            <td className="col-span-4 border text-[#474747] bg-[#F7F7F7]" />
-            <td className="col-span-2 border text-[#FFFFFF] bg-[#000000]">
+            <td className="col-span-4 text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-2 text-[#FFFFFF] bg-[#000000]">
               <div className="flex items-center justify-center h-full">
                 <p className="truncate">{getTotalTimezoneDistributionPercent("weekdays")}%</p>
               </div>
             </td>
-            <td className="col-span-5 border text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-5 text-[#474747] bg-[#F7F7F7]" />
           </tr>
 
           {Object.entries(timezoneDataByMarketSite?.[genderType] || {})?.filter(([dayType]) => dayType === 'saturdays')?.map(([dayType, dayTypeData]: [any, any], i: any) => (
-            <tr key={1} className='grid grid-cols-12'>
-              <td className="col-span-1 border h-full font-semibold">
+            <tr key={1} className='grid grid-cols-12 border-t'>
+              <td className="col-span-1 border-x h-full font-semibold">
                 <div className="h-full flex justify-center items-center">
                   <h1 className="">
                     {capitalizeFirst(dayType)}
                   </h1>
                 </div>
               </td>
-              <td className="col-span-1 border h-full">
+              <td className="col-span-1 h-full">
                 <div className={`h-[20vh] p-1 flex justify-center items-center`}>
                   {dayTypeData?.percent.toFixed(2)} %
                 </div>
               </td>
-              <td className="col-span-1 border h-full">
+              <td className="col-span-1 border-x h-full">
                 <div className={`h-[20vh] p-1 flex justify-center items-center`}>
                   {dayTypeData?.count.toFixed(2)}
                 </div>
               </td>
-              <td className="col-span-2 border h-full">
+              <td className="col-span-2 h-full">
                 {Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((timezoneKey: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
                     <h1>{capitalizeFirst(timezoneKey)}</h1>
                   </div>
                 ))}
               </td>
-              <td className="col-span-2 border border-[#FF5050]">
+              <td className="col-span-2 border-x border-t border-red-500">
                 {Object.entries(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map(([timezone, m]: any, k: any) => (
                   <div key={k}
-                    onMouseEnter={() => {
+                    onClick={() => {
                       setEditableCell({ gender: "gender", day: dayType, index: k, column: "percentage" })
-                    }
-                    }
-                    onMouseLeave={handleBlur}
-                    className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center w-full font-semibold`}
+                    }}
+                    // onMouseLeave={handleBlur}
+                    className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b border-[#FF5050]"} border-red-500 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center w-full font-semibold`}
                   >
                     {editableCell?.index === k &&
                       editableCell?.gender === "gender" &&
@@ -417,21 +476,21 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
                   </div>
                 ))}
               </td>
-              <td className="col-span-1 border">
+              <td className="col-span-1">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((m: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-1 flex justify-center items-center w-full`}>
                     <h1>{m?.audiencePercent?.toFixed(2)} %</h1>
                   </div>
                 ))}
               </td>
-              <td className="col-span-2 border">
+              <td className="col-span-2 border-x">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
                     <h1>{n?.count?.toFixed(decimal)}</h1>
                   </div>
                 ))}
               </td>
-              <td className="col-span-2 border">
+              <td className="col-span-2 border-r">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
                     <h1>{n?.unique?.toFixed(2)}</h1>
@@ -441,58 +500,57 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
             </tr>
           ))}
 
-          <tr className="grid grid-cols-12 pb-4">
-            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+          <tr className="grid grid-cols-12 mb-4 border">
+            <td className="col-span-1 text-[#474747] bg-[#F7F7F7] p-2">
               <div className="flex items-center justify-center h-full">
                 <Tooltip title="Monthly Distribution Total Percent">
                   <p className="truncate">Total</p>
                 </Tooltip>
               </div>
             </td>
-            <td className="col-span-4 border text-[#474747] bg-[#F7F7F7]" />
-            <td className="col-span-2 border text-[#FFFFFF] bg-[#000000]">
+            <td className="col-span-4 text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-2 text-[#FFFFFF] bg-[#000000]">
               <div className="flex items-center justify-center h-full">
                 <p className="truncate">{getTotalTimezoneDistributionPercent("saturdays")}%</p>
               </div>
             </td>
-            <td className="col-span-5 border text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-5 text-[#474747] bg-[#F7F7F7]" />
           </tr>
 
           {Object.entries(timezoneDataByMarketSite?.[genderType] || {})?.filter(([dayType]) => dayType === 'sundays')?.map(([dayType, dayTypeData]: [any, any], i: any) => (
-            <tr key={2} className='grid grid-cols-12'>
-              <td className="col-span-1 border h-full font-semibold">
+            <tr key={2} className='grid grid-cols-12 border-t'>
+              <td className="col-span-1 border-x h-full font-semibold">
                 <div className="h-full flex justify-center items-center">
                   <h1 className="">
                     {capitalizeFirst(dayType)}
                   </h1>
                 </div>
               </td>
-              <td className="col-span-1 border h-full">
+              <td className="col-span-1 h-full">
                 <div className={`h-[20vh] p-1 flex justify-center items-center`}>
                   {dayTypeData?.percent.toFixed(2)} %
                 </div>
               </td>
-              <td className="col-span-1 border h-full">
+              <td className="col-span-1 border-x h-full">
                 <div className={`h-[20vh] p-1 flex justify-center items-center`}>
                   {dayTypeData?.count.toFixed(2)}
                 </div>
               </td>
-              <td className="col-span-2 border h-full">
+              <td className="col-span-2 h-full">
                 {Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((timezoneKey: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
                     <h1>{capitalizeFirst(timezoneKey)}</h1>
                   </div>
                 ))}
               </td>
-              <td className="col-span-2 border border-[#FF5050]">
+              <td className="col-span-2 border-x border-t border-red-500">
                 {Object.entries(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map(([timezone, m]: any, k: any) => (
                   <div key={k}
-                    onMouseEnter={() => {
+                    onClick={() => {
                       setEditableCell({ gender: "gender", day: dayType, index: k, column: "percentage" })
-                    }
-                    }
-                    onMouseLeave={handleBlur}
-                    className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b border-[#FF5050]"} border-slate-300 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center w-full font-semibold`}
+                    }}
+                    // onMouseLeave={handleBlur}
+                    className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b border-[#FF5050]"} border-red-500 text-[#FF5050] cursor-pointer text-center p-2 flex justify-center items-center w-full font-semibold`}
                   >
                     {editableCell?.index === k &&
                       editableCell?.gender === "gender" &&
@@ -518,21 +576,21 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
                   </div>
                 ))}
               </td>
-              <td className="col-span-1 border">
+              <td className="col-span-1">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((m: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-1 flex justify-center items-center w-full`}>
                     <h1>{m?.audiencePercent?.toFixed(2)} %</h1>
                   </div>
                 ))}
               </td>
-              <td className="col-span-2 border">
+              <td className="col-span-2 border-x">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
                     <h1>{n?.count?.toFixed(decimal)}</h1>
                   </div>
                 ))}
               </td>
-              <td className="col-span-2 border">
+              <td className="col-span-2 border-r">
                 {Object.values(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.map((n: any, k: any) => (
                   <div key={k} className={`h-[5vh] ${k + 1 === Object.keys(dayTypeData?.timezoneWiseData)?.filter((l: any) => l !== "_id")?.length ? "" : "border-b"} p-2 flex justify-center items-center w-full`}>
                     <h1>{n?.unique?.toFixed(2)}</h1>
@@ -542,21 +600,21 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
             </tr>
           ))}
 
-          <tr className="grid grid-cols-12 pb-4">
-            <td className="col-span-1 border text-[#474747] bg-[#F7F7F7] p-2">
+          <tr className="grid grid-cols-12 mb-4 border">
+            <td className="col-span-1 text-[#474747] bg-[#F7F7F7] p-2">
               <div className="flex items-center justify-center h-full">
                 <Tooltip title="Monthly Distribution Total Percent">
                   <p className="truncate">Total</p>
                 </Tooltip>
               </div>
             </td>
-            <td className="col-span-4 border text-[#474747] bg-[#F7F7F7]" />
-            <td className="col-span-2 border text-[#FFFFFF] bg-[#000000]">
+            <td className="col-span-4 text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-2 text-[#FFFFFF] bg-[#000000]">
               <div className="flex items-center justify-center h-full">
                 <p className="truncate">{getTotalTimezoneDistributionPercent("sundays")}%</p>
               </div>
             </td>
-            <td className="col-span-5 border text-[#474747] bg-[#F7F7F7]" />
+            <td className="col-span-5 text-[#474747] bg-[#F7F7F7]" />
           </tr>
         </tbody>
       </table>
