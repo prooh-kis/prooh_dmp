@@ -254,15 +254,6 @@ export const IdentificationFormForDataHeroPopup: React.FC<
             </Form.Item>
 
             <Form.Item
-              name="experience"
-              label="Experience (in years)"
-              rules={[
-                { required: true, message: "Please input your experience" },
-              ]}
-            >
-              <InputNumber min={0} max={50} className="w-full" />
-            </Form.Item>
-            <Form.Item
               name="industry"
               label="Industry"
               rules={[
@@ -289,6 +280,16 @@ export const IdentificationFormForDataHeroPopup: React.FC<
                   form.setFieldsValue({ industry: upperValue });
                 }}
               /> */}
+            </Form.Item>
+
+            <Form.Item
+              name="experience"
+              label="Experience (in years)"
+              rules={[
+                { required: true, message: "Please input your experience" },
+              ]}
+            >
+              <InputNumber min={0} max={50} className="w-full" />
             </Form.Item>
 
             <Form.Item

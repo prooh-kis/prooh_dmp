@@ -138,7 +138,7 @@ const Helper = () => {
   }, [success, error]);
 
   return (
-    <div className="w-full h-full font-custom bg-[#F6FFFA]">
+    <div className="absolute w-full font-custom bg-white">
       <IdentificationFormForDataHeroPopup
         open={open}
         setOpen={setOpen}
@@ -150,23 +150,27 @@ const Helper = () => {
         setOpen={setLocationOpen}
         handleSave={handleSave2}
       />
-      <div className="w-full h-[95vh] grid grid-cols-12 bg-gradient-to-b from-[#F6FFFA] to-[#FFFFFF] p-12">
-        <div className="w-full col-span-6">
-          <div className="flex flex-col justify-start gap-4">
-            <div className="mt-8">
-              <i className="fi fi-ss-bolt text-[42px] text-[#3A9868]"></i>
-            </div>
-            <h1 className="font-bold text-[64px] text-[#244433] leading-[58px] tracking-tight w-[449px]">
+      <div className="grid grid-cols-12 bg-gradient-to-b from-[#F6FFFA] to-[#FFFFFF]">
+        <div className="col-span-6 grid grid-rows-7 flex flex-col justify-start gap-4 px-12">
+          <div className="row-span-2 flex items-end">
+            <i className="fi fi-ss-bolt text-[42px] text-[#3A9868]"></i>
+          </div>
+          <div className="row-span-2 ">
+            <h1 className="font-bold text-[64px] text-[#244433] leading-[64px] tracking-tight w-[449px]">
               Become Our Data Hero
             </h1>
-            <p className="mt-4 font-normal text-[14px] text-[#2D5087] leading-7 tracking-normal w-[480px]">
+          </div>
+          <div className="row-span-1 ">
+            <p className="font-normal text-[14px] text-[#2D5087] leading-8 tracking-normal w-[480px]">
               {" "}
               Approval Shall Be Granted In{" "}
               <span className="font-bold">24 </span> hours post application and
               The Research Paper Shall Be Completed In{" "}
               <span className="font-bold">48 </span> Hours Window Thereafter.
             </p>
-            <div className="mt-4 flex gap-4">
+          </div>
+          <div className="row-span-1 flex items-center ">
+            <div className="flex gap-4">
               <ButtonInput
                 className="bg-[#3A9868] hover:bg-[#3A9868]"
                 icon={<i className="fi fi-bs-arrow-up-right text-[14px]"></i>}
@@ -187,50 +191,53 @@ const Helper = () => {
                 See Historical Data
               </ButtonInput>
             </div>
-            <div className="mt-8 flex gap-4 items-center">
-              <div className="flex">
-                {[1, 2, 3].map((key: number) => (
-                  <div className="h-8 w-8 rounded-full border" key={key} />
-                ))}
-              </div>
-              <h1 className="text-[#0C0C0C] text-[14px] font-normal leading-6 tracking-normal">
-                <span className="font-bold">+64 </span> Respondents have already
-                participated
-              </h1>
-            </div>
           </div>
-        </div>
-        <div className="w-full col-span-6">
-          <div className="flex gap-8">
-            <div className="flex flex-col gap-4 items-center justify-center">
-              {icons?.map((icon: string, index: number) => (
-                <button
-                  key={`${icon}-${index}`}
-                  type="button"
-                  className={`h-8 w-8 border rounded-full flex justify-center items-center 
-            hover:bg-gray-100 transition-colors 
-            ${
-              currentCase === `${index + 1}`
-                ? "bg-[#3A9868] text-white"
-                : "bg-[#E1F7EE] text-[#ABD7C5]"
-            }`}
-                  onClick={() => setCase(`${index + 1}`)}
-                  aria-label={`Select case ${index + 1}`}
-                >
-                  <i className={`${icon} text-base`} />
-                </button>
+          <div className="row-span-1 flex gap-4 items-start ">
+            <div className="flex">
+              {[1, 2, 3].map((key: number) => (
+                <div className="h-8 w-8 rounded-full border" key={key} />
               ))}
             </div>
-            <div className="flex flex-col justify-start gap-4">
-              <div className="mt-8"></div>
-              <h1 className="text-[#254354] text-[24px] font-extrabold leading-1 tracking-normal">
+            <h1 className="text-[#0C0C0C] text-[14px] font-normal leading-6 tracking-normal">
+              <span className="font-bold">+64 </span> Respondents have already
+              participated
+            </h1>
+          </div>
+        </div>
+        <div className="col-span-6">
+          <div className="flex flex-col justify-start gap-4 grid grid-rows-10">
+            <div className="grid grid-cols-12 row-span-3 flex flex-col justify-end items-end">
+              <div className="col-span-1"></div>
+              <h1 className="col-span-11 text-[#254354] text-[24px] font-extrabold leading-1 tracking-normal">
                 {currentCase === "1"
                   ? "1. Scope Of Work"
                   : currentCase === "2"
                   ? "2. Eligibility Criteria"
                   : "3. Region focussed!!"}
               </h1>
-              <div className="flex flex-col mt-4 gap-4">
+            </div>
+            
+            <div className="grid grid-cols-12 gap-4 row-span-7 h-80">
+              <div className="col-span-1 flex flex-col gap-4 items-start justify-start py-4">
+                {icons?.map((icon: string, index: number) => (
+                  <button
+                    key={`${icon}-${index}`}
+                    type="button"
+                    className={`h-8 w-8 border rounded-full flex justify-center items-center 
+              hover:bg-gray-100 transition-colors 
+              ${
+                currentCase === `${index + 1}`
+                  ? "bg-[#3A9868] text-white"
+                  : "bg-[#E1F7EE] text-[#ABD7C5]"
+              }`}
+                    onClick={() => setCase(`${index + 1}`)}
+                    aria-label={`Select case ${index + 1}`}
+                  >
+                    <i className={`${icon} text-base`} />
+                  </button>
+                ))}
+              </div>
+              <div className="col-span-11 flex flex-col mt-4 gap-4">
                 {getData()?.map((data: any, index: number) => (
                   <MyDiv
                     title={data?.title}
@@ -238,6 +245,7 @@ const Helper = () => {
                     key={index}
                   />
                 ))}
+                
               </div>
             </div>
           </div>

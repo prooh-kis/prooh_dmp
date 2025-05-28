@@ -5,6 +5,7 @@ interface SectionHeaderWithSwitchProps {
   iconClass: string;
   title: string;
   bgColor: string;
+  tooltip?: string;
   showPercent?: any;
   setShowPercent?: any;
   switchShow?: boolean;
@@ -15,6 +16,7 @@ export const SectionHeaderWithSwitch: React.FC<SectionHeaderWithSwitchProps> = (
   iconClass,
   title,
   bgColor,
+  tooltip,
   showPercent=false,
   setShowPercent,
   switchShow=true,
@@ -29,8 +31,8 @@ export const SectionHeaderWithSwitch: React.FC<SectionHeaderWithSwitchProps> = (
       <h1 className="text-[12px] text-[#0E212E] truncate ">
         {title}
       </h1>
-      <Tooltip title="">
-        <i className="fi fi-br-info text-[12px] text-[#b2c1ca] flex justify-center items-center"></i>
+      <Tooltip title={tooltip}>
+        <i className="fi fi-br-info text-[12px] text-[#b2c1ca] flex justify-center items-center cursor-pointer"></i>
       </Tooltip>
     </div>
     {switchShow && (
@@ -50,6 +52,5 @@ export const SectionHeaderWithSwitch: React.FC<SectionHeaderWithSwitchProps> = (
 
       </div>
     )}
-
   </div>
 );

@@ -11,7 +11,7 @@ export const PublicRoute = (props: any) => {
   return (
     <div className="h-screen w-screen flex flex-col font-custom">
       <Header />
-      <div className="flex-grow bg-gray-100 pt-16 overflow-auto">{children}</div>
+      <div className="flex-grow pt-16 overflow-auto">{children}</div>
     </div>
   );
 };

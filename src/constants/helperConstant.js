@@ -85,6 +85,7 @@ export const ALL_INDUSTRY = [
     "Advertising",
     "Marketing",
     "Creative Design",
+    "Real Estate",
     "Agriculture and Allied Industries",
     "Textile and Apparel Industry",
     "Automobile and Auto Components",
