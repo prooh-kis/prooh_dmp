@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 type SwitchProps = {
   isEnabled: boolean;
@@ -14,21 +14,25 @@ export const SwitchInput: React.FC<SwitchProps> = ({
   offColor = "bg-gray-300",
 }) => {
   return (
-    <button
-      onClick={() => onToggle(!isEnabled)}
-      className={`relative inline-flex items-center w-11 h-5 rounded-full transition-colors focus:outline-none ${
-        isEnabled ? onColor : offColor
-      }`}
-    >
+    <div className="relative inline-block w-8 h-4">
+      <button
+        type="button"
+        title="switch"
+        onClick={() => onToggle(!isEnabled)}
+        className={`absolute inset-0 w-full h-full rounded-full transition-colors focus:outline-none ${
+          isEnabled ? onColor : offColor
+        }`}
+      >
+        <span className="sr-only">Toggle</span>
+      </button>
       <span
-        className={`w-4 h-4 transform bg-white rounded-full shadow transition-transform ${
-          isEnabled ? "translate-x-6" : "translate-x-1"
+        className={`absolute top-0.5 w-3 h-3 bg-white rounded-full shadow transition-transform duration-200 ease-in-out ${
+          isEnabled ? 'left-4' : 'left-0.5'
         }`}
       />
-    </button>
+    </div>
   );
 };
-
 
 export const SwitchInputCenter: React.FC<SwitchProps> = ({
   isEnabled,
@@ -38,18 +42,23 @@ export const SwitchInputCenter: React.FC<SwitchProps> = ({
 }) => {
   return (
     <div className="flex justify-center items-center">
-      <button
-        onClick={() => onToggle(!isEnabled)}
-        className={`relative inline-flex items-center w-11 h-5 rounded-full transition-colors focus:outline-none ${
-          isEnabled ? onColor : offColor
-        }`}
-      >
+      <div className="relative inline-block w-11 h-5">
+        <button
+          type="button"
+          title="switch"
+          onClick={() => onToggle(!isEnabled)}
+          className={`absolute inset-0 w-full h-full rounded-full transition-colors focus:outline-none ${
+            isEnabled ? onColor : offColor
+          }`}
+        >
+          <span className="sr-only">Toggle</span>
+        </button>
         <span
-          className={`w-4 h-4 transform bg-white rounded-full shadow transition-transform ${
-            isEnabled ? "translate-x-6" : "translate-x-1"
+          className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ease-in-out ${
+            isEnabled ? 'left-6' : 'left-0.5'
           }`}
         />
-      </button>
+      </div>
     </div>
   );
 };
