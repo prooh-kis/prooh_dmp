@@ -6,11 +6,11 @@ interface IProps {
 }
 
 export const PublicRoute = (props: any) => {
-  const { children } = props;
+  const { children , value } = props;
 
   return (
     <div className="h-screen w-screen flex flex-col font-custom">
-      <Header />
+      <Header value={value} />
       <div className="flex-grow bg-gray-100 pt-16 overflow-auto">{children}</div>
     </div>
   );

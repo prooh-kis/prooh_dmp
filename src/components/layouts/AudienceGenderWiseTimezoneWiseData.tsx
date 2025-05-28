@@ -17,7 +17,7 @@ interface AudienceGenderWiseTimezoneWiseDataProps {
 }
 
 export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTimezoneWiseDataProps> = ({
-    marketSite, id, setId, dataCheckStatus, setDataCheckStatus, step, setStep , avgDataBool
+    marketSite, id, setId, step, setStep, dataCheckStatus, setDataCheckStatus, avgDataBool
 }) => {
 
     const navigate = useNavigate();

@@ -16,7 +16,7 @@ interface FootfallDataSourceWiseProps {
     setToggleVisible: Function;
 }
 
-export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ marketSite, id, setId , setToggleVisible }) => {
+export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ marketSite, id, setId, setToggleVisible }) => {
 
     const dispatch = useDispatch<any>();
     const navigate = useNavigate();
@@ -29,12 +29,8 @@ export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ 
         "totalMobileDeviceSdkData": 0
     });
 
-    const userSignin = useSelector((state: any) => state.userSignin);
-    const {
-        error: errorSignIn,
-        success: successSignin,
-        userInfo: userInfo,
-    } = userSignin;
+    const auth = useSelector((state: any) => state.auth);
+    const { userInfo } = auth;
 
     const getAvgFootfallDataByMarketSiteData = useSelector(
         (state: any) => state.getAvgFootfallDataByMarketSite

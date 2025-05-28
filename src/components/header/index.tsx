@@ -3,26 +3,23 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AUTH, RESEARCH } from "../../routes/routes";
+import { AUTH, DASHBOARD, HOME, RESEARCH } from "../../routes/routes";
 import { message } from "antd";
 
-export const Header: React.FC = () => {
+export const Header: React.FC<any> = ({value}) => {
   const dispatch = useDispatch<any>();
   const navigate = useNavigate();
   const location = useLocation();
-  const [current, setCurrent] = useState<string>("Home");
+  const [current, setCurrent] = useState<string>(value);
+  console.log(current)
 
-  const userSignin = useSelector((state: any) => state.userSignin);
-  const {
-    error: errorSignIn,
-    success: successSignin,
-    userInfo: userInfo,
-  } = userSignin;
+  const auth = useSelector((state: any) => state.auth);
+  const { userInfo } = auth;
 
   const [tabs, setTabs] = useState<any>([
     {
       label: "Home",
-      path: "/",
+      path: HOME,
     },
     {
       label: "Research",
@@ -30,7 +27,7 @@ export const Header: React.FC = () => {
     },
     {
       label: "Dashboard",
-      path: `/dashboard`,
+      path: DASHBOARD,
     },
   ]);
 
@@ -71,11 +68,10 @@ export const Header: React.FC = () => {
               key={d1?.label}
               type="button"
               onClick={() => handleClick(index)}
-              className={`${
-                current === d1.label
+              className={`${current === d1.label
                   ? "text-sm lg:text-base text-[#129BFF] border-b-2 border-[#129BFF] py-5 leading-[20.69px] tracking-[0.01rem]"
                   : "text-sm lg:text-base py-1 text-[#888888] leading-[20.69px] tracking-[0.01rem]"
-              }`}
+                }`}
             >
               {d1?.label}
             </button>

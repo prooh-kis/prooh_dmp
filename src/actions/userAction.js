@@ -105,6 +105,7 @@ export const signin = (input) => async (dispatch) => {
       userInfo: data,
       loginTime,
     };
+    localStorage.setItem("user", JSON.stringify(loginData));
     store.dispatch(login(loginData));
   } catch (error) {
     dispatch({
@@ -215,40 +216,40 @@ export const updateUserPassword =
 
 export const googleSignupSignin =
   ({ name, email, avatar }) =>
-  async (dispatch) => {
-    dispatch({
-      type: USER_SIGNIN_REQUEST,
-      payload: { name, email, avatar },
-    });
-    try {
-      const { data } = await Axios.post(`${USER_URL}/googleSignupSignin`, {
-        name,
-        email,
-        avatar,
-      });
+    async (dispatch) => {
       dispatch({
-        type: USER_SIGNIN_SUCCESS,
-        payload: data,
+        type: USER_SIGNIN_REQUEST,
+        payload: { name, email, avatar },
       });
-      // localStorage.setItem("userInfo", JSON.stringify(data));
+      try {
+        const { data } = await Axios.post(`${USER_URL}/googleSignupSignin`, {
+          name,
+          email,
+          avatar,
+        });
+        dispatch({
+          type: USER_SIGNIN_SUCCESS,
+          payload: data,
+        });
+        // localStorage.setItem("userInfo", JSON.stringify(data));
 
-      const loginTime = new Date().getTime();
-      const loginData = {
-        userInfo: data,
-        loginTime,
-      };
-      localStorage.setItem("user", JSON.stringify(loginData));
-      store.dispatch(login(loginData));
-    } catch (error) {
-      dispatch({
-        type: USER_SIGNIN_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
+        const loginTime = new Date().getTime();
+        const loginData = {
+          userInfo: data,
+          loginTime,
+        };
+        localStorage.setItem("user", JSON.stringify(loginData));
+        store.dispatch(login(loginData));
+      } catch (error) {
+        dispatch({
+          type: USER_SIGNIN_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+        });
+      }
+    };
 
 export const sendEmailForConfirmation =
   (formData) => async (dispatch, getState) => {

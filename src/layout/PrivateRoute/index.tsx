@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export const PrivateRoute = (props: any) => {
-  const { children } = props;
+  const { children , value } = props;
   const navigate = useNavigate();
 
   const userSignin = useSelector((state: any) => state.userSignin);
@@ -23,7 +23,7 @@ export const PrivateRoute = (props: any) => {
 
   return (
     <div className="h-[100vh] w-[100vw] p-0 m-0">
-      <Header />
+      <Header value={value}/>
       <div className="h-[100vh] w-[100vw]  bg-gray-100 pt-8">{children}</div>
     </div>
   );

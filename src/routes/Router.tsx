@@ -83,7 +83,7 @@ const Routers: React.FC = () => {
         <Route
           path={HOMEPAGE}
           element={
-            <PrivateRoute>
+            <PrivateRoute value="Home">
               <HomePage />
             </PrivateRoute>
           }
@@ -91,7 +91,7 @@ const Routers: React.FC = () => {
         <Route
           path={DASHBOARD}
           element={
-            <PublicRoute>
+            <PublicRoute value="Dashboard">
               <Dashboard />
             </PublicRoute>
           }
@@ -99,7 +99,7 @@ const Routers: React.FC = () => {
         <Route
           path={RESEARCH}
           element={
-            <PublicRoute>
+            <PublicRoute value="Research">
               <InputPage />
             </PublicRoute>
           }
