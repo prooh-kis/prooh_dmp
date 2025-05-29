@@ -1,3 +1,4 @@
+import { GENDER_WISE_DATA_STATUS, PERCENT_DATA_STATUS, TIMEZONE_WISE_DATA_STATUS } from '../../constants/audienceConstant';
 import React from 'react';
 
 type FooterProps = {
@@ -14,7 +15,7 @@ export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dat
             case 1: setCurrentStep(currentStep + 1);
                 break
             case 2: {
-                if (dataCheckStatus["Audience Type Data"]) {
+                if (dataCheckStatus[PERCENT_DATA_STATUS]) {
                     setCurrentStep(currentStep + 1)
                 }
                 else {
@@ -28,13 +29,13 @@ export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dat
                     break
                 }
                 var checkStatus = 0
-                for (const genderData of Object.values(dataCheckStatus["Gender Wise Data"])) {
+                for (const genderData of Object.values(dataCheckStatus[GENDER_WISE_DATA_STATUS])) {
                     if (!genderData) {
                         checkStatus = 1
                     }
                 }
 
-                for (const timezoneData of Object.values(dataCheckStatus["Timezone Wise Data"])) {
+                for (const timezoneData of Object.values(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS])) {
                     if (!timezoneData) {
                         checkStatus = 1
                     }

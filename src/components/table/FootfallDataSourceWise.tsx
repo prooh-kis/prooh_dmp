@@ -16,7 +16,8 @@ interface FootfallDataSourceWiseProps {
     setToggleVisible: Function;
 }
 
-export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ marketSite, id, setId, setToggleVisible }) => {
+export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ marketSite, id, setId, setDataCheckStatus,
+    setToggleVisible }) => {
 
     const dispatch = useDispatch<any>();
     const navigate = useNavigate();
@@ -67,6 +68,7 @@ export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ 
             if (audienceCountByMarketSite.audienceData != null) {
                 setId(audienceCountByMarketSite.audienceData._id.toString())
                 setToggleVisible(audienceCountByMarketSite.audienceData.certified)
+                setDataCheckStatus(audienceCountByMarketSite.audienceData.audienceDataStatus)
             }
         }
 

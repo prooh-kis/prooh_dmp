@@ -1,4 +1,8 @@
 import React from 'react';
+import {
+    GENDER_WISE_DATA_STATUS, TIMEZONE_WISE_DATA_STATUS,
+    PERCENT_DATA_STATUS, IMPACT_FACTOR_DATA_STATUS
+} from "../../constants/audienceConstant";
 
 interface TabProps {
     label: string;
@@ -13,7 +17,7 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, curre
     const checkTickStatus = () => {
         switch (index) {
             case 2: {
-                if (dataCheckStatus["Audience Type Data"]) {
+                if (dataCheckStatus[PERCENT_DATA_STATUS]) {
                     return true
                 }
                 else {
@@ -22,19 +26,19 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, curre
             }
                 break
             case 3: {
-                for (const genderData of Object.values(dataCheckStatus["Gender Wise Data"])) {
+                for (const genderData of Object.values(dataCheckStatus[GENDER_WISE_DATA_STATUS])) {
                     if (!genderData) {
                         return false
                     }
                 }
 
-                for (const timezoneData of Object.values(dataCheckStatus["Timezone Wise Data"])) {
+                for (const timezoneData of Object.values(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS])) {
                     if (!timezoneData) {
                         return false
                     }
                 }
 
-                if (Object.values(dataCheckStatus["Gender Wise Data"]).length == 0)
+                if (Object.values(dataCheckStatus[GENDER_WISE_DATA_STATUS] || {}).length == 0)
                     return false
                 else
                     return true
@@ -42,7 +46,7 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, curre
                 break
 
             case 4: {
-                if (dataCheckStatus["Impact Factor Data"]) {
+                if (dataCheckStatus[IMPACT_FACTOR_DATA_STATUS]) {
                     return true
                 }
                 else {
@@ -53,8 +57,6 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, curre
         }
     }
 
-    const showTick = checkTickStatus();
-
     return (
         <div
             className={`flex items-center border px-2 py-1 mr-2 rounded-t-lg cursor-pointer ${!isActive ? 'bg-white border-b-white' : 'bg-gray-100'}`}
@@ -62,7 +64,7 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, curre
         >
             <span className="mr-2 text-sm font-medium">{label}</span>
             {label !== "Footfall Data" && <div>
-                {showTick ?
+                {checkTickStatus() ?
                     <span className="text-green-600 text-sm">✔</span>
                     : <span className="text-red-500 text-sm">✕</span>}
             </div>}

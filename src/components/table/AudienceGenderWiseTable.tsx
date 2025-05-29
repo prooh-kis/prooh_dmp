@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import {
   ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_RESET,
+  GENDER_WISE_DATA_STATUS,
   GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_RESET
 } from "../../constants/audienceConstant";
 import { message, Tooltip } from "antd";
@@ -66,16 +67,23 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   const [editableCell, setEditableCell] = useState<any>(null);
   const [editableCell1, setEditableCell1] = useState<any>(null);
   const [editableCell2, setEditableCell2] = useState<any>(null);
-  const [lockStatus, setLockStatus] = useState(dataCheckStatus["Gender Wise Data"][audienceCategory]);
+  const [lockStatus, setLockStatus] = useState(dataCheckStatus[GENDER_WISE_DATA_STATUS][audienceCategory]);
   const [genderDataByMarketSite, setGenderDataByMarketSite] = useState<any>({})
+
+  const resetButtonFunction = () => {
+    dispatch(getGenderWiseDataByAudienceTypeMarketSite({
+      id: id, marketSite: marketSite, categoryType: audienceCategory,
+      avgDataBool: avgDataBool
+    }))
+  }
 
   useEffect(() => {
     dispatch(getGenderWiseDataByAudienceTypeMarketSite({
       id: id, marketSite: marketSite, categoryType: audienceCategory,
       avgDataBool: avgDataBool
     }))
-    setLockStatus(dataCheckStatus["Gender Wise Data"][audienceCategory])
-  }, [audienceCategory , avgDataBool])
+    setLockStatus(dataCheckStatus[GENDER_WISE_DATA_STATUS][audienceCategory])
+  }, [audienceCategory, avgDataBool])
 
   useEffect(() => {
     if (genderWiseDataByMarketSiteError) {
@@ -84,7 +92,9 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
     }
 
     if (genderWiseDataByMarketSiteSuccess) {
-      setGenderDataByMarketSite(genderWiseDataByMarketSite)
+      setGenderDataByMarketSite(genderWiseDataByMarketSite?.response)
+      if (genderWiseDataByMarketSite.audienceDataStatus != null)
+        setDataCheckStatus(genderWiseDataByMarketSite?.audienceDataStatus)
       dispatch({ type: GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_RESET })
     }
 
@@ -96,13 +106,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
     if (addGenderWiseDataByAudienceTypeSuccess) {
       message.info("Data Saved Successfully")
       dispatch({ type: ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_RESET })
-      setDataCheckStatus((prevData: any) => ({
-        ...prevData,
-        ["Gender Wise Data"]: {
-          ...prevData["Gender Wise Data"],
-          [audienceCategory]: true
-        }
-      }));
+      resetButtonFunction()
     }
 
   }, [genderWiseDataByMarketSiteSuccess, genderWiseDataByMarketSiteError,
@@ -189,6 +193,10 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
         saturdays.monthly = saturdays.monthly / 100;
         sundays.monthly = sundays.monthly / 100;
 
+        weekdays.unique = weekdays.unique / 100
+        saturdays.unique = saturdays.unique / 100
+        sundays.unique = sundays.unique / 100
+
         weekdays.daily = weekdays.monthly / weekdays.days;
         saturdays.daily = saturdays.monthly / saturdays.days;
         sundays.daily = weekdays.monthly / sundays.days;
@@ -211,19 +219,12 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
       setLockStatus(!lockStatus)
       setDataCheckStatus((prevData: any) => ({
         ...prevData,
-        ["Gender Wise Data"]: {
-          ...prevData["Gender Wise Data"],
+        [GENDER_WISE_DATA_STATUS]: {
+          ...prevData[GENDER_WISE_DATA_STATUS],
           [audienceCategory]: false
         }
       }));
     }
-  }
-
-  const resetButtonFunction = () => {
-    dispatch(getGenderWiseDataByAudienceTypeMarketSite({
-      id: id, marketSite: marketSite, categoryType: audienceCategory,
-      avgDataBool: avgDataBool
-    }))
   }
 
   return (

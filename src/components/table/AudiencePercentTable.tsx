@@ -6,7 +6,10 @@ import { useDispatch } from "react-redux";
 import { message } from "antd";
 import {
   ADD_AUDIENCE_TYPE_PERCENT_DATA_RESET,
-  GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_RESET
+  GENDER_WISE_DATA_STATUS,
+  GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_RESET,
+  PERCENT_DATA_STATUS,
+  TIMEZONE_WISE_DATA_STATUS
 } from "../../constants/audienceConstant";
 
 interface AudiencePercentData {
@@ -30,16 +33,12 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
 
   const dispatch = useDispatch<any>();
   const [totalCount, setTotalCount] = useState(0);
-  const [lockStatus, setLockStatus] = useState<any>(dataCheckStatus["Audience Type Data"]);
+  const [lockStatus, setLockStatus] = useState<any>(dataCheckStatus[PERCENT_DATA_STATUS]);
   const [audienceTypeWiseData, setAudienceTypeWiseData] = useState<AudiencePercentData[]>([]);
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
-  const userSignin = useSelector((state: any) => state.userSignin);
-  const {
-    error: errorSignIn,
-    success: successSignin,
-    userInfo: userInfo,
-  } = userSignin;
+  const auth = useSelector((state: any) => state.auth);
+  const { userInfo } = auth;
 
   const getAvgAudienceDataByMarketSiteData = useSelector(
     (state: any) => state.getAvgAudienceDataByMarketSite
@@ -126,6 +125,7 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
         dataHeroUserEmail: userInfo.email,
         geoCoordinates: [],
         data: data,
+        audienceDataStatus: dataCheckStatus
       }))
     }
     else if (getTotalPercent() != "100") {
@@ -135,17 +135,17 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
       setLockStatus(!lockStatus)
       setDataCheckStatus((prevData: any) => ({
         ...prevData,
-        ["Audience Type Data"]: false
+        [PERCENT_DATA_STATUS]: false
       }));
     }
   }
 
   const resetButtonFunction = () => {
-    dispatch(getAvgAudienceDataByMarketSite({ id: id, marketSite: marketSite, avgDataBool: avgDataBool }))
+    dispatch(getAvgAudienceDataByMarketSite({ id: id === "research" ? null : id, marketSite: marketSite, avgDataBool: avgDataBool }))
   }
 
   useEffect(() => {
-    dispatch(getAvgAudienceDataByMarketSite({ id: id, marketSite: marketSite, avgDataBool: avgDataBool }))
+    dispatch(getAvgAudienceDataByMarketSite({ id: id === "research" ? null : id, marketSite: marketSite, avgDataBool: avgDataBool }))
   }, [avgDataBool])
 
   useEffect(() => {
@@ -163,31 +163,30 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
       setAudienceTypeWiseData(audienceDataByMarketSite?.data)
       setTotalCount(audienceDataByMarketSite?.totalAvgCount)
 
-      const data: any = {}
-      for (const audienceType of audienceDataByMarketSite?.data) {
-        data[audienceType.category] = false
+      if (Object.keys(dataCheckStatus[GENDER_WISE_DATA_STATUS] || {}).length === 0 &&
+        Object.keys(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS] || {}).length === 0) {
+        const data: any = {}
+        for (const audienceType of audienceDataByMarketSite?.data) {
+          data[audienceType.category] = false
+        }
+        setDataCheckStatus((prevData: any) => ({
+          ...prevData,
+          [GENDER_WISE_DATA_STATUS]: data,
+          [TIMEZONE_WISE_DATA_STATUS]: data
+        }));
+      }
+      else if (audienceDataByMarketSite?.audienceDataStatus != null) {
+        setDataCheckStatus(audienceDataByMarketSite?.audienceDataStatus)
       }
 
       dispatch({ type: GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_RESET })
-
-      if (Object.keys(dataCheckStatus["Gender Wise Data"]).length === 0 &&
-        Object.keys(dataCheckStatus["Timezone Wise Data"]).length === 0) {
-        setDataCheckStatus((prevData: any) => ({
-          ...prevData,
-          ["Gender Wise Data"]: data,
-          ["Timezone Wise Data"]: data
-        }));
-      }
     }
 
     if (addAudienceTypePercentSuccess) {
       message.info("Data Saved Successfully")
       setId(addAudienceTypePercent._id)
+      resetButtonFunction()
       dispatch({ type: ADD_AUDIENCE_TYPE_PERCENT_DATA_RESET })
-      setDataCheckStatus((prevData: any) => ({
-        ...prevData,
-        ["Audience Type Data"]: true
-      }));
     }
 
   }, [audienceDataByMarketSiteSuccess, audienceDataByMarketSiteError,

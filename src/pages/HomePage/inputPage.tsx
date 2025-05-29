@@ -8,6 +8,7 @@ import HeaderIcon from '../../assets/icons/header-icon.svg'
 import { AudienceGenderWiseTimezoneWiseData } from '../../components/layouts/AudienceGenderWiseTimezoneWiseData';
 import { SwitchInputCenter } from '../../components/atoms/SwitchInput';
 import { Tooltip } from 'antd';
+import { GENDER_WISE_DATA_STATUS, IMPACT_FACTOR_DATA_STATUS, PERCENT_DATA_STATUS, TIMEZONE_WISE_DATA_STATUS } from '../../constants/audienceConstant';
 
 const InputPage: React.FC = () => {
     const tabs = [
@@ -17,21 +18,21 @@ const InputPage: React.FC = () => {
         { label: 'Impact Factor Data' },
     ];
 
-    const [dataCheckStatus, setDataCheckStatus] = useState({
-        "Audience Type Data": false,
-        "Gender Wise Data": {},
-        "Timezone Wise Data": {},
-        "Impact Factor Data": false
+    const [dataCheckStatus, setDataCheckStatus] = useState<any>({
+        "percentDataStatus": false,
+        "genderWiseDataStatus": {},
+        "timezoneWiseDataStatus": {},
+        "impactFactorDataStatus": false
     })
     const [currentStep, setCurrentStep] = useState(1)
     const [id, setId] = useState("")
     const [audienceCategoryStep, setAudienceCategoryStep] = useState<any>(0);
-    const [avgDataBool, setAvgDataBool] = useState(true);
+    const [avgDataBool, setAvgDataBool] = useState(false);
     const [toggleVisible, setToggleVisible] = useState(false);
 
     useEffect(() => {
         const currentUrl = window.location.href;
-        setId(currentUrl.split("/").pop() || "")
+        setId(currentUrl.split("/").pop() || "research")
     }, [])
 
     const handleTabClick = (index: number) => {
@@ -41,7 +42,7 @@ const InputPage: React.FC = () => {
             case 1: setCurrentStep(index + 1);
                 break
             case 2: {
-                if (dataCheckStatus["Audience Type Data"]) {
+                if (dataCheckStatus.PERCENT_DATA_STATUS) {
                     setCurrentStep(index + 1)
                 }
                 else {
@@ -51,13 +52,13 @@ const InputPage: React.FC = () => {
                 break
             case 3: {
                 var checkStatus = 0
-                for (const genderData of Object.values(dataCheckStatus["Gender Wise Data"])) {
+                for (const genderData of Object.values(dataCheckStatus.GENDER_WISE_DATA_STATUS)) {
                     if (!genderData) {
                         checkStatus = 1
                     }
                 }
 
-                for (const timezoneData of Object.values(dataCheckStatus["Timezone Wise Data"])) {
+                for (const timezoneData of Object.values(dataCheckStatus.TIMEZONE_WISE_DATA_STATUS)) {
                     if (!timezoneData) {
                         checkStatus = 1
                     }

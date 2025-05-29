@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { AudienceGenderWiseTable, AudienceTimezoneWiseTable } from "../../components/table"
-import AudienceSelector from "./AudienceSelector";
 import { useNavigate } from "react-router-dom";
 import { VerticalStepper } from "./VerticalStepper";
+import { GENDER_WISE_DATA_STATUS } from "../../constants/audienceConstant";
 
 
 interface AudienceGenderWiseTimezoneWiseDataProps {
@@ -49,7 +49,7 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
                     <AudienceGenderWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
                         audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
                         setDataCheckStatus={setDataCheckStatus} avgDataBool={avgDataBool} />
-                    {dataCheckStatus["Gender Wise Data"][audienceCategory] && <AudienceTimezoneWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
+                    {dataCheckStatus?.[GENDER_WISE_DATA_STATUS]?.[audienceCategory] && <AudienceTimezoneWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
                         audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
                         setDataCheckStatus={setDataCheckStatus} avgDataBool={avgDataBool} />}
                 </div>

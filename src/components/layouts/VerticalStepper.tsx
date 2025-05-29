@@ -1,5 +1,6 @@
 import { getAudienceTypePercentForGenderWiseTab } from "../../actions/audienceAction";
 import { Tooltip } from "antd";
+import { GENDER_WISE_DATA_STATUS, TIMEZONE_WISE_DATA_STATUS } from "../../constants/audienceConstant";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -32,6 +33,17 @@ export const VerticalStepper = ({ id, setStep, step, dataCheckStatus, setAudienc
   useEffect(() => {
     dispatch(getAudienceTypePercentForGenderWiseTab({ id: id }))
   }, [dispatch, id]);
+
+  useEffect(() => {
+    var count = 0
+    for (const audienceCategory of Object.keys(dataCheckStatus[GENDER_WISE_DATA_STATUS])) {
+      count++;
+      if (count === step+1) {
+        setAudienceCategory(audienceCategory)
+        break;
+      }
+    }
+  }, [step, setStep])
 
   useEffect(() => {
     if (audienceTypePercentError) {
@@ -68,7 +80,7 @@ export const VerticalStepper = ({ id, setStep, step, dataCheckStatus, setAudienc
               <div
                 className={`${i == step ? "w-8 h-8" : "w-6 h-6 "} rounded-full flex items-center justify-center 
                   ${i <= step ? 'bg-primaryButton' : 'bg-gray-200'}`}>
-                {(dataCheckStatus["Gender Wise Data"][audienceType] && dataCheckStatus["Timezone Wise Data"][audienceType]) ? (
+                {(dataCheckStatus[GENDER_WISE_DATA_STATUS][audienceType] && dataCheckStatus[TIMEZONE_WISE_DATA_STATUS][audienceType]) ? (
                   <i className="fi fi-br-check text-white text-[12px]" />
                 ) : (
                   <span className={`text-[12px]  ${i === step ? 'text-white font-bold' : i < step ?
