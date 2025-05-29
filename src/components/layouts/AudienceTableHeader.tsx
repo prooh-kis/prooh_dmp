@@ -23,13 +23,13 @@ export const AudienceTableHeader: React.FC<AudienceTableHeaderProps> = ({
                 </h2>
             </div>
 
-            <div className="flex gap-3">
-                <button className="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100 transition"
+            <div className="flex gap-3 text-[12px]">
+                <button type="button" className="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100 transition"
                     onClick={() => resetButton()}>
                     Reset
                 </button>
 
-                <button className={`${ lockStatus ? 'bg-yellow-400' : 'bg-gray-300'} text-black px-4 py-2 rounded-md flex items-center gap-2 font-semibold transition`}
+                <button type="button" className={`${ lockStatus ? 'bg-yellow-400' : 'bg-gray-300'} text-black px-4 py-2 rounded-md flex items-center gap-2 font-semibold transition`}
                     onClick={() => lockButton()}>
                     {lockStatus ? <Lock className="w-4 h-4" /> :
                         <Unlock className="w-4 h-4" />}

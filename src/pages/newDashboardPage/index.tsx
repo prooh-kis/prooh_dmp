@@ -9,6 +9,8 @@ import { getAudienceDataOnFiltersAction, getRespondentCountIndustryWiseAction, g
 import { DashboardPieChart } from './DashboardPieChart';
 import { DataHeroProfilePopup } from './DataHeroProfilePopup';
 import { SwitchInput } from '../../components/atoms/SwitchInput';
+import { ThirdPartyAudienceCountSegment } from './ThirdPartyAudienceCountSegment';
+import { RespondentDataSegment } from './RespondentDataSegment';
 
 const dataSourceTab = [{
     label: "Third Party Data",
@@ -76,7 +78,29 @@ const filterHelperTexts = [{
     header: "Impact Factors",
     icon: "fi-br-arrow-trend-up",
     tooltip: ""
+}];
+
+const impactFactorHelper = [{
+    label: "Government Holidays",
+    value: "govtHolidays",
+},{
+    label: "Long Weekend Holidays",
+    value: "longWeekendHolidays",
+},{
+    label: "Festivals",
+    value: "festivals",
+},{
+    label: "Peak Winters",
+    value: "peakWinters",
+},{
+    label: "Peak Summers",
+    value: "peakSummers",
+},{
+    label: "Summer Holidays School",
+    value: "summerHolidaysSchool",
 }]
+
+
 
 export const Dashboard: React.FC = () => {
     const dispatch = useDispatch<any>();
@@ -85,16 +109,11 @@ export const Dashboard: React.FC = () => {
     const [dataSource, setDataSource] = useState<any>(1);
     const [audienceType, setAudienceType] = useState<any>(0);
 
-    const [thirdPartyData, setThirdPartyData] = useState<any>([]);
-    const [respondentData, setRespondentData] = useState<any>([]);
-    const [respondentProfile, setRespondentProfile] = useState<any>([]);
     const [respondentAudienceData, setRespondentAudienceData] = useState<any>({});
     const [respondentAudienceGenderData, setRespondentAudienceGenderData] = useState<any>({});
 
     const [value, setValue] = useState<any>("");
 
-    const [openDataHeroPopup, setOpenDataHeroPopup] = useState<any>(false);
-    const [selectedHero, setSelectedHero] = useState<any>(null);
     const [showPercent, setShowPercent] = useState<any>(true);
 
     const [filters, setFilters] = useState<any>({
@@ -118,23 +137,7 @@ export const Dashboard: React.FC = () => {
         impactFactors: [],
     });
 
-    const {
-        loading: loadingRespondentCount,
-        error: errorRespondentCount,
-        data: respondentCount
-    } = useSelector((state: any) => state.getRespondentCountIndustryWise);
-
-    const {
-        loading: loadingThirdPartyAudienceCount,
-        error: errorThirdPartyAudienceCount,
-        data: thirdPartyAudienceCount
-    } = useSelector((state: any) => state.getThirdPartyAudienceCountSourceWise);
-
-    const {
-        loading: loadingRespondentProfile,
-        error: errorRespondentProfile,
-        data: respondentProfileData
-    } = useSelector((state: any) => state.getRespondentProfileIndustryWise);
+   
 
     const {
         loading: loadingAudienceData,
@@ -195,29 +198,10 @@ export const Dashboard: React.FC = () => {
             setRespondentAudienceGenderData(genderWiseData);
         }
     }, [audienceData]);
-console.log(allValues)
-    useEffect(() => {
-        if (thirdPartyAudienceCount) {
-            setThirdPartyData((thirdPartyAudienceCount.response));
-        }
-
-        if (respondentCount) {
-            setRespondentData(respondentCount.response);
-        }
-
-        if (respondentProfileData) {
-            setRespondentProfile(respondentProfileData);
-        }
-
-    }, [thirdPartyAudienceCount, respondentCount, respondentProfileData]);
 
     useEffect(() => {
-        dispatch(getRespondentCountIndustryWiseAction());
-        dispatch(getThirdPartyAudienceCountSourceWiseAction());
-        dispatch(getRespondentProfileIndustryWiseAction({ industry: industry }));
         dispatch(getAudienceDataOnFiltersAction(filters));
-
-    }, [dispatch, filters, industry]);
+    }, [dispatch, filters]);
 
     const handleClick = ({ type, value, checked }: { type: string; value: string; checked: boolean }) => {
 
@@ -257,13 +241,7 @@ console.log(allValues)
     }
     return (
         <div className="font-custom grid grid-rows-12 bg-gray-100 h-[90vh]">
-            <DataHeroProfilePopup
-                open={openDataHeroPopup}
-                onClose={() => {
-                    setOpenDataHeroPopup(false);
-                }}
-                heroDetails={selectedHero}
-            />
+          
             <div className="row-span-1 px-8 bg-white flex gap-2 items-center">
                 <div className="flex items-center justify-center bg-[#3A9868] rounded-[8px] p-2">
                     <i className="fi fi-br-analyse text-[12px] text-white flex items-center justify-center motion-safe:animate-bounce"></i>
@@ -292,92 +270,14 @@ console.log(allValues)
                         </div>
                     </div>
                     
-
                     <div className="row-span-10 grid grid-rows-1">
                         {dataSource === 0 ? (
-                            <div className="row-span-1 grid grid-rows-12">
-                                <div className="row-span-6 flex items-center border-b">
-                                    {loadingAudienceData ? (
-                                        <div className="rounded-[8px] bg-white animate-pulse h-20 p-1">
-                                            <div className="bg-gray-200 h-full" />
-                                        </div>
-                                    ) : thirdPartyAudienceCount && (
-                                        <div className="p-4 flex items-center">
-                                            <DashboardPieChart
-                                                type="Third Party Data"
-                                                total={thirdPartyAudienceCount.totalCount}
-                                                data={thirdPartyData}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="row-span-6 p-4 overflow-y-scroll no-scrollbar">
-                                    {Object.keys(thirdPartyData)?.map((key: any, i: number) => (
-                                        <div key={i}>
-                                            <h1 className="text-[16px] font-semibold">
-                                                {key === "totalCameraData" ? "Camera Data" : key === "totalRoadsterData" ? "Roadster Data" : key === "totalDmfdData" ? "DMFD Data" : key === "totalTrafficData" ? "Traffic Data" : key === "totalMobileDeviceSdkData" ? "Mobile Device SDK" : ""}
-                                            </h1>
-                                            <p className="text-[14px] text-gray-500">
-                                                {thirdPartyData[key].description}
-                                            </p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                            <ThirdPartyAudienceCountSegment />
                         ) : dataSource === 1 ? (
-                            <div className="row-span-1 grid grid-rows-12">
-                                <div className="row-span-6 flex items-center justify-center border-b">
-                                    {loadingRespondentCount ? (
-                                        <div className="rounded-[8px] bg-white animate-pulse h-20 p-1">
-                                            <div className="bg-gray-200 h-full" />
-                                        </div>
-                                    ) : respondentCount && (
-                                        <div className="p-4 flex items-center ">
-                                            <DashboardPieChart
-                                                type="Respondent Data"
-                                                total={respondentData.length}
-                                                data={respondentData}
-                                                setValue={setValue}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="row-span-6 grid grid-rows-12 overflow-y-scroll no-scrollbar">
-                                    <div className="px-4 row-span-2">
-                                        {respondentCount && (
-                                            <h1 className="pt-2 text-[16px] font-semibold">Respondent Profile ({respondentCount?.total})</h1>
-                                        )}
-                                    </div>
-                                    <div className="px-4 row-span-10">
-                                        {loadingRespondentProfile ? (
-                                            <div className="rounded-[8px] bg-white animate-pulse h-20 p-1">
-                                                <div className="bg-gray-200 h-full" />
-                                            </div>
-                                        ) : respondentProfileData && (
-                                            <div className="grid grid-cols-3 gap-4 overflow-y-scroll no-scrollbar">
-                                                {respondentProfile?.filter((rspdt: any) => industry.includes(rspdt?.industry))?.map((respondent: any, j: any) => (
-                                                    <div
-                                                        key={j}
-                                                        className="col-span-1 w-full h-full py-1"
-                                                        onClick={() => {
-                                                            setOpenDataHeroPopup(true);
-                                                            setSelectedHero(respondent);
-                                                        }}
-                                                    >
-                                                        <div className="h-24 rounded-[8px] bg-white border border-[#D7D7D720]">
-                                                            <img className="rounded-[8px] h-full w-full" src={respondent?.avatar} alt={respondent.name} />
-                                                        </div>
-                                                        <div className="py-1">
-                                                            <h1 className="text-[14px] font-semibold truncate">{respondent.name}</h1>
-                                                            <p className="text-[12px] text-gray-500 truncate">{respondent.role}</p>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
+                            <RespondentDataSegment
+                                industry={industry}
+                                setValue={setValue}
+                            />
                         ) : null}
                     </div>
                 </div>
@@ -517,9 +417,9 @@ console.log(allValues)
                                                         <div key={i} className="grid grid-cols-6 flex items-center gap-2 pt-1">
                                                             <div className="col-span-2 cursor-pointer">
                                                                     {data === "impactFactorData" ? (
-                                                                        <Tooltip title={key.toUpperCase()}>
+                                                                        <Tooltip title={impactFactorHelper?.find((d: any) => d.value === key)?.label || key.toUpperCase()}>
                                                                             <h1 className="text-[10px] text-[#6F7F8E] truncate">
-                                                                                {key.toUpperCase()}
+                                                                                {impactFactorHelper?.find((d: any) => d.value === key)?.label || key.toUpperCase()} 
                                                                             </h1>
                                                                         </Tooltip>
                                                                     ) : (
@@ -529,7 +429,7 @@ console.log(allValues)
                                                                                 Object.keys(filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data] || []).length === 1 && (data === disabledOption || (filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data]?.includes(key))) ||
                                                                                 Object.keys(filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data] || []).length === 2 && filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data]?.includes("All")
                                                                             }
-                                                                            label={key.toUpperCase()}
+                                                                            label={key}
                                                                             checked={data === disabledOption || (filters[filterHelperTexts?.find((d: any) => d.value === data)?.label || data]?.includes(key) || false)}
                                                                             textSize="10px"
                                                                             color="#6F7F8E"

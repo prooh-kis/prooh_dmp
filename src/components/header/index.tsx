@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AUTH, DASHBOARD, HOME, RESEARCH } from "../../routes/routes";
 import { message } from "antd";
+import { Layer } from "../../assets";
 
 export const Header: React.FC<any> = ({value}) => {
   const dispatch = useDispatch<any>();
@@ -55,10 +56,15 @@ export const Header: React.FC<any> = ({value}) => {
     <div className="w-full h-16 bg-white border border-b flex items-center justify-between fixed z-50">
       <div className="col-span-2 flex items-center mx-10">
         <div
-          className="flex flex-col mb-2 -space-y-1 pt-2"
+          className="flex items-center gap-2"
           onClick={() => navigate("/")}
         >
-          <h1 className="text-xl font-black">PROOH.AI</h1>
+          {/* <h1 className="text-xl font-black">PROOH.AI</h1> */}
+          <img src={Layer} className="h-8 w-8" alt="fly" />
+          <div className="">
+            <h1 className="text-[16px] text-[#1E376E] font-black">Layer</h1>
+            <p className="text-[10px] text-[#6F7F8E]">powered by <span className="italic">PROOH.AI</span></p>
+          </div>
         </div>
       </div>
       <div className="col-span-2 flex items-center justify-end pr-8">

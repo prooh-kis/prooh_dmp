@@ -32,7 +32,7 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
 
     return (
         <div className="flex-grow grid grid-cols-12 gap-2 overflow-hidden">
-            <div className="col-span-3 bg-[#ffffff] overfow-hidden">
+            <div className="col-span-3 bg-[#ffffff] overfow-hidden rounded-[8px] shadow-sm">
                 <VerticalStepper
                     step={step}
                     setStep={setStep}
@@ -44,15 +44,19 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
                 />
             </div>
 
-            <div className="col-span-9 flex flex-col overflow-hidden">
-                <div className="flex-grow overflow-y-auto pr-2">
+            <div className="col-span-9 flex flex-col gap-2 overflow-hidden">
+                <div className="flex-grow overflow-y-auto pr-2 rounded-[8px] shadow-sm bg-[#ffffff]">
                     <AudienceGenderWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
                         audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
                         setDataCheckStatus={setDataCheckStatus} avgDataBool={avgDataBool} />
-                    {dataCheckStatus?.[GENDER_WISE_DATA_STATUS]?.[audienceCategory] && <AudienceTimezoneWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
-                        audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
-                        setDataCheckStatus={setDataCheckStatus} avgDataBool={avgDataBool} />}
                 </div>
+                {dataCheckStatus?.[GENDER_WISE_DATA_STATUS]?.[audienceCategory] && (
+                    <div className="rounded-[8px] shadow-sm bg-[#ffffff]">
+                        <AudienceTimezoneWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
+                        audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
+                        setDataCheckStatus={setDataCheckStatus} avgDataBool={avgDataBool} />
+                    </div>
+                )}
             </div>
         </div>
     )

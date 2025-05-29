@@ -88,12 +88,15 @@ const InputPage: React.FC = () => {
     }, {
         title: "you can edit",
         color: "#FF5050"
+    }, {
+        title: "edited",
+        color: "#129BFF"
     }]
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-4rem)]">
-            <div className='bg-[#ffffff] px-6 pt-2'>
-                <div className='flex flex-row gap-2 mt-2 pb-2'>
+        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-gray-100">
+            <div className='bg-[#ffffff]'>
+                <div className='flex flex-row gap-2 px-6 pt-2 mt-2 pb-2'>
                     <h2 className="text-[20px] font-medium">DLF CyberHub Gurugram, Haryana</h2>
                     <img src={HeaderIcon} alt="" />
                     <h3 className="text-[12px] font-medium text-[#6F7F8E] flex items-center justify-center cursor-pointer">View Images</h3>
@@ -109,8 +112,8 @@ const InputPage: React.FC = () => {
                     </div>}
                 </div>
 
-                <div className='flex flex-row justify-between items-center'>
-                    <div className="flex">
+                <div className='px-6 pt-2 shadow-sm flex flex-row justify-between items-center'>
+                    <div className="flex gap-4">
                         {tabs.map((tab, index) => (
                             <Tab
                                 key={index}
@@ -123,17 +126,17 @@ const InputPage: React.FC = () => {
                             />
                         ))}
                     </div>
-                    <div className='flex gap-4 mr-4'>
+                    <div className='flex gap-4'>
                         {colorData.map((singleData, index) => (
-                            <div key={index} className='flex gap-2 justify-between items-center'>
-                                <div className={`h-3 w-3 bg-[${singleData.color}] rounded-full`} />
-                                <h1 className='flex justify-between items-center'>{singleData.title}</h1>
+                            <div key={index} className='grid grid-cols-4 gap-2'>
+                                <div className={`col-span-1 mt-[2px] h-3 w-3 bg-[${singleData.color}] rounded-full`} />
+                                <h1 className='col-span-3 text-[10px] truncate'>{singleData.title}</h1>
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
-            <div className='flex-grow p-4'>
+            <div className='flex-grow p-2'>
                 <StepComponent
                     marketSite={"CyberCity Gurgaon"}
                     id={id}
