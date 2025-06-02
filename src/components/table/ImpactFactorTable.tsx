@@ -3,7 +3,7 @@ import { addImpactFactorData, getImpactFactorDataByMarketSite } from "../../acti
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { message } from "antd";
-import { ADD_IMPACT_FACTOR_DATA_RESET, GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_RESET } from "../../constants/audienceConstant";
+import { ADD_IMPACT_FACTOR_DATA_RESET, GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_RESET, IMPACT_FACTOR_DATA_STATUS } from "../../constants/audienceConstant";
 
 interface ImpactFactorTableProps {
   marketSite: String;
@@ -44,7 +44,7 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
     dayType: string;
     factorKey: string;
   } | null>(null);
-  const [lockStatus, setLockStatus] = useState(dataCheckStatus["Impact Factor Data"]);
+  const [lockStatus, setLockStatus] = useState(dataCheckStatus[IMPACT_FACTOR_DATA_STATUS]);
 
   const capitalizeFirst = (str: string) =>
     str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -70,6 +70,10 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
 
   };
 
+  const resetButtonFunction = () => {
+    dispatch(getImpactFactorDataByMarketSite({ marketSite: marketSite, id: id, avgDataBool: avgBoolData }))
+  }
+
   const handleKeyDown = (e: any, index: any) => {
     if (e.key === 'Tab' && !e.shiftKey) {
       e.preventDefault();
@@ -86,7 +90,7 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
   };
 
   useEffect(() => {
-    dispatch(getImpactFactorDataByMarketSite({ marketSite: marketSite, id: id, avgBoolData: avgBoolData }))
+    dispatch(getImpactFactorDataByMarketSite({ marketSite: marketSite, id: id, avgDataBool: avgBoolData }))
   }, [])
 
   useEffect(() => {
@@ -96,17 +100,16 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
     }
 
     if (impactFactorByMarketSiteSuccess) {
-      setImpactFactorData(impactFactorByMarketSite)
+      setImpactFactorData(impactFactorByMarketSite?.response)
+      if (impactFactorByMarketSite.audienceDataStatus != null)
+        setDataCheckStatus(impactFactorByMarketSite?.audienceDataStatus)
       dispatch({ type: GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_RESET })
     }
 
     if (addImpactFactorDataSuccess) {
       message.info("Data Saved Successfully")
       dispatch({ type: ADD_IMPACT_FACTOR_DATA_RESET })
-      setDataCheckStatus((prevData: any) => ({
-        ...prevData,
-        ["Impact Factor Data"]: true
-      }));
+      resetButtonFunction()
     }
 
     if (addImpactFactorDataError) {
@@ -140,6 +143,7 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
   }
 
   const lockButtonFunction = () => {
+    console.log(checkData() , lockStatus)
     if (checkData() && lockStatus === false) {
       setLockStatus(!lockStatus)
       dispatch(addImpactFactorData({
@@ -154,10 +158,6 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
         ["Impact Factor Data"]: false
       }));
     }
-  }
-
-  const resetButtonFunction = () => {
-    dispatch(getImpactFactorDataByMarketSite({ marketSite: marketSite, id: id, avgBoolData: avgBoolData }))
   }
 
   return (
@@ -202,7 +202,7 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
                       editableCell.factorKey === factorKey ? (
                       <input
                         type="number"
-                        value={((factors as any)[factorKey])}
+                        value={(((factors || {} as any)[dayType] || {} as any)[factorKey])}
                         onBlur={handleBlur}
                         onWheel={(e) => e.currentTarget.blur()}
                         onChange={(e) => handleChange(e, dayType, factorKey)}
@@ -224,7 +224,7 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
           </tbody>
         </table>
       </div>
-      
+
     </div>
   );
 };
