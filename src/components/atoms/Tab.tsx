@@ -58,7 +58,10 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, curre
     }
     return (
         <div
-            className={`flex gap-4 items-center p-2 cursor-pointer ${label === "Footfall Data" && isActive ? "border-b-2 border-black font-bold" : index < currentIndex && !showTick ? "border-b-2 border-gray-200" : showTick ? "border-b-2 border-[#129BFF50]" : !isActive ? 'border-b-2 border-red-100 font-normal' : 'border-b-2 border-red-500 text-red-500 font-bold'}`}
+            className={`flex gap-4 items-center p-2 cursor-pointer ${label === "Footfall Data" && isActive ? "border-b-2 border-black font-bold"
+                : index < currentIndex && !checkTickStatus() ? "border-b-2 border-gray-200" : checkTickStatus() ?
+                    "border-b-2 border-[#129BFF50]" : !isActive ? 'border-b-2 border-red-100 font-normal' :
+                        'border-b-2 border-red-500 text-red-500 font-bold'}`}
             onClick={onClick}
         >
             <span className="text-sm">{label}</span>
