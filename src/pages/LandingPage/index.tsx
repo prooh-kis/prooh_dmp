@@ -7,7 +7,6 @@ import { Footer } from "../../components/footer";
 import { MyButton, RegisterHeroDataForm } from "../../components/index";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { AUTH } from "../../routes/routes";
 
 export const LandingPage: React.FC = () => {
   const scrollToRef = useRef<any>(null);
@@ -28,7 +27,7 @@ export const LandingPage: React.FC = () => {
     if (userInfo) {
       navigate(`/dashboard?userId=${userInfo?._id}`);
     } else {
-      navigate(AUTH);
+      navigate("/");
     }
   };
   return (
@@ -203,8 +202,8 @@ export const LandingPage: React.FC = () => {
               </div>
             </div>
             <h1 className="text-[16px]  pt-4">
-              2. We Are Currently Looking To Seek Data In The Following
-              Touch points
+              2. We Are Currently Looking To Seek Data In The Following Touch
+              points
             </h1>
             <div className="flex gap-8 items-center text-[#254354] pt-4">
               <div className="flex gap-2 items-center">

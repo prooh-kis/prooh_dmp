@@ -116,7 +116,8 @@ export const IdentificationFormForDataHeroPopup: React.FC<
       open={open}
       onOk={handleSubmit}
       onCancel={handleCancel}
-      width={700}
+      width={800}
+      style={{ top: 10 }}
       footer={[
         <Button key="back" onClick={handleCancel} className="mr-2">
           Cancel
@@ -132,7 +133,7 @@ export const IdentificationFormForDataHeroPopup: React.FC<
         </Button>,
       ]}
     >
-      <div className="h-[70vh] overflow-y-scroll scrollbar-minimal pr-2">
+      <div className="overflow-y-scroll scrollbar-minimal pr-2">
         <h1 className="text-[#12334B] text-[36px] font-semibold leading-2 tracking-normal font-inter">
           Identify Yourself
         </h1>
@@ -182,7 +183,16 @@ export const IdentificationFormForDataHeroPopup: React.FC<
               valuePropName="fileList"
               getValueFromEvent={normFile}
               className="custom-error-text"
-              rules={[{ required: true, message: <span style={{ fontSize: "8px" }}>Please upload your resume</span> }]}
+              rules={[
+                {
+                  required: true,
+                  message: (
+                    <span style={{ fontSize: "8px" }}>
+                      Please upload your resume
+                    </span>
+                  ),
+                },
+              ]}
             >
               <Upload
                 listType="picture-card"
@@ -234,10 +244,14 @@ export const IdentificationFormForDataHeroPopup: React.FC<
               ]}
             >
               <AutoComplete
-                options={ALL_WHO_AM_I?.map((v: any) => {return {value: v.toUpperCase()}})}
+                options={ALL_WHO_AM_I?.map((v: any) => {
+                  return { value: v.toUpperCase() };
+                })}
                 placeholder="e.g., Software Developer"
                 filterOption={(inputValue, option) =>
-                  option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                  option!.value
+                    .toUpperCase()
+                    .indexOf(inputValue.toUpperCase()) !== -1
                 }
                 onSelect={(value) => {
                   form.setFieldsValue({ role: value.toUpperCase() });
@@ -245,7 +259,6 @@ export const IdentificationFormForDataHeroPopup: React.FC<
                 onChange={(value) => {
                   form.setFieldsValue({ role: value.toUpperCase() });
                 }}
-              
               />
               {/* <Input
                 placeholder="e.g., Software Developer"
@@ -261,10 +274,14 @@ export const IdentificationFormForDataHeroPopup: React.FC<
               ]}
             >
               <AutoComplete
-                options={ALL_INDUSTRY?.map((v: any) => {return {value: v.toUpperCase()}})}
+                options={ALL_INDUSTRY?.map((v: any) => {
+                  return { value: v.toUpperCase() };
+                })}
                 placeholder="e.g., Industry"
                 filterOption={(inputValue, option) =>
-                  option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                  option!.value
+                    .toUpperCase()
+                    .indexOf(inputValue.toUpperCase()) !== -1
                 }
                 onSelect={(value) => {
                   form.setFieldsValue({ industry: value.toUpperCase() });
