@@ -1,106 +1,99 @@
-import { signout } from "../../actions/userAction";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { AUTH, DASHBOARD, HOME, RESEARCH } from "../../routes/routes";
-import { message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { AUTH, DASHBOARD, HOME } from "../../routes/routes";
 import { Layer } from "../../assets";
+import ButtonInput from "../../components/atoms/ButtonInput";
+import { Menu } from "./Menu";
 
-export const Header: React.FC<any> = ({value}) => {
-  const dispatch = useDispatch<any>();
+interface Tab {
+  label: string;
+  path: string;
+}
+
+export const Header: React.FC<{ value?: string }> = ({ value }) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [current, setCurrent] = useState<string>(value);
-  console.log(current)
+  const [currentTab, setCurrentTab] = useState<string>("Home");
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const auth = useSelector((state: any) => state.auth);
   const { userInfo } = auth;
 
-  const [tabs, setTabs] = useState<any>([
-    {
-      label: "Home",
-      path: HOME,
-    },
-    {
-      label: "Research",
-      path: RESEARCH,
-    },
-    {
-      label: "Dashboard",
-      path: DASHBOARD,
-    },
+  const [tabs] = useState<Tab[]>([
+    { label: "Home", path: HOME },
+    { label: "Dashboard", path: DASHBOARD },
   ]);
 
-  const handleClick = (index: number) => {
-    setCurrent(tabs[index]?.label);
-    if (index == 1) {
-      if (!userInfo) {
-        message.error("please  signIn");
-        navigate("/auth");
-      }
-      if (userInfo?._id) {
-        navigate(RESEARCH);
-      }
-    } else {
-      navigate(tabs[index].path);
-    }
+  const handleTabClick = (tab: Tab) => {
+    setCurrentTab(tab.label);
+    navigate(tab.path);
   };
 
-  const handleSignOut = () => {
-    dispatch(signout());
-    navigate("/");
+  const handleLogoClick = () => {
+    navigate(userInfo ? `/research/${userInfo?._id}` : "/");
   };
 
   return (
-    <div className="w-full h-16 bg-white border border-b flex items-center justify-between fixed z-50">
-      <div className="col-span-2 flex items-center mx-10">
-        <div
-          className="flex items-center gap-2"
-          onClick={() => navigate("/")}
-        >
-          {/* <h1 className="text-xl font-black">PROOH.AI</h1> */}
-          <img src={Layer} className="h-8 w-8" alt="fly" />
-          <div className="">
-            <h1 className="text-[16px] text-[#1E376E] font-black">Layer</h1>
-            <p className="text-[10px] text-[#6F7F8E]">powered by <span className="italic">PROOH.AI</span></p>
+    <header className="w-full h-16 bg-white border-b flex items-center justify-between fixed z-50 px-4 sm:px-10">
+      {/* Logo Section */}
+      <div
+        className="flex items-center gap-2 cursor-pointer"
+        onClick={handleLogoClick}
+      >
+        <img src={Layer} className="h-8 w-8" alt="Layer logo" />
+        <div>
+          <h1 className="text-base text-[#1E376E] font-black">Layer</h1>
+          <p className="text-xs text-[#6F7F8E]">
+            powered by <span className="italic">PROOH.AI</span>
+          </p>
+        </div>
+      </div>
+
+      {/* Navigation Section */}
+      {userInfo ? (
+        <div className="flex items-center space-x-2 relative">
+          <img
+            src={userInfo?.avatar}
+            alt="User profile"
+            className="w-10 h-10 rounded-full object-cover"
+          />
+          <div className="truncate max-w-[120px]">
+            <h3 className="text-lg font-semibold truncate">{userInfo.name}</h3>
+            <p className="text-xs font-bold text-gray-700 truncate">
+              {userInfo.userRole}
+            </p>
+          </div>
+          <div className="relative" ref={dropdownRef}>
+            <Menu userInfo={userInfo} />
           </div>
         </div>
-      </div>
-      <div className="col-span-2 flex items-center justify-end pr-8">
-        <div className="flex gap-4 items-center">
-          {tabs?.map((d1: any, index: any) => (
-            <button
-              key={d1?.label}
-              type="button"
-              onClick={() => handleClick(index)}
-              className={`${current === d1.label
-                  ? "text-sm lg:text-base text-[#129BFF] border-b-2 border-[#129BFF] py-5 leading-[20.69px] tracking-[0.01rem]"
-                  : "text-sm lg:text-base py-1 text-[#888888] leading-[20.69px] tracking-[0.01rem]"
+      ) : (
+        <div className="flex items-center gap-4">
+          <nav className="hidden sm:flex gap-4">
+            {tabs.map((tab) => (
+              <button
+                key={tab.label}
+                type="button"
+                onClick={() => handleTabClick(tab)}
+                className={`text-sm sm:text-base transition-colors border-b-2 py-4 ${
+                  currentTab === tab.label
+                    ? "text-[#129BFF] border-[#129BFF] font-medium"
+                    : "text-[#888888] hover:text-[#129BFF] border-[#FFFFFF]"
                 }`}
-            >
-              {d1?.label}
-            </button>
-          ))}
-          {userInfo ? (
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className={`${"text-sm lg:text-base py-1 text-[#888888] leading-[20.69px] tracking-[0.01rem]"}`}
-            >
-              {`Sign Out`}
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => navigate(AUTH)}
-              className={`${"text-sm lg:text-base py-1 text-[#888888] leading-[20.69px] tracking-[0.01rem]"}`}
-            >
-              {`Log In`}
-            </button>
-          )}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+          <ButtonInput
+            onClick={() => navigate(AUTH)}
+            rounded="full"
+            className="min-w-[100px]"
+          >
+            Sign In
+          </ButtonInput>
         </div>
-      </div>
-    </div>
+      )}
+    </header>
   );
 };

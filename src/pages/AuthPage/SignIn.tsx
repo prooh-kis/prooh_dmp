@@ -19,7 +19,7 @@ export const SignIn: React.FC = () => {
 
   useEffect(() => {
     if (success) {
-      navigate("/");
+      navigate(`/research/${userInfo?._id}`);
     }
     if (errorSignIn) {
       message.error(errorSignIn);
@@ -27,10 +27,12 @@ export const SignIn: React.FC = () => {
   }, [errorSignIn, success, navigate]);
 
   const onFinish = (values: any) => {
-    dispatch(signin({
-      "email": email,
-      "password": password
-    }));
+    dispatch(
+      signin({
+        email: email,
+        password: password,
+      })
+    );
   };
 
   return (
