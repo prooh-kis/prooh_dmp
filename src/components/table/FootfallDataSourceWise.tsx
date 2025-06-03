@@ -44,7 +44,6 @@ export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ 
     } = getAvgFootfallDataByMarketSiteData;
 
     useEffect(() => {
-        console.log(id)
         if (id !== "research") {
             navigate(`/research/${id}`)
         }

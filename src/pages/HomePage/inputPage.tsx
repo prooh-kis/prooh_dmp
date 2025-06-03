@@ -37,12 +37,10 @@ const InputPage: React.FC = () => {
 
     const handleTabClick = (index: number) => {
         switch (index) {
-            case 0: setCurrentStep(index + 1);
-                break
             case 1: setCurrentStep(index + 1);
                 break
             case 2: {
-                if (dataCheckStatus.PERCENT_DATA_STATUS) {
+                if (dataCheckStatus[PERCENT_DATA_STATUS]) {
                     setCurrentStep(index + 1)
                 }
                 else {
@@ -52,13 +50,13 @@ const InputPage: React.FC = () => {
                 break
             case 3: {
                 var checkStatus = 0
-                for (const genderData of Object.values(dataCheckStatus.GENDER_WISE_DATA_STATUS)) {
+                for (const genderData of Object.values(dataCheckStatus[GENDER_WISE_DATA_STATUS])) {
                     if (!genderData) {
                         checkStatus = 1
                     }
                 }
 
-                for (const timezoneData of Object.values(dataCheckStatus.TIMEZONE_WISE_DATA_STATUS)) {
+                for (const timezoneData of Object.values(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS])) {
                     if (!timezoneData) {
                         checkStatus = 1
                     }

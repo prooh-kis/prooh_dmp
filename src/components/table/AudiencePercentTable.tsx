@@ -125,7 +125,7 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
         dataHeroUserEmail: userInfo?.email,
         geoCoordinates: [],
         data: data,
-        audienceDataStatus: dataCheckStatus
+        audienceDataStatus: JSON.parse(JSON.stringify(dataCheckStatus))
       }))
     }
     else if (getTotalPercent() != "100") {
@@ -146,7 +146,7 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
 
   useEffect(() => {
     dispatch(getAvgAudienceDataByMarketSite({ id: id === "research" ? null : id, marketSite: marketSite, avgDataBool: avgDataBool }))
-  }, [avgDataBool])
+  }, [avgDataBool , id])
 
   useEffect(() => {
     if (audienceDataByMarketSiteError) {
@@ -185,7 +185,6 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
     if (addAudienceTypePercentSuccess) {
       message.info("Data Saved Successfully")
       setId(addAudienceTypePercent._id)
-      resetButtonFunction()
       dispatch({ type: ADD_AUDIENCE_TYPE_PERCENT_DATA_RESET })
     }
 

@@ -15,6 +15,7 @@ interface TabProps {
 
 export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, currentIndex, dataCheckStatus }) => {
     const checkTickStatus = () => {
+        console.log(dataCheckStatus)
         switch (index) {
             case 2: {
                 if (dataCheckStatus[PERCENT_DATA_STATUS]) {
@@ -71,8 +72,6 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, curre
                         <span className="text-green-600 text-sm">✔</span>
                         : <span className="text-red-500 text-sm">✕</span>}
                 </div>}
-
-
             </div>
         </div>
     );
