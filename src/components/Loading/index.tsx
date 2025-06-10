@@ -1,39 +1,35 @@
 import React, { useEffect, useRef, useState } from "react";
-export const Loading = ({ grid = { cols: 3, rows: 4 }, height, width}: any) => {
+export const Loading = ({ grid = { cols: 1, rows: 3 }}: any) => {
   const generateColumnWidths = (cols: number) => {
-    // Generate widths such that their sum equals 'w-full'
-    const availableWidths = [1 / 4, 1 / 2, 1 / 4]; // Tailwind width fractions
-    if (cols > availableWidths.length) {
-      throw new Error("Number of columns exceeds available distinct widths");
+    // Common column configurations
+    const commonWidths: Record<number, string> = {
+      1: 'w-full',
+      2: 'w-1/2',
+      3: 'w-1/3',
+      4: 'w-1/4',
+    };
+
+    // Return common width if available, otherwise calculate
+    if (commonWidths[cols]) {
+      return Array(cols).fill(commonWidths[cols]);
     }
-  
-    // Shuffle the available widths to ensure randomness
-    const shuffledWidths = [...availableWidths].sort(() => Math.random() - 0.5);
-  
-    // Take the first `cols` widths
-    const selectedWidths = shuffledWidths.slice(0, cols);
-  
-    // Ensure the sum of selected widths equals 1 (w-full)
-    const total = selectedWidths.reduce((sum, width) => sum + width, 0);
-  
-    if (total !== 1) {
-      throw new Error("Widths do not sum to w-full");
-    }
-  
-    return selectedWidths.map((width) => `w-${Math.round(width * 4)}/4`);
+    
+    // Fallback for other column counts
+    const width = 100 / cols;
+    return Array(cols).fill(`w-[${width}%]`);
   };
 
   return (
-    <div className={`grid gap-4 w-full h-full p-4`}>
+    <div className={`grid gap-1 w-full h-full py-1`}>
       {Array.from({ length: grid.rows })?.map((_, rowIndex) => {
         const columnWidths = generateColumnWidths(grid.cols);
 
         return (
-          <div key={`row-${rowIndex}`} className={`grid grid-cols-${grid.cols} gap-4 w-full`}>
+          <div key={`row-${rowIndex}`} className={`grid grid-cols-${grid.cols} gap-1 w-full`}>
             {Array.from({ length: grid.cols })?.map((_, colIndex) => (
               <div
                 key={`col-${colIndex}`}
-                className={`p-2 animate-pulse bg-[#D7D7D7] rounded h-20 ${columnWidths[colIndex]}`}
+                className={`p-1 animate-pulse bg-[#D7D7D7] h-10 w-full`}
               ></div>
             ))}
           </div>

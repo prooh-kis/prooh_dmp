@@ -101,7 +101,7 @@ const ButtonInput: React.FC<ButtonProps> = ({
     <div
       role="button"
       tabIndex={0}
-      aria-disabled={disabled || loading}
+      // aria-disabled={disabled || loading}
       onClick={handleClick}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {

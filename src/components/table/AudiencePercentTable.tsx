@@ -1,8 +1,7 @@
 import { AudienceTableHeader } from "../../components/layouts/AudienceTableHeader";
 import { addAudienceTypePercentData, getAvgAudienceDataByMarketSite } from "../../actions/audienceAction";
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { message } from "antd";
 import {
   ADD_AUDIENCE_TYPE_PERCENT_DATA_RESET,
@@ -11,6 +10,7 @@ import {
   PERCENT_DATA_STATUS,
   TIMEZONE_WISE_DATA_STATUS
 } from "../../constants/audienceConstant";
+import { Loading } from "../../components/Loading";
 
 interface AudiencePercentData {
   category: string;
@@ -19,21 +19,23 @@ interface AudiencePercentData {
 }
 
 interface AudiencePercentTableProps {
-  marketSite: String;
+  marketSite: string;
   id: string;
   setId: Function;
   dataCheckStatus: any;
   setDataCheckStatus: Function;
-  avgDataBool: Boolean;
+  avgDataBool: boolean;
+  lockStatus: boolean;
+  setLockStatus: Function;
 }
 
 export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
-  marketSite, id, setId, dataCheckStatus, setDataCheckStatus, avgDataBool
+  marketSite, id, setId, lockStatus, setLockStatus, dataCheckStatus, setDataCheckStatus, avgDataBool
 }) => {
 
   const dispatch = useDispatch<any>();
   const [totalCount, setTotalCount] = useState(0);
-  const [lockStatus, setLockStatus] = useState<any>(dataCheckStatus[PERCENT_DATA_STATUS]);
+  // const [lockStatus, setLockStatus] = useState<any>(dataCheckStatus[PERCENT_DATA_STATUS]);
   const [audienceTypeWiseData, setAudienceTypeWiseData] = useState<AudiencePercentData[]>([]);
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
@@ -108,9 +110,15 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
     return (totalPercentage).toFixed(0);
   };
 
+  console.log("audience % table", dataCheckStatus)
   const lockButtonFunction = () => {
+
     if (getTotalPercent() == "100" && lockStatus == false) {
       setLockStatus(!lockStatus)
+      setDataCheckStatus((prevData: any) => ({
+        ...prevData,
+        [PERCENT_DATA_STATUS]: true
+      }));
       const data: { [key: string]: number | undefined } = {};
       for (const audience of audienceTypeWiseData) {
         data[audience.category] = audience?.percent / 100
@@ -125,7 +133,10 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
         dataHeroUserEmail: userInfo?.email,
         geoCoordinates: [],
         data: data,
-        audienceDataStatus: JSON.parse(JSON.stringify(dataCheckStatus))
+        audienceDataStatus: {
+          ...dataCheckStatus,
+          [PERCENT_DATA_STATUS]: true
+        }
       }))
     }
     else if (getTotalPercent() != "100") {
@@ -146,7 +157,7 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
 
   useEffect(() => {
     dispatch(getAvgAudienceDataByMarketSite({ id: id === "research" ? null : id, marketSite: marketSite, avgDataBool: avgDataBool }))
-  }, [avgDataBool , id])
+  }, [avgDataBool, dispatch, id, marketSite])
 
   useEffect(() => {
     if (audienceDataByMarketSiteError) {
@@ -160,6 +171,7 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
     }
 
     if (audienceDataByMarketSiteSuccess) {
+      setLockStatus(dataCheckStatus[PERCENT_DATA_STATUS]);
       setAudienceTypeWiseData(audienceDataByMarketSite?.data)
       setTotalCount(audienceDataByMarketSite?.totalAvgCount)
 
@@ -169,14 +181,14 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
         for (const audienceType of audienceDataByMarketSite?.data) {
           data[audienceType.category] = false
         }
-        setDataCheckStatus((prevData: any) => ({
-          ...prevData,
-          [GENDER_WISE_DATA_STATUS]: data,
-          [TIMEZONE_WISE_DATA_STATUS]: data
-        }));
+        // setDataCheckStatus((prevData: any) => ({
+        //   ...prevData,
+        //   [GENDER_WISE_DATA_STATUS]: data,
+        //   [TIMEZONE_WISE_DATA_STATUS]: data
+        // }));
       }
       else if (audienceDataByMarketSite?.audienceDataStatus != null) {
-        setDataCheckStatus(audienceDataByMarketSite?.audienceDataStatus)
+        // setDataCheckStatus(audienceDataByMarketSite?.audienceDataStatus)
       }
 
       dispatch({ type: GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_RESET })
@@ -184,12 +196,11 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
 
     if (addAudienceTypePercentSuccess) {
       message.info("Data Saved Successfully")
-      setId(addAudienceTypePercent._id)
+      setId(addAudienceTypePercent?._id)
       dispatch({ type: ADD_AUDIENCE_TYPE_PERCENT_DATA_RESET })
     }
 
-  }, [audienceDataByMarketSiteSuccess, audienceDataByMarketSiteError,
-    addAudienceTypePercentError, addAudienceTypePercentSuccess])
+  }, [audienceDataByMarketSiteSuccess, audienceDataByMarketSiteError, addAudienceTypePercentError, addAudienceTypePercentSuccess, dispatch, audienceDataByMarketSite, dataCheckStatus, setDataCheckStatus, setId, addAudienceTypePercent, setLockStatus])
 
 
   return (
@@ -201,12 +212,17 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
           <tr className="grid grid-cols-6 bg-[#F7F7F7] text-[#6F7F8E]">
             <th className="col-span-4 border border-slate-300 py-2 text-left pl-4">Audience Type</th>
             <th className="col-span-1 py-2 text-[#ffffff] bg-[#FF5050]">% share</th>
-            <th className="col-span-1 border border-slate-300 py-2">
-              Audience Count
-            </th>
+            <th className="col-span-1 border border-slate-300 py-2">Audience Count</th>
           </tr>
         </thead>
         <tbody>
+          {audienceDataByMarketSiteLoading && (
+            <tr>
+              <td>
+                <Loading grid={{ cols: 1, rows: 4 }} />
+              </td>
+            </tr>
+          )}
           {audienceTypeWiseData.map((data, index) => (
             <tr key={index} className="grid grid-cols-6">
               <td className="col-span-4 border-b border-l border-slate-300 py-2 px-4">

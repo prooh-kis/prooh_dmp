@@ -11,6 +11,7 @@ import { DataHeroProfilePopup } from './DataHeroProfilePopup';
 import { SwitchInput } from '../../components/atoms/SwitchInput';
 import { ThirdPartyAudienceCountSegment } from './ThirdPartyAudienceCountSegment';
 import { RespondentDataSegment } from './RespondentDataSegment';
+import { rightArrowGif } from '../../assets';
 
 const dataSourceTab = [{
     label: "Third Party Data",
@@ -242,7 +243,7 @@ export const Dashboard: React.FC = () => {
     return (
         <div className="font-custom grid grid-rows-12 bg-gray-100 h-[90vh]">
           
-            <div className="row-span-1 px-8 bg-white flex gap-2 items-center">
+            <div className="row-span-1 px-6 bg-white flex gap-2 items-center">
                 <div className="flex items-center justify-center bg-[#3A9868] rounded-[8px] p-2">
                     <i className="fi fi-br-analyse text-[12px] text-white flex items-center justify-center motion-safe:animate-bounce"></i>
                 </div>
@@ -283,8 +284,11 @@ export const Dashboard: React.FC = () => {
                 </div>
                 <div className="col-span-8 grid grid-cols-1 grid-rows-12 gap-2">
                     <div className="row-span-3 col-span-1 rounded-[8px] bg-white shadow-sm">
-                        <div className="flex gap-2 items-center px-4 pt-4 pb-2">
+                        <div className="flex gap-2 items-center justify-between px-4 pt-4 pb-2">
                             <h1 className="text-[16px] font-semibold">Total Audience Data</h1>
+                            <div className="h-4 w-6">
+                                <img src={rightArrowGif} alt="right arrow" />
+                            </div>
                         </div>
                         
                         <div className="border-b border-[#E5E5E5]">
@@ -328,50 +332,12 @@ export const Dashboard: React.FC = () => {
                                     </div>
                                     );
                                 })}
-
-                                {/* {Object.keys(respondentAudienceGenderData)?.map((gender: any, m: any) => (
-                                    <div key={m} className="flex items-center">
-                                        <CheckboxInput
-                                            label={`${gender} (${respondentAudienceGenderData[gender].percentage?.toFixed(1)}%)`}
-                                            checked={
-                                                filters[filterHelperTexts?.find((d: any) => d.value === "genderWiseData")?.label || "genderWiseData"]?.includes(gender)
-                                                // filters.genders?.length === 0 || filters.genders?.includes("All")
-                                            }
-                                            color="#6F7F8E"
-                                            textSize="14px"
-                                            onChange={(checked) => handleClick({
-                                                type: "genders",
-                                                value: gender,
-                                                checked: checked
-                                            })}
-                                            disabled={
-                                                Object.keys(filters[filterHelperTexts?.find((d: any) => d.value === "genderWiseData")?.label || "genderWiseData"] || []).length === 1 ||
-                                                Object.keys(filters[filterHelperTexts?.find((d: any) => d.value === "genderWiseData")?.label || "genderWiseData"] || []).length === 2 && filters[filterHelperTexts?.find((d: any) => d.value === "genderWiseData")?.label || "genderWiseData"]?.includes("All")
-                                            }
-                                        />
-                                    </div>
-                                ))}
-                                {allValues?.["genders"]?.filter((a: any) => !Object.keys(respondentAudienceGenderData)?.includes(a))?.map((key: any, p: any) => (
-                                    <div key={p} className="flex items-center gap-2">
-                                        <CheckboxInput
-                                            label={key}
-                                            checked={false}
-                                            color="#6F7F8E"
-                                            textSize="14px"
-                                            onChange={(checked) => handleClick({
-                                                type: "genders",
-                                                value: key,
-                                                checked: checked
-                                            })}
-                                        />
-                                    </div>
-                                ))} */}
                             </div>
-                            <div className="px-2 flex items-center gap-2">
+                            <div className="px-2 flex items-center gap-2 cursor-pointer">
                                 <h1 className={`text-[12px] ${showPercent ? "text-[#6F7F8E50]" : "text-[#3A9868]"}`}>#</h1>
                                 <SwitchInput
                                     isEnabled={showPercent}
-                                    onToggle={() => setShowPercent(!showPercent)}
+                                    onToggle={setShowPercent}
                                 />
                                 <h1 className={`text-[10px] ${showPercent ? "text-[#3A9868]" : "text-[#6F7F8E50]"}`}>%</h1>
                             </div>

@@ -6,18 +6,20 @@ import { GENDER_WISE_DATA_STATUS } from "../../constants/audienceConstant";
 
 
 interface AudienceGenderWiseTimezoneWiseDataProps {
-    marketSite: String;
+    marketSite: string;
     id: string;
     setId: string;
-    step: any;
-    setStep: Function;
+    audienceCategoryStep: any;
+    setAudienceCategoryStep: Function;
     dataCheckStatus: any;
     setDataCheckStatus: Function;
-    avgDataBool: Boolean;
+    avgDataBool: boolean;
+    lockStatus: boolean;
+    setLockStatus: Function;
 }
 
 export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTimezoneWiseDataProps> = ({
-    marketSite, id, setId, step, setStep, dataCheckStatus, setDataCheckStatus, avgDataBool
+    marketSite, id, setId, lockStatus, setLockStatus, audienceCategoryStep, setAudienceCategoryStep, dataCheckStatus, setDataCheckStatus, avgDataBool
 }) => {
 
     const navigate = useNavigate();
@@ -34,8 +36,8 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
         <div className="flex-grow grid grid-cols-12 gap-2 overflow-hidden">
             <div className="col-span-3 bg-[#ffffff] overfow-hidden rounded-[8px] shadow-sm">
                 <VerticalStepper
-                    step={step}
-                    setStep={setStep}
+                    audienceCategoryStep={audienceCategoryStep}
+                    setAudienceCategoryStep={setAudienceCategoryStep}
                     id={id}
                     dataCheckStatus={dataCheckStatus}
                     audienceCategory={audienceCategory}
@@ -46,14 +48,17 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
 
             <div className="col-span-9 flex flex-col gap-2 overflow-hidden">
                 <div className="flex-grow overflow-y-auto pr-2 rounded-[8px] shadow-sm bg-[#ffffff]">
-                    <AudienceGenderWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
+                    <AudienceGenderWiseTable lockStatus={lockStatus} setLockStatus={setLockStatus} marketSite={marketSite} audienceCategory={audienceCategory}
                         audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
                         setDataCheckStatus={setDataCheckStatus} avgDataBool={avgDataBool} />
                 </div>
                 {dataCheckStatus?.[GENDER_WISE_DATA_STATUS]?.[audienceCategory] && (
                     <div className="rounded-[8px] shadow-sm bg-[#ffffff]">
-                        <AudienceTimezoneWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
-                        audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
+                        <AudienceTimezoneWiseTable lockStatus={lockStatus} setLockStatus={setLockStatus} marketSite={marketSite} audienceCategory={audienceCategory}
+                        // audiencePercent={audiencePercent} 
+                        id={id} 
+                        // setId={setId} 
+                        dataCheckStatus={dataCheckStatus}
                         setDataCheckStatus={setDataCheckStatus} avgDataBool={avgDataBool} />
                     </div>
                 )}

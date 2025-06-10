@@ -14,10 +14,15 @@ interface TabProps {
 }
 
 export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, currentIndex, dataCheckStatus }) => {
+    console.log("index", index)
     const checkTickStatus = () => {
-        console.log(dataCheckStatus)
+        console.log(index);
         switch (index) {
+            case 1: {
+                return true;
+            }
             case 2: {
+                console.log(dataCheckStatus[PERCENT_DATA_STATUS]);
                 if (dataCheckStatus[PERCENT_DATA_STATUS]) {
                     return true
                 }
@@ -59,17 +64,22 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, curre
     }
     return (
         <div
-            className={`flex gap-4 items-center p-2 cursor-pointer ${label === "Footfall Data" && isActive ? "border-b-2 border-black font-bold"
-                : index < currentIndex && !checkTickStatus() ? "border-b-2 border-gray-200" : checkTickStatus() ?
-                    "border-b-2 border-[#129BFF50]" : !isActive ? 'border-b-2 border-red-100 font-normal' :
-                        'border-b-2 border-red-500 text-red-500 font-bold'}`}
+            className={`flex gap-4 items-center p-2 cursor-pointer 
+                ${label === "Footfall Data" && isActive ? 
+                    "border-b-2 border-black font-bold"
+                : index < currentIndex && !checkTickStatus() ? 
+                    "border-b-2 border-red-500"
+                : checkTickStatus() ?
+                    "border-b-2 border-[#129BFF50]"
+                : isActive ? 'border-b-2 border-red-100 font-normal'
+                : 'border-b-2 border-red-500 text-red-500 font-bold'}`}
             onClick={onClick}
         >
-            <span className="text-sm">{label}</span>
+            <span className="text-sm truncate">{label}</span>
             <div className="flex items-center">
                 {label !== "Footfall Data" && <div>
                     {checkTickStatus() ?
-                        <span className="text-green-600 text-sm">✔</span>
+                        <span className="text-[#129BFF] text-sm">✔</span>
                         : <span className="text-red-500 text-sm">✕</span>}
                 </div>}
             </div>

@@ -12,14 +12,16 @@ import {
 import { message, Tooltip } from 'antd';
 
 interface AudienceTimezoneWiseTableProps {
-  marketSite: String;
-  audienceCategory: String;
-  audiencePercent: number;
+  marketSite: string;
+  audienceCategory: string;
+  // audiencePercent: number;
   id: string;
-  setId: string;
+  // setId: string;
   dataCheckStatus: {};
   setDataCheckStatus: Function;
-  avgDataBool: Boolean;
+  avgDataBool: boolean;
+  lockStatus: any;
+  setLockStatus: Function;
 }
 
 export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps> = ({
@@ -28,7 +30,10 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
   id,
   dataCheckStatus,
   setDataCheckStatus,
-  avgDataBool
+  avgDataBool,
+  lockStatus,
+  setLockStatus,
+  
 }: any) => {
 
   const dispatch = useDispatch<any>();
@@ -55,7 +60,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
     error: addTimezoneWiseDataByAudienceTypeError
   } = addTimezoneWiseDataByAudienceTypeSelector;
 
-  const [lockStatus, setLockStatus] = useState(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS][audienceCategory]);
+  // const [lockStatus, setLockStatus] = useState(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS][audienceCategory]);
   const [genderType, setGenderType] = useState("Male")
   const [decimal, setDecimal] = useState<any>(0);
   const [data, setData] = useState<any>({});
@@ -145,7 +150,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
         [timezone]: {
           ...newTimezoneData[genderType][day].timezoneWiseData[timezone],
           percent: enterValue,
-          audiencePercent: (enterValue * newTimezoneData[genderType][day].percent) / 100,
+          audiencePercent: (enterValue * newTimezoneData[genderType][day]?.percent) / 100,
           count: (enterValue * newTimezoneData[genderType][day].count) / 100,
           unique: (enterValue * newTimezoneData[genderType][day].count * newTimezoneData[genderType][day].timezoneWiseData[timezone].uniquePercent) / 100,
         }

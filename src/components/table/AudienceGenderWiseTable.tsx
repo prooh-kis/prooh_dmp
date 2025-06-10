@@ -10,14 +10,16 @@ import {
 import { message, Tooltip } from "antd";
 
 interface AudienceGenderWiseTableProps {
-  marketSite: String;
-  audienceCategory: String;
+  marketSite: string;
+  audienceCategory: string;
   audiencePercent: number;
   id: string;
   setId: string;
   dataCheckStatus: {};
   setDataCheckStatus: Function;
-  avgDataBool: Boolean;
+  avgDataBool: boolean;
+  lockStatus: boolean;
+  setLockStatus: Function;
 }
 
 export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = ({
@@ -28,7 +30,9 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   setId,
   dataCheckStatus,
   setDataCheckStatus,
-  avgDataBool
+  avgDataBool,
+  lockStatus,
+  setLockStatus
 }: any) => {
 
   const dispatch = useDispatch<any>();
@@ -66,7 +70,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   const [editableCell, setEditableCell] = useState<any>(null);
   const [editableCell1, setEditableCell1] = useState<any>(null);
   const [editableCell2, setEditableCell2] = useState<any>(null);
-  const [lockStatus, setLockStatus] = useState(dataCheckStatus[GENDER_WISE_DATA_STATUS][audienceCategory]);
+  // const [lockStatus, setLockStatus] = useState(dataCheckStatus[GENDER_WISE_DATA_STATUS][audienceCategory]);
   const [genderDataByMarketSite, setGenderDataByMarketSite] = useState<any>({})
 
   const resetButtonFunction = () => {
@@ -91,6 +95,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
     }
 
     if (genderWiseDataByMarketSiteSuccess) {
+      setLockStatus(dataCheckStatus[GENDER_WISE_DATA_STATUS][audienceCategory]);
       setGenderDataByMarketSite(genderWiseDataByMarketSite?.response)
       if (genderWiseDataByMarketSite.audienceDataStatus != null)
         setDataCheckStatus(genderWiseDataByMarketSite?.audienceDataStatus)
@@ -131,7 +136,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
       newGenderData.dayWiseData[day] = {
         ...newGenderData.dayWiseData[day],
         monthly: enterValue,
-        daily: parseFloat((enterValue * newGenderData.percent * audiencePercent / newGenderData.dayWiseData[day].days / 10000).toFixed(2)),
+        daily: parseFloat((enterValue * newGenderData?.percent * audiencePercent / newGenderData.dayWiseData[day].days / 10000).toFixed(2)),
         count: enterValue * newGenderData.count / 100 / newGenderData.dayWiseData[day].days
       };
     }
@@ -149,7 +154,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   };
 
   const checkData = () => {
-    if (genderDataByMarketSite["Male"].percent + genderDataByMarketSite["Female"].percent !== 100) {
+    if (genderDataByMarketSite["Male"]?.percent + genderDataByMarketSite["Female"]?.percent !== 100) {
       alert("Gender Distribution Sum must be 100")
       return false
     }
@@ -201,7 +206,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
         sundays.daily = weekdays.monthly / sundays.days;
 
         sampleData["gender"] = gender;
-        sampleData["weight"] = genderData.percent / 100;
+        sampleData["weight"] = genderData?.percent / 100;
         sampleData["weekdays"] = weekdays;
         sampleData["saturdays"] = saturdays;
         sampleData["sundays"] = sundays;
@@ -341,9 +346,9 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
                       type="number"
                       value={(genderData?.percent)}
                       onBlur={handleBlur}
-                      onWheel={(e) => e.currentTarget.blur()}
+                      // onWheel={(e) => e.currentTarget.blur()}
                       onChange={(e) => handleDataChange(gender, e, null, false)}
-                      className="w-full h-full text-center cursor-pointer focus:outline-none"
+                      className="w-full h-full text-center cursor-pointer border"
                       aria-label="Edit percentage"
                       title="Edit percentage"
                       disabled={lockStatus}

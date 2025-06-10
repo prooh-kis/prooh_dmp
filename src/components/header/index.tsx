@@ -34,7 +34,7 @@ export const Header: React.FC<{ value?: string }> = ({ value }) => {
   };
 
   return (
-    <header className="w-full h-16 bg-white border-b flex items-center justify-between fixed z-50 px-4 sm:px-10">
+    <header className="w-full h-16 bg-white border-b flex items-center justify-between fixed z-50 px-4 sm:px-6">
       {/* Logo Section */}
       <div
         className="flex items-center gap-2 cursor-pointer"

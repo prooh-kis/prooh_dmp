@@ -29,14 +29,18 @@ const InputPage: React.FC = () => {
     const [audienceCategoryStep, setAudienceCategoryStep] = useState<any>(0);
     const [avgDataBool, setAvgDataBool] = useState(false);
     const [toggleVisible, setToggleVisible] = useState(false);
+    const [lockStatus, setLockStatus] = useState<any>(false);
 
     useEffect(() => {
         const currentUrl = window.location.href;
         setId(currentUrl.split("/").pop() || "research")
     }, [])
 
+    // console.log(dataCheckStatus);
     const handleTabClick = (index: number) => {
         switch (index) {
+            case 0: setCurrentStep(index + 1);
+                break
             case 1: setCurrentStep(index + 1);
                 break
             case 2: {
@@ -91,6 +95,8 @@ const InputPage: React.FC = () => {
         color: "#129BFF"
     }]
 
+    console.log(dataCheckStatus)
+
     return (
         <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-gray-100">
             <div className='bg-[#ffffff]'>
@@ -139,18 +145,21 @@ const InputPage: React.FC = () => {
                     marketSite={"CyberCity Gurgaon"}
                     id={id}
                     setId={setId}
-                    step={audienceCategoryStep}
-                    setStep={setAudienceCategoryStep}
+                    audienceCategoryStep={audienceCategoryStep}
+                    setAudienceCategoryStep={setAudienceCategoryStep}
                     dataCheckStatus={dataCheckStatus}
                     setDataCheckStatus={setDataCheckStatus}
                     setToggleVisible={setToggleVisible}
                     avgDataBool={avgDataBool}
                     setAvgDataBool={setAvgDataBool}
+                    lockStatus={lockStatus}
+                    setLockStatus={setLockStatus}
                 />
             </div>
 
             <div className="border-t bg-white py-2">
-                <Footer currentStep={currentStep} setCurrentStep={setCurrentStep} dataCheckStatus={dataCheckStatus}
+                <Footer
+                    lockStatus={lockStatus} currentStep={currentStep} setCurrentStep={setCurrentStep} dataCheckStatus={dataCheckStatus}
                     audienceStep={audienceCategoryStep} setAudienceStep={setAudienceCategoryStep} />
             </div>
         </div>

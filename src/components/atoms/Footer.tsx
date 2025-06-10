@@ -1,5 +1,8 @@
+import { message } from 'antd';
 import { GENDER_WISE_DATA_STATUS, PERCENT_DATA_STATUS, TIMEZONE_WISE_DATA_STATUS } from '../../constants/audienceConstant';
-import React from 'react';
+import React, { useState } from 'react';
+import { SuccessMessagePopup } from '../../components/Popup/SuccessPopup';
+import { useSelector } from 'react-redux';
 
 type FooterProps = {
     audienceStep: any;
@@ -7,12 +10,21 @@ type FooterProps = {
     currentStep: number;
     setCurrentStep: Function;
     dataCheckStatus: any;
+    lockStatus: boolean;
 };
 
-export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dataCheckStatus, audienceStep, setAudienceStep }) => {
+export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dataCheckStatus, audienceStep, setAudienceStep, lockStatus }) => {
+    
+    const [successMsg, setSuccessMsg] = useState<boolean>(false);
+
+    const auth = useSelector((state: any) => state.auth);
+    const { userInfo } = auth;
+    
     const increaseStepVal = () => {
         switch (currentStep) {
-            case 1: setCurrentStep(currentStep + 1);
+            case 1: {
+                setCurrentStep(currentStep + 1);
+            }
                 break
             case 2: {
                 if (dataCheckStatus[PERCENT_DATA_STATUS]) {
@@ -41,7 +53,7 @@ export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dat
                     }
                 }
 
-                if (checkStatus) {
+                if (checkStatus === 0) {
                     alert("Lock the Gender And Timezone Data for All Audience Types First")
                 }
                 else
@@ -49,6 +61,12 @@ export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dat
             }
                 break
 
+            case 4: {
+                message.info("Your response has been saved...");
+                setSuccessMsg(true);
+
+            }
+                break
             default: setCurrentStep(4)
                 break
         }
@@ -56,6 +74,7 @@ export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dat
 
     return (
         <div className='w-full flex justify-end items-center gap-4 text-[12px]'>
+            <SuccessMessagePopup open={successMsg} onClose={() => setSuccessMsg(false)} userInfo={userInfo} />
             <div className=''>
                 {currentStep === 3 && <button type="button" className="border border-blue-500 text-blue-500 p-2 rounded-md">
                     Reset All
