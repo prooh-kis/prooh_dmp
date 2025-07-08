@@ -1,9 +1,9 @@
 import { AudienceTableHeader } from "../../components/layouts/AudienceTableHeader";
-import { addImpactFactorData, getImpactFactorDataByMarketSite } from "../../actions/audienceAction";
+import { addImpactFactorData, getImpactFactorDataByMarketSite, updateAudienceDataStatus } from "../../actions/audienceAction";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { message } from "antd";
-import { ADD_IMPACT_FACTOR_DATA_RESET, GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_RESET, IMPACT_FACTOR_DATA_STATUS } from "../../constants/audienceConstant";
+import { ADD_IMPACT_FACTOR_DATA_RESET, GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_RESET, IMPACT_FACTOR_DATA_STATUS, UPDATE_AUDIENCE_DATA_STATUS_RESET } from "../../constants/audienceConstant";
 
 interface ImpactFactorTableProps {
   marketSite: String;
@@ -37,6 +37,16 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
     success: addImpactFactorDataSuccess,
     error: addImpactFactorDataError
   } = addImpactFactorDataSelector;
+
+  const updateAudienceDataStatusSelector = useSelector(
+    (state: any) => state.updateAudienceDataStatus
+  );
+  const {
+    loading: updateAudienceDataStatusLoading,
+    data: updateAudienceDataStatusData,
+    success: updateAudienceDataStatusSuccess,
+    error: updateAudienceDataStatusError
+  } = updateAudienceDataStatusSelector;
 
   const inputRefs = useRef<HTMLInputElement[]>([]);
   const [impactFactorData, setImpactFactorData] = useState<any>({});
@@ -91,7 +101,11 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
 
   useEffect(() => {
     dispatch(getImpactFactorDataByMarketSite({ marketSite: marketSite, id: id, avgDataBool: avgBoolData }))
-  }, [])
+  }, [marketSite, id, avgBoolData])
+
+  useEffect(() => {
+    setLockStatus(dataCheckStatus[IMPACT_FACTOR_DATA_STATUS])
+  }, [dataCheckStatus])
 
   useEffect(() => {
     if (impactFactorByMarketSiteError) {
@@ -108,6 +122,7 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
 
     if (addImpactFactorDataSuccess) {
       message.info("Data Saved Successfully")
+      setDataCheckStatus(addImpactFactorDataData?.audienceDataStatus)
       dispatch({ type: ADD_IMPACT_FACTOR_DATA_RESET })
       resetButtonFunction()
     }
@@ -117,8 +132,19 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
       dispatch({ type: ADD_IMPACT_FACTOR_DATA_RESET })
     }
 
+    if (updateAudienceDataStatusError) {
+      alert("Error UnLocking Data : " + updateAudienceDataStatusError)
+      dispatch({ type: UPDATE_AUDIENCE_DATA_STATUS_RESET })
+    }
+
+    if (updateAudienceDataStatusSuccess) {
+      setDataCheckStatus(updateAudienceDataStatusData?.audienceDataStatus)
+      dispatch({ type: UPDATE_AUDIENCE_DATA_STATUS_RESET })
+    }
+
+
   }, [impactFactorByMarketSiteSuccess, impactFactorByMarketSiteError,
-    addImpactFactorDataSuccess, addImpactFactorDataError
+    addImpactFactorDataSuccess, addImpactFactorDataError , updateAudienceDataStatusSuccess, updateAudienceDataStatusError
   ])
 
   const impactFactorLabels: Record<string, string> = {
@@ -133,8 +159,8 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
   const checkData = () => {
     for (const dayTypeData of Object.values(impactFactorData) as {}[]) {
       for (const impactTypeData of Object.values(dayTypeData) as number[]) {
-        if (impactTypeData < -1 || impactTypeData > 1) {
-          alert("Impact Factor should be between -1 and 1")
+        if (impactTypeData < -100 || impactTypeData > 100) {
+          alert("Impact Factor should be between -100 and 100")
           return false
         }
       }
@@ -143,20 +169,16 @@ export const ImpactFactorTable: React.FC<ImpactFactorTableProps> = ({ marketSite
   }
 
   const lockButtonFunction = () => {
-    console.log(checkData() , lockStatus)
     if (checkData() && lockStatus === false) {
-      setLockStatus(!lockStatus)
       dispatch(addImpactFactorData({
         id: id,
         data: impactFactorData
       }))
     }
     else if (lockStatus === true) {
-      setLockStatus(!lockStatus)
-      setDataCheckStatus((prevData: any) => ({
-        ...prevData,
-        ["Impact Factor Data"]: false
-      }));
+      dispatch(updateAudienceDataStatus({
+        id: id, audienceCategory: "", impactData: false
+      }))
     }
   }
 

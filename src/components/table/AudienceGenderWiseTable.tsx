@@ -1,11 +1,13 @@
 import { AudienceTableHeader } from "../../components/layouts/AudienceTableHeader";
-import { addGenderWiseDataByAudienceType, getGenderWiseDataByAudienceTypeMarketSite } from "../../actions/audienceAction";
+import { addGenderWiseDataByAudienceType, getGenderWiseDataByAudienceTypeMarketSite, updateAudienceDataStatus } from "../../actions/audienceAction";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_RESET,
   GENDER_WISE_DATA_STATUS,
-  GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_RESET
+  GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_RESET,
+  TIMEZONE_WISE_DATA_STATUS,
+  UPDATE_AUDIENCE_DATA_STATUS_RESET
 } from "../../constants/audienceConstant";
 import { message, Tooltip } from "antd";
 
@@ -18,8 +20,6 @@ interface AudienceGenderWiseTableProps {
   dataCheckStatus: {};
   setDataCheckStatus: Function;
   avgDataBool: boolean;
-  lockStatus: boolean;
-  setLockStatus: Function;
 }
 
 export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = ({
@@ -30,9 +30,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   setId,
   dataCheckStatus,
   setDataCheckStatus,
-  avgDataBool,
-  lockStatus,
-  setLockStatus
+  avgDataBool
 }: any) => {
 
   const dispatch = useDispatch<any>();
@@ -58,6 +56,16 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
     error: addGenderWiseDataByAudienceTypeError
   } = addGenderWiseDataByAudienceTypeSelector;
 
+  const updateAudienceDataStatusSelector = useSelector(
+    (state: any) => state.updateAudienceDataStatus
+  );
+  const {
+    loading: updateAudienceDataStatusLoading,
+    data: updateAudienceDataStatusData,
+    success: updateAudienceDataStatusSuccess,
+    error: updateAudienceDataStatusError
+  } = updateAudienceDataStatusSelector;
+
   const handleKeyDown = (e: any, index: any) => {
     if (e.key === 'Tab' && !e.shiftKey) {
       e.preventDefault();
@@ -70,7 +78,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   const [editableCell, setEditableCell] = useState<any>(null);
   const [editableCell1, setEditableCell1] = useState<any>(null);
   const [editableCell2, setEditableCell2] = useState<any>(null);
-  // const [lockStatus, setLockStatus] = useState(dataCheckStatus[GENDER_WISE_DATA_STATUS][audienceCategory]);
+  const [lockStatus, setLockStatus] = useState(dataCheckStatus[GENDER_WISE_DATA_STATUS][audienceCategory]);
   const [genderDataByMarketSite, setGenderDataByMarketSite] = useState<any>({})
 
   const resetButtonFunction = () => {
@@ -81,11 +89,14 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
   }
 
   useEffect(() => {
+    setLockStatus(dataCheckStatus[GENDER_WISE_DATA_STATUS][audienceCategory])
+  }, [dataCheckStatus])
+
+  useEffect(() => {
     dispatch(getGenderWiseDataByAudienceTypeMarketSite({
       id: id, marketSite: marketSite, categoryType: audienceCategory,
       avgDataBool: avgDataBool
     }))
-    setLockStatus(dataCheckStatus[GENDER_WISE_DATA_STATUS][audienceCategory])
   }, [audienceCategory, avgDataBool])
 
   useEffect(() => {
@@ -95,10 +106,10 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
     }
 
     if (genderWiseDataByMarketSiteSuccess) {
-      setLockStatus(dataCheckStatus[GENDER_WISE_DATA_STATUS][audienceCategory]);
       setGenderDataByMarketSite(genderWiseDataByMarketSite?.response)
-      if (genderWiseDataByMarketSite.audienceDataStatus != null)
+      if (genderWiseDataByMarketSite.audienceDataStatus != null) {
         setDataCheckStatus(genderWiseDataByMarketSite?.audienceDataStatus)
+      }
       dispatch({ type: GET_AUDIENCE_TYPE_PERCENT_FOR_GENDER_WISE_TAB_RESET })
     }
 
@@ -109,13 +120,24 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
 
     if (addGenderWiseDataByAudienceTypeSuccess) {
       message.info("Data Saved Successfully")
+      setDataCheckStatus(addGenderWiseDataByAudienceTypeData?.audienceDataStatus)
       dispatch({ type: ADD_GENDER_WISE_DATA_BY_AUDIENCE_TYPE_RESET })
       resetButtonFunction()
     }
 
+    if (updateAudienceDataStatusError) {
+      alert("Error UnLocking Data : " + updateAudienceDataStatusError)
+      dispatch({ type: UPDATE_AUDIENCE_DATA_STATUS_RESET })
+    }
+
+    if (updateAudienceDataStatusSuccess) {
+      setDataCheckStatus(updateAudienceDataStatusData?.audienceDataStatus)
+      dispatch({ type: UPDATE_AUDIENCE_DATA_STATUS_RESET })
+    }
+
   }, [genderWiseDataByMarketSiteSuccess, genderWiseDataByMarketSiteError,
-    addGenderWiseDataByAudienceTypeSuccess,
-    addGenderWiseDataByAudienceTypeError
+    addGenderWiseDataByAudienceTypeSuccess, addGenderWiseDataByAudienceTypeError,
+    updateAudienceDataStatusError, updateAudienceDataStatusSuccess
   ])
 
   const handleBlur = () => {
@@ -185,7 +207,6 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
 
   const lockButtonFunction = () => {
     if (checkData() && lockStatus === false) {
-      setLockStatus(!lockStatus)
       const data: any = []
       Object.entries(genderDataByMarketSite)?.forEach(([gender, genderData]: [any, any]) => {
         const sampleData: any = {}
@@ -220,14 +241,9 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
       }))
     }
     else if (lockStatus === true) {
-      setLockStatus(!lockStatus)
-      setDataCheckStatus((prevData: any) => ({
-        ...prevData,
-        [GENDER_WISE_DATA_STATUS]: {
-          ...prevData[GENDER_WISE_DATA_STATUS],
-          [audienceCategory]: false
-        }
-      }));
+      dispatch(updateAudienceDataStatus({
+        id: id, audienceCategory: audienceCategory, timeData: false, genderData: false
+      }))
     }
   }
 
@@ -248,7 +264,7 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
             </th>
             <th className="col-span-1 text-[#ffffff] bg-[#FF5050]">
               <div className="grid grid-cols-5 h-full">
-                <div className="col-span-1"/>
+                <div className="col-span-1" />
                 <div className="col-span-3 flex items-center justify-center">
                   <Tooltip title="Gender Wise Audience Percentage">
                     <p>%</p>

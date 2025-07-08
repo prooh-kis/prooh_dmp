@@ -1,5 +1,5 @@
 import { AudienceTableHeader } from "../../components/layouts/AudienceTableHeader";
-import { addAudienceTypePercentData, getAvgAudienceDataByMarketSite } from "../../actions/audienceAction";
+import { addAudienceTypePercentData, getAvgAudienceDataByMarketSite, updateAudienceDataStatus } from "../../actions/audienceAction";
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { message } from "antd";
@@ -8,9 +8,11 @@ import {
   GENDER_WISE_DATA_STATUS,
   GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_RESET,
   PERCENT_DATA_STATUS,
-  TIMEZONE_WISE_DATA_STATUS
+  TIMEZONE_WISE_DATA_STATUS,
+  UPDATE_AUDIENCE_DATA_STATUS_RESET
 } from "../../constants/audienceConstant";
 import { Loading } from "../../components/Loading";
+import { Percent } from "lucide-react";
 
 interface AudiencePercentData {
   category: string;
@@ -25,17 +27,15 @@ interface AudiencePercentTableProps {
   dataCheckStatus: any;
   setDataCheckStatus: Function;
   avgDataBool: boolean;
-  lockStatus: boolean;
-  setLockStatus: Function;
 }
 
 export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
-  marketSite, id, setId, lockStatus, setLockStatus, dataCheckStatus, setDataCheckStatus, avgDataBool
+  marketSite, id, setId, dataCheckStatus, setDataCheckStatus, avgDataBool
 }) => {
 
   const dispatch = useDispatch<any>();
   const [totalCount, setTotalCount] = useState(0);
-  // const [lockStatus, setLockStatus] = useState<any>(dataCheckStatus[PERCENT_DATA_STATUS]);
+  const [lockStatus, setLockStatus] = useState<any>(dataCheckStatus[PERCENT_DATA_STATUS]);
   const [audienceTypeWiseData, setAudienceTypeWiseData] = useState<AudiencePercentData[]>([]);
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
@@ -61,6 +61,16 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
     success: addAudienceTypePercentSuccess,
     error: addAudienceTypePercentError
   } = addAudienceTypePercentDataSelector;
+
+  const updateAudienceDataStatusSelector = useSelector(
+    (state: any) => state.updateAudienceDataStatus
+  );
+  const {
+    loading: updateAudienceDataStatusLoading,
+    data: updateAudienceDataStatusData,
+    success: updateAudienceDataStatusSuccess,
+    error: updateAudienceDataStatusError
+  } = updateAudienceDataStatusSelector;
 
   const handleKeyDown = (e: any, index: any) => {
     if (e.key === 'Tab' && !e.shiftKey) {
@@ -109,16 +119,8 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
     );
     return (totalPercentage).toFixed(0);
   };
-
-  console.log("audience % table", dataCheckStatus)
   const lockButtonFunction = () => {
-
-    if (getTotalPercent() == "100" && lockStatus == false) {
-      setLockStatus(!lockStatus)
-      setDataCheckStatus((prevData: any) => ({
-        ...prevData,
-        [PERCENT_DATA_STATUS]: true
-      }));
+    if (getTotalPercent() === "100" && lockStatus === false) {
       const data: { [key: string]: number | undefined } = {};
       for (const audience of audienceTypeWiseData) {
         data[audience.category] = audience?.percent / 100
@@ -132,22 +134,16 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
         dataHeroUserId: userInfo?._id,
         dataHeroUserEmail: userInfo?.email,
         geoCoordinates: [],
-        data: data,
-        audienceDataStatus: {
-          ...dataCheckStatus,
-          [PERCENT_DATA_STATUS]: true
-        }
+        data: data
       }))
     }
     else if (getTotalPercent() != "100") {
       alert("Total Percent Sum must be 100")
     }
     else {
-      setLockStatus(!lockStatus)
-      setDataCheckStatus((prevData: any) => ({
-        ...prevData,
-        [PERCENT_DATA_STATUS]: false
-      }));
+      dispatch(updateAudienceDataStatus({
+        id: id, audienceCategory: "", percentData: false
+      }))
     }
   }
 
@@ -158,6 +154,10 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
   useEffect(() => {
     dispatch(getAvgAudienceDataByMarketSite({ id: id === "research" ? null : id, marketSite: marketSite, avgDataBool: avgDataBool }))
   }, [avgDataBool, dispatch, id, marketSite])
+
+  useEffect(() => {
+    setLockStatus(dataCheckStatus[PERCENT_DATA_STATUS])
+  }, [dataCheckStatus])
 
   useEffect(() => {
     if (audienceDataByMarketSiteError) {
@@ -171,24 +171,11 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
     }
 
     if (audienceDataByMarketSiteSuccess) {
-      setLockStatus(dataCheckStatus[PERCENT_DATA_STATUS]);
       setAudienceTypeWiseData(audienceDataByMarketSite?.data)
       setTotalCount(audienceDataByMarketSite?.totalAvgCount)
 
-      if (Object.keys(dataCheckStatus[GENDER_WISE_DATA_STATUS] || {}).length === 0 &&
-        Object.keys(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS] || {}).length === 0) {
-        const data: any = {}
-        for (const audienceType of audienceDataByMarketSite?.data) {
-          data[audienceType.category] = false
-        }
-        // setDataCheckStatus((prevData: any) => ({
-        //   ...prevData,
-        //   [GENDER_WISE_DATA_STATUS]: data,
-        //   [TIMEZONE_WISE_DATA_STATUS]: data
-        // }));
-      }
-      else if (audienceDataByMarketSite?.audienceDataStatus != null) {
-        // setDataCheckStatus(audienceDataByMarketSite?.audienceDataStatus)
+      if (audienceDataByMarketSite?.audienceDataStatus !== null) {
+        setDataCheckStatus(audienceDataByMarketSite?.audienceDataStatus)
       }
 
       dispatch({ type: GET_AVG_AUDIENCE_DATA_BY_MARKET_SITE_RESET })
@@ -197,10 +184,22 @@ export const AudiencePercentTable: React.FC<AudiencePercentTableProps> = ({
     if (addAudienceTypePercentSuccess) {
       message.info("Data Saved Successfully")
       setId(addAudienceTypePercent?._id)
+      setDataCheckStatus(addAudienceTypePercent?.audienceDataStatus)
       dispatch({ type: ADD_AUDIENCE_TYPE_PERCENT_DATA_RESET })
     }
 
-  }, [audienceDataByMarketSiteSuccess, audienceDataByMarketSiteError, addAudienceTypePercentError, addAudienceTypePercentSuccess, dispatch, audienceDataByMarketSite, dataCheckStatus, setDataCheckStatus, setId, addAudienceTypePercent, setLockStatus])
+    if (updateAudienceDataStatusError) {
+      alert("Error UnLocking Data : " + updateAudienceDataStatusError)
+      dispatch({ type: UPDATE_AUDIENCE_DATA_STATUS_RESET })
+    }
+
+    if (updateAudienceDataStatusSuccess) {
+      setDataCheckStatus(updateAudienceDataStatusData?.audienceDataStatus)
+      dispatch({ type: UPDATE_AUDIENCE_DATA_STATUS_RESET })
+    }
+
+  }, [audienceDataByMarketSiteSuccess, audienceDataByMarketSiteError, updateAudienceDataStatusError, updateAudienceDataStatusSuccess,
+    addAudienceTypePercentError, addAudienceTypePercentSuccess])
 
 
   return (

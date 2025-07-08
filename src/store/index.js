@@ -26,7 +26,8 @@ import {
   getAvgFootfallDataByMarketSiteReducer,
   getGenderWiseDataByAudienceTypeMarketSiteReducer,
   getImpactfactorDataByMarketSiteReducer,
-  getTimezoneWiseDataByAudienceTypeMarketSiteReducer
+  getTimezoneWiseDataByAudienceTypeMarketSiteReducer,
+  updateAudienceDataStatusReducer
 } from "../reducers/audienceReducers";
 import { getAudienceDataOnFiltersReducer, getRespondentCountIndustryWiseReducer, getRespondentProfileIndustryWiseReducer, getThirdPartyAudienceCountSourceWiseReducer } from "../reducers/dashboardReducers";
 
@@ -64,10 +65,11 @@ const store = configureStore({
     getAudienceTypePercentForGenderWiseTab: getAudienceTypePercentForGenderWiseTabReducer,
     getImpactFactorDataByMarketSite: getImpactfactorDataByMarketSiteReducer,
 
-    addAudienceTypePercentData : addAudienceTypePercentDataReducer,
-    addGenderWiseDataByAudienceType : addGenderWiseDataByAudienceTypeReducer,
-    addTimezoneWiseDataByAudienceType : addTimezoneWiseDataByAudienceTypeReducer,
-    addImpactFactorData : addImpactFactorDataReducer,
+    updateAudienceDataStatus: updateAudienceDataStatusReducer,
+    addAudienceTypePercentData: addAudienceTypePercentDataReducer,
+    addGenderWiseDataByAudienceType: addGenderWiseDataByAudienceTypeReducer,
+    addTimezoneWiseDataByAudienceType: addTimezoneWiseDataByAudienceTypeReducer,
+    addImpactFactorData: addImpactFactorDataReducer,
 
     // dashboard
     getRespondentCountIndustryWise: getRespondentCountIndustryWiseReducer,

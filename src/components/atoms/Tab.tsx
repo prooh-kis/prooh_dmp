@@ -14,31 +14,27 @@ interface TabProps {
 }
 
 export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, currentIndex, dataCheckStatus }) => {
-    console.log("index", index)
     const checkTickStatus = () => {
-        console.log(index);
         switch (index) {
             case 1: {
                 return true;
             }
             case 2: {
-                console.log(dataCheckStatus[PERCENT_DATA_STATUS]);
                 if (dataCheckStatus[PERCENT_DATA_STATUS]) {
                     return true
                 }
                 else {
-                    false
+                    return false
                 }
             }
-                break
             case 3: {
-                for (const genderData of Object.values(dataCheckStatus[GENDER_WISE_DATA_STATUS])) {
+                for (const genderData of Object.values(dataCheckStatus[GENDER_WISE_DATA_STATUS] || {})) {
                     if (!genderData) {
                         return false
                     }
                 }
 
-                for (const timezoneData of Object.values(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS])) {
+                for (const timezoneData of Object.values(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS] || {})) {
                     if (!timezoneData) {
                         return false
                     }
@@ -49,17 +45,15 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick, index, curre
                 else
                     return true
             }
-                break
 
             case 4: {
                 if (dataCheckStatus[IMPACT_FACTOR_DATA_STATUS]) {
                     return true
                 }
                 else {
-                    false
+                    return false
                 }
             }
-                break
         }
     }
     return (

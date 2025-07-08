@@ -68,11 +68,10 @@ export const FootfallDataSourceWise: React.FC<FootfallDataSourceWiseProps> = ({ 
                 setId(audienceCountByMarketSite.audienceData._id.toString())
                 setToggleVisible(audienceCountByMarketSite.audienceData.certified)
                 setDataCheckStatus(audienceCountByMarketSite.audienceData.audienceDataStatus)
-
             }
         }
 
-    }, [audienceCountByMarketSiteSuccess, audienceCountByMarketSiteError, audienceCountByMarketSite, setId, setToggleVisible, setDataCheckStatus])
+    }, [audienceCountByMarketSiteSuccess, audienceCountByMarketSiteError, audienceCountByMarketSite])
 
     return (
         <div>

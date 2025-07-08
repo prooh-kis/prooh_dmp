@@ -38,7 +38,11 @@ import {
     GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_FAIL,
     GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_REQUEST,
     GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_RESET,
-    GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_SUCCESS
+    GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_SUCCESS,
+    UPDATE_AUDIENCE_DATA_STATUS_FAIL,
+    UPDATE_AUDIENCE_DATA_STATUS_REQUEST,
+    UPDATE_AUDIENCE_DATA_STATUS_RESET,
+    UPDATE_AUDIENCE_DATA_STATUS_SUCCESS
 } from "../constants/audienceConstant";
 
 export function getAvgFootfallDataByMarketSiteReducer(state = {}, action) {
@@ -125,6 +129,21 @@ export function getImpactfactorDataByMarketSiteReducer(state = {}, action) {
         case GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_FAIL:
             return { loading: false, error: action.payload };
         case GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_RESET:
+            return {};
+        default:
+            return state;
+    }
+}
+
+export function updateAudienceDataStatusReducer(state = {}, action) {
+    switch (action.type) {
+        case UPDATE_AUDIENCE_DATA_STATUS_REQUEST:
+            return { loading: true };
+        case UPDATE_AUDIENCE_DATA_STATUS_SUCCESS:
+            return { loading: false, data: action.payload, success: true };
+        case UPDATE_AUDIENCE_DATA_STATUS_FAIL:
+            return { loading: false, error: action.payload };
+        case UPDATE_AUDIENCE_DATA_STATUS_RESET:
             return {};
         default:
             return state;

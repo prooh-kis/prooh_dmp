@@ -1,27 +1,26 @@
 import { GenderSelector } from '../../components/layouts/GenderSelector';
 import { AudienceTableHeader } from '../../components/layouts/AudienceTableHeader';
-import { addTimezoneWiseDataByAudienceType, getTimezoneWiseDataByAudienceTypeMarketSite } from '../../actions/audienceAction';
+import { addTimezoneWiseDataByAudienceType, getTimezoneWiseDataByAudienceTypeMarketSite, updateAudienceDataStatus } from '../../actions/audienceAction';
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import {
   ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_RESET,
   GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_RESET,
-  TIMEZONE_WISE_DATA_STATUS
+  TIMEZONE_WISE_DATA_STATUS,
+  UPDATE_AUDIENCE_DATA_STATUS_RESET
 } from '../../constants/audienceConstant';
 import { message, Tooltip } from 'antd';
 
 interface AudienceTimezoneWiseTableProps {
   marketSite: string;
   audienceCategory: string;
-  // audiencePercent: number;
+  audiencePercent: number;
   id: string;
-  // setId: string;
+  setId: string;
   dataCheckStatus: {};
   setDataCheckStatus: Function;
   avgDataBool: boolean;
-  lockStatus: any;
-  setLockStatus: Function;
 }
 
 export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps> = ({
@@ -31,9 +30,6 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
   dataCheckStatus,
   setDataCheckStatus,
   avgDataBool,
-  lockStatus,
-  setLockStatus,
-  
 }: any) => {
 
   const dispatch = useDispatch<any>();
@@ -60,7 +56,17 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
     error: addTimezoneWiseDataByAudienceTypeError
   } = addTimezoneWiseDataByAudienceTypeSelector;
 
-  // const [lockStatus, setLockStatus] = useState(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS][audienceCategory]);
+  const updateAudienceDataStatusSelector = useSelector(
+    (state: any) => state.updateAudienceDataStatus
+  );
+  const {
+    loading: updateAudienceDataStatusLoading,
+    data: updateAudienceDataStatusData,
+    success: updateAudienceDataStatusSuccess,
+    error: updateAudienceDataStatusError
+  } = updateAudienceDataStatusSelector;
+
+  const [lockStatus, setLockStatus] = useState(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS][audienceCategory]);
   const [genderType, setGenderType] = useState("Male")
   const [decimal, setDecimal] = useState<any>(0);
   const [data, setData] = useState<any>({});
@@ -90,13 +96,16 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
   }
 
   useEffect(() => {
+    setLockStatus(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS][audienceCategory])
+  }, [dataCheckStatus])
+
+  useEffect(() => {
     dispatch(getTimezoneWiseDataByAudienceTypeMarketSite({
       marketSite: marketSite, categoryType: audienceCategory, id: id, avgDataBool: avgDataBool
     }))
-    setLockStatus(dataCheckStatus[TIMEZONE_WISE_DATA_STATUS][audienceCategory])
     setGenderType(genderType)
     setData({})
-  }, [audienceCategory, dataCheckStatus, avgDataBool])
+  }, [audienceCategory, avgDataBool])
 
   useEffect(() => {
     if (timezoneWiseDataByMarketSiteError) {
@@ -108,13 +117,14 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
       setTimezoneDataByMarketSite(timezoneWiseDataByMarketSite.response)
       setGenders(timezoneWiseDataByMarketSite.genderResponse)
       if (timezoneDataByMarketSite.audienceDataStatus != null)
-        setDataCheckStatus(timezoneDataByMarketSite.audienceDataStatus)
+        setDataCheckStatus(timezoneDataByMarketSite?.audienceDataStatus)
       saveTimezoneData(timezoneWiseDataByMarketSite.response[genderType], genderType)
       dispatch({ type: GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_RESET })
     }
 
     if (addTimezoneWiseDataByAudienceTypeSuccess) {
       message.info("Data Saved Successfully")
+      setDataCheckStatus(addTimezoneWiseDataByAudienceTypeData?.audienceDataStatus)
       dispatch({ type: ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_RESET })
       resetButtonFunction()
     }
@@ -124,7 +134,18 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
       dispatch({ type: ADD_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_RESET })
     }
 
+    if (updateAudienceDataStatusError) {
+      alert("Error UnLocking Data : " + updateAudienceDataStatusError)
+      dispatch({ type: UPDATE_AUDIENCE_DATA_STATUS_RESET })
+    }
+
+    if (updateAudienceDataStatusSuccess) {
+      setDataCheckStatus(updateAudienceDataStatusData?.audienceDataStatus)
+      dispatch({ type: UPDATE_AUDIENCE_DATA_STATUS_RESET })
+    }
+
   }, [timezoneWiseDataByMarketSiteSuccess, timezoneWiseDataByMarketSiteError,
+    updateAudienceDataStatusError, updateAudienceDataStatusSuccess,
     addTimezoneWiseDataByAudienceTypeSuccess, addTimezoneWiseDataByAudienceTypeError
   ])
 
@@ -195,7 +216,6 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
 
   const lockButtonFunction = () => {
     if (checkData() && lockStatus == false) {
-      setLockStatus(!lockStatus)
       dispatch(addTimezoneWiseDataByAudienceType({
         id: id,
         audienceCategory: audienceCategory,
@@ -203,14 +223,9 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
       }))
     }
     else if (lockStatus === true) {
-      setLockStatus(!lockStatus)
-      setDataCheckStatus((prevData: any) => ({
-        ...prevData,
-        [TIMEZONE_WISE_DATA_STATUS]: {
-          ...prevData[TIMEZONE_WISE_DATA_STATUS],
-          [audienceCategory]: false
-        }
-      }));
+      dispatch(updateAudienceDataStatus({
+        id: id, audienceCategory: audienceCategory, timeData : false
+      }))
     }
   }
 
@@ -258,7 +273,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
               </div>
             </th>
             <th className="col-span-2 py-2">
-            <div className="p-2 flex items-center justify-center h-full">
+              <div className="p-2 flex items-center justify-center h-full">
                 <Tooltip title="Time Zones">
                   <p className="truncate">
                     Time Zones
@@ -285,7 +300,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
                   <i className="fi fi-sr-pencil text-[10px] flex items-center"></i>
                 </div>
               </div>
-              
+
             </th>
             <th className="col-span-1 py-2">
               <div className="p-2 flex items-center justify-center h-full">
@@ -297,7 +312,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
               </div>
             </th>
             <th className="col-span-2 py-2">
-            <div className="p-2 flex items-center justify-center h-full">
+              <div className="p-2 flex items-center justify-center h-full">
                 <Tooltip title="Audience Count / Timezone">
                   <p className="truncate">
                     Audience Count / Timezone
@@ -306,7 +321,7 @@ export const AudienceTimezoneWiseTable: React.FC<AudienceTimezoneWiseTableProps>
               </div>
             </th>
             <th className="col-span-2 py-2">
-            <div className="p-2 flex items-center justify-center h-full">
+              <div className="p-2 flex items-center justify-center h-full">
                 <Tooltip title="Unique Audience Count / Timezone">
                   <p className="truncate">
                     Unique Audience Count / Timezone

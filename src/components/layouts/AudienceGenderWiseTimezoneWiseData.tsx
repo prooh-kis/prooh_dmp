@@ -48,17 +48,14 @@ export const AudienceGenderWiseTimezoneWiseData: React.FC<AudienceGenderWiseTime
 
             <div className="col-span-9 flex flex-col gap-2 overflow-hidden">
                 <div className="flex-grow overflow-y-auto pr-2 rounded-[8px] shadow-sm bg-[#ffffff]">
-                    <AudienceGenderWiseTable lockStatus={lockStatus} setLockStatus={setLockStatus} marketSite={marketSite} audienceCategory={audienceCategory}
+                    <AudienceGenderWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
                         audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
                         setDataCheckStatus={setDataCheckStatus} avgDataBool={avgDataBool} />
                 </div>
                 {dataCheckStatus?.[GENDER_WISE_DATA_STATUS]?.[audienceCategory] && (
                     <div className="rounded-[8px] shadow-sm bg-[#ffffff]">
-                        <AudienceTimezoneWiseTable lockStatus={lockStatus} setLockStatus={setLockStatus} marketSite={marketSite} audienceCategory={audienceCategory}
-                        // audiencePercent={audiencePercent} 
-                        id={id} 
-                        // setId={setId} 
-                        dataCheckStatus={dataCheckStatus}
+                        <AudienceTimezoneWiseTable marketSite={marketSite} audienceCategory={audienceCategory}
+                        audiencePercent={audiencePercent} id={id} setId={setId} dataCheckStatus={dataCheckStatus}
                         setDataCheckStatus={setDataCheckStatus} avgDataBool={avgDataBool} />
                     </div>
                 )}

@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { GENDER_WISE_DATA_STATUS, PERCENT_DATA_STATUS, TIMEZONE_WISE_DATA_STATUS } from '../../constants/audienceConstant';
+import { GENDER_WISE_DATA_STATUS, IMPACT_FACTOR_DATA_STATUS, PERCENT_DATA_STATUS, TIMEZONE_WISE_DATA_STATUS } from '../../constants/audienceConstant';
 import React, { useState } from 'react';
 import { SuccessMessagePopup } from '../../components/Popup/SuccessPopup';
 import { useSelector } from 'react-redux';
@@ -14,12 +14,12 @@ type FooterProps = {
 };
 
 export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dataCheckStatus, audienceStep, setAudienceStep, lockStatus }) => {
-    
+
     const [successMsg, setSuccessMsg] = useState<boolean>(false);
 
     const auth = useSelector((state: any) => state.auth);
     const { userInfo } = auth;
-    
+
     const increaseStepVal = () => {
         switch (currentStep) {
             case 1: {
@@ -36,7 +36,7 @@ export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dat
             }
                 break
             case 3: {
-                if (audienceStep <= 9) {
+                if (audienceStep < 9) {
                     setAudienceStep(audienceStep + 1)
                     break
                 }
@@ -53,7 +53,7 @@ export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dat
                     }
                 }
 
-                if (checkStatus === 0) {
+                if (checkStatus === 1) {
                     alert("Lock the Gender And Timezone Data for All Audience Types First")
                 }
                 else
@@ -62,9 +62,13 @@ export const Footer: React.FC<FooterProps> = ({ currentStep, setCurrentStep, dat
                 break
 
             case 4: {
-                message.info("Your response has been saved...");
-                setSuccessMsg(true);
-
+                if (dataCheckStatus[IMPACT_FACTOR_DATA_STATUS]) {
+                    message.info("Your response has been saved...");
+                    setSuccessMsg(true);
+                }
+                else {
+                    alert("Lock the Impact Factor Percent Data First")
+                }
             }
                 break
             default: setCurrentStep(4)

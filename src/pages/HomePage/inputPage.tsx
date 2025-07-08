@@ -8,7 +8,7 @@ import HeaderIcon from '../../assets/icons/header-icon.svg'
 import { AudienceGenderWiseTimezoneWiseData } from '../../components/layouts/AudienceGenderWiseTimezoneWiseData';
 import { SwitchInputCenter } from '../../components/atoms/SwitchInput';
 import { Tooltip } from 'antd';
-import { GENDER_WISE_DATA_STATUS, IMPACT_FACTOR_DATA_STATUS, PERCENT_DATA_STATUS, TIMEZONE_WISE_DATA_STATUS } from '../../constants/audienceConstant';
+import { GENDER_WISE_DATA_STATUS, PERCENT_DATA_STATUS, TIMEZONE_WISE_DATA_STATUS } from '../../constants/audienceConstant';
 
 const InputPage: React.FC = () => {
     const tabs = [

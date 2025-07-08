@@ -29,7 +29,10 @@ import {
     GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_SUCCESS,
     GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_FAIL,
     GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_REQUEST,
-    GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_SUCCESS
+    GET_TIMEZONE_WISE_DATA_BY_AUDIENCE_TYPE_MARKET_SITE_SUCCESS,
+    UPDATE_AUDIENCE_DATA_STATUS_FAIL,
+    UPDATE_AUDIENCE_DATA_STATUS_REQUEST,
+    UPDATE_AUDIENCE_DATA_STATUS_SUCCESS
 } from "../constants/audienceConstant";
 import { AUDIENCE_URL } from "../constants/urlConstant";
 
@@ -164,6 +167,28 @@ export const getImpactFactorDataByMarketSite = (input) => async (dispatch, getSt
     } catch (error) {
         dispatch({
             type: GET_IMPACT_FACTOR_DATA_BY_MARKET_SITE_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        });
+    }
+};
+
+export const updateAudienceDataStatus = (input) => async (dispatch, getState) => {
+    dispatch({
+        type: UPDATE_AUDIENCE_DATA_STATUS_REQUEST,
+        payload: input,
+    });
+    try {
+        const { data } = await axios.post(`${AUDIENCE_URL}/updateAudienceDataStatus`, input);
+        dispatch({
+            type: UPDATE_AUDIENCE_DATA_STATUS_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: UPDATE_AUDIENCE_DATA_STATUS_FAIL,
             payload:
                 error.response && error.response.data.message
                     ? error.response.data.message
