@@ -95,8 +95,6 @@ const InputPage: React.FC = () => {
         color: "#129BFF"
     }]
 
-    console.log(dataCheckStatus)
-
     return (
         <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-gray-100">
             <div className='bg-[#ffffff]'>

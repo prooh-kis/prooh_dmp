@@ -125,6 +125,11 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
       resetButtonFunction()
     }
 
+  }, [genderWiseDataByMarketSiteSuccess, genderWiseDataByMarketSiteError,
+    addGenderWiseDataByAudienceTypeSuccess, addGenderWiseDataByAudienceTypeError
+  ])
+
+  useEffect(() => {
     if (updateAudienceDataStatusError) {
       alert("Error UnLocking Data : " + updateAudienceDataStatusError)
       dispatch({ type: UPDATE_AUDIENCE_DATA_STATUS_RESET })
@@ -132,13 +137,9 @@ export const AudienceGenderWiseTable: React.FC<AudienceGenderWiseTableProps> = (
 
     if (updateAudienceDataStatusSuccess) {
       setDataCheckStatus(updateAudienceDataStatusData?.audienceDataStatus)
-      dispatch({ type: UPDATE_AUDIENCE_DATA_STATUS_RESET })
+      dispatch({ type: UPDATE_AUDIENCE_DATA_STATUS_RESET });
     }
-
-  }, [genderWiseDataByMarketSiteSuccess, genderWiseDataByMarketSiteError,
-    addGenderWiseDataByAudienceTypeSuccess, addGenderWiseDataByAudienceTypeError,
-    updateAudienceDataStatusError, updateAudienceDataStatusSuccess
-  ])
+  }, [updateAudienceDataStatusError, updateAudienceDataStatusSuccess])
 
   const handleBlur = () => {
     setEditableCell(null);
